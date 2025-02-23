@@ -1,0 +1,2 @@
+2025-02-23T18:36:35.383Z [ERROR] POST /api/register | Status: 500 | Time: 35.062 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
+2025-02-23T21:48:50.968Z [ERROR] POST /api/logout | Status: 500 | Time: 20.896 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
