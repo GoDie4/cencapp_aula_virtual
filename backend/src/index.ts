@@ -2,6 +2,8 @@ import app from "./server";
 import prisma from "./config/database";
 import { ENV } from "./config/config";
 
+import authRoutes from "../src/routes/auth.routes";
+
 prisma
   .$connect()
   .then(() => {
@@ -12,5 +14,7 @@ prisma
   })
   .catch((error: any) => {
     console.error("❌ Error al conectar a la base de datos:", error);
-    process.exit(1); 
+    process.exit(1);
   });
+
+app.use("/api", authRoutes);
