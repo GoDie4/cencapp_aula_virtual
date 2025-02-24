@@ -2,13 +2,14 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 export const requireEstudiante = async (req: any, res: any, next: any) => {
+
   if (!req.user) {
     return res.status(401).json({ message: "Autenticación requerida" });
   }
 
   try {
     const usuarioExiste = await prisma.usuario.findUnique({
-      where: { email: req.user.email },
+      where: { id: req.user.id },
       include: { rol: true },
     });
     if (!usuarioExiste)
