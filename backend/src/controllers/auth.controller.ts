@@ -47,8 +47,8 @@ export const register = async (
 
     res.cookie("token", token, {
       sameSite: "none",
-      secure: false,
-      httpOnly: false,
+      secure: true,
+      httpOnly: true,
     });
 
     return res.status(201).json({
@@ -90,8 +90,8 @@ export const login = async (
 
     res.cookie("token", token, {
       sameSite: "none",
-      secure: false,
-      httpOnly: false,
+      secure: true,
+      httpOnly: true,
     });
 
     const primerNombre = usuarioExiste.nombres.split(" ");
