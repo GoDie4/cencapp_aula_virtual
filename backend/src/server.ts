@@ -25,6 +25,7 @@ morgan.format(
   ':date[iso] [ERROR] :method :url | Status: :status | Time: :response-time ms | IP: :remote-addr | User-Agent: ":user-agent"'
 );
 
+
 // Usar Morgan para registrar solo errores (4xx y 5xx)
 app.use(
   morgan("custom", {

@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "sonner";
-import { Errors } from "@/components/form/Errors";
+import { Errors } from "../../../../components/form/Errors";
 import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
 
@@ -71,7 +71,7 @@ const FormLogin = () => {
   }, [touched, errors, isSubmitting]);
 
   return (
-    <form className="p-5" onSubmit={handleSubmit}>
+    <form className="p-5 max-w-xl w-full"  onSubmit={handleSubmit}>
       <div className="w-full mb-5 flex flex-col gap-1">
         <label htmlFor="email">Correo electrónico</label>
         <input
