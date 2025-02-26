@@ -1,10 +1,15 @@
 import app from "./server";
+import express from 'express';
 import prisma from "./config/database";
 import { ENV } from "./config/config";
 import cookieParser from "cookie-parser";
 
 import authRoutes from "../src/routes/auth.routes";
 import userRoutes from "../src/routes/user.routes";
+import categoryRoutes from "../src/routes/category.routes"
+
+app.use(express.static('public'));
+
 app.use(cookieParser());
 prisma
   .$connect()
@@ -21,3 +26,4 @@ prisma
 
 app.use("/api", authRoutes);
 app.use("/api/usuarios", userRoutes);
+app.use("/api/categorias", categoryRoutes)

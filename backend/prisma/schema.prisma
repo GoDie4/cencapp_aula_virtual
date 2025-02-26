@@ -63,9 +63,16 @@ model Usuario {
     email     String   @unique
     celular   String   @db.VarChar(15)
     password  String
+    activo    Boolean  @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     rol       Rol      @relation(fields: [rolId], references: [id])
 
     @@map("usuarios")
+}
+
+model Categorias {
+    id         Int      @id @default(autoincrement())
+    nombre     String   @db.VarChar(255)
+    url_imagen String   @db.VarChar(255)
 }
