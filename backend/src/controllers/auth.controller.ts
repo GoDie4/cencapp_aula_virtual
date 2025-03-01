@@ -61,6 +61,7 @@ export const register = async (
         email: nuevoUsuario.email,
         celular: nuevoUsuario.celular,
       },
+      token: token
     });
   } catch (error) {
     console.error("Error al registrar usuario", error);

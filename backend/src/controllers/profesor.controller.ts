@@ -14,6 +14,7 @@ export const crearProfesor = async (req: any, res: any): Promise<void> => {
         email: email,
         password: password,
         rolId: 3,
+        activo: false
       },
     });
 
