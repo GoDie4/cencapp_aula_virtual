@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.scss";
 import { Toaster } from "sonner";
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider } from "../src/context/AuthContext";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",

@@ -48,4 +48,5 @@ router.get('/alumnos/:id', verifyAdmin, obtenerAlumnoPorId)
 router.post('/alumnos/:id', verifyAdmin, actualizarAlumno)
 router.post('/borrarAlumno/:id', verifyAdmin, deleteAlumno)
 
+
 export default router;

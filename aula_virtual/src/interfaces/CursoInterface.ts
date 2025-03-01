@@ -7,12 +7,15 @@ export interface Curso {
   horas: number
   imagen: string
   categoriaId: number
+  presentacion?: string
+  dirigido?: string
+  metodologia?: string
+  certificacion?: string
   categoria?: Categoria
-  CursoDetalles?: CursoDetalles[]
   createdAt?: Date
   updatedAt?: Date
 }
-
+/*
 export interface CursoDetalles {
   id: string
   cursoId: string
@@ -24,3 +27,4 @@ export interface CursoDetalles {
   updatedAt?: Date
   curso?: Curso
 }
+*/

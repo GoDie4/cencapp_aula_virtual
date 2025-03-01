@@ -1,14 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
+'use client'
+
+import useAuth from "@/hooks/useAuth";
+
+/*
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { getUserData } from "@/libs/auth/getUserData";
 import { jwtDecode } from "jwt-decode";
-export default async function Aula() {
+*/
+export default function Aula() {
+  const { user } = useAuth()
+  /*
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
-
-  let userId = "";
-
+  */
+  /*let userId = "";*/
+  /*
   if (!token) {
     redirect("/login");
   }
@@ -22,17 +30,17 @@ export default async function Aula() {
     redirect("/login");
   }
 
-  const data = await getUserData(token, userId);
+  const data = await getUserData(token, userId); 
 
   const user = data.usuario;
 
   if (!user) {
     redirect("/login");
   }
-
+  */
   return (
     <>
-      <h1>Bienvenido, {user.nombres}</h1>
+      <h1>Bienvenido, {user?.email}</h1>
     </>
   );
 }

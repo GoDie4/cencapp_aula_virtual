@@ -5,14 +5,14 @@ import { SchemaLogin } from "@/schemas/AuthSchema";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../../context/AuthContext";
+import { useAuth } from "../../../../src/context/AuthContext";
 import { toast } from "sonner";
 import { Errors } from "../../../../components/form/Errors";
 import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
 
 const FormLogin = () => {
-  const { setIsAuthenticated } = useAuth();
+  const { setIsAuthenticated, setUser, setToken } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter()
 
@@ -32,7 +32,10 @@ const FormLogin = () => {
 
       if (response.status === 200) {
         setIsAuthenticated(true);
+        setUser(response.data.usuario);
+        setToken(response.data.token);
         toast.success(response.data.message);
+        localStorage.setItem("token", response.data.token);
         router.push('/aula');
       }
     } catch (error: any) {

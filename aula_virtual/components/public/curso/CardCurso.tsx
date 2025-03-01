@@ -24,7 +24,7 @@ const CardCurso = ({ id, img, horas, titulo, precio }: { id: string, img: string
         imagen: img,
         categoriaId: 1,
       })
-      toast.success("Curso agregado al carrito")
+      toast.success("Curso eliminado del carrito")
     }
     else {
       agregarCarrito({
@@ -35,7 +35,7 @@ const CardCurso = ({ id, img, horas, titulo, precio }: { id: string, img: string
         imagen: img,
         categoriaId: 1,
       })
-      toast.success("Curso eliminado del carrito")
+      toast.success("Curso agregado al carrito")
     }
   }
 

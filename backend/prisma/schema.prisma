@@ -37,6 +37,16 @@ model Curso {
   @@map("cursos")
 }
 
+model SeccionesCursos {
+  id           String         @id @default(cuid())
+  cursoId      String         @db.Text
+  seccionId    String         @db.Text
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("secciones_cursos")
+}
+
 model CursoDetalles {
   id            String   @id @default(cuid())
   presentacion  String   @db.Text
