@@ -6,7 +6,6 @@ import path from "path";
 
 const app = express();
 
-
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:3000"],
@@ -33,6 +32,10 @@ app.use(
     stream: errorLogStream,
   })
 );
+
+// Configurar el servidor para usar el directorio 'public' como directorio de archivos estáticos
+app.use('/public', express.static(path.resolve('public')))
+
 app.use(express.json());
 
 export default app;

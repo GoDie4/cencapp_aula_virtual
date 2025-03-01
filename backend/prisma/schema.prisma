@@ -5,74 +5,84 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 generator erd {
-    provider = "prisma-erd-generator"
-    output   = "./diagrama.png" // Guarda la imagen en la carpeta prisma
-    format   = "png" // Puedes cambiarlo a "png" o "dot"
+  provider = "prisma-erd-generator"
+  output   = "./diagrama.png" // Guarda la imagen en la carpeta prisma
+  format   = "png" // Puedes cambiarlo a "png" o "dot"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Curso {
-    id            String          @id @default(cuid())
-    nombre        String          @db.VarChar(255)
-    imagen        String          @db.VarChar(255)
-    precio        Decimal
-    createdAt     DateTime        @default(now())
-    updatedAt     DateTime        @updatedAt
-    CursoDetalles CursoDetalles[]
+  id            String        @id @default(cuid())
+  nombre        String        @db.VarChar(255)
+  imagen        String        @db.VarChar(255)
+  banner        String        @db.VarChar(255)
+  precio        Decimal
+  categoriaId   Int
+  presentacion  String        @db.Text @default("")
+  dirigido      String        @db.Text @default("")
+  metodologia   String        @db.Text @default("")
+  certificacion String        @db.Text @default("")
+  categoria     Categorias    @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-    @@map("cursos")
+  @@map("cursos")
 }
 
 model CursoDetalles {
-    id            String   @id @default(cuid())
-    cursoId       String   @unique
-    presentacion  String   @db.Text
-    dirigido      String   @db.Text
-    metodologia   String   @db.Text
-    certificacion String   @db.Text
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
-    curso         Curso    @relation(fields: [cursoId], references: [id])
+  id            String   @id @default(cuid())
+  presentacion  String   @db.Text
+  dirigido      String   @db.Text
+  metodologia   String   @db.Text
+  certificacion String   @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-    @@map("cursos_detalles")
+  @@map("cursos_detalles")
 }
 
 model Rol {
-    id        Int       @id @default(autoincrement())
-    nombre    String    @unique @db.VarChar(20)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    Usuario   Usuario[]
+  id        Int       @id @default(autoincrement())
+  nombre    String    @unique @db.VarChar(20)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Usuario   Usuario[]
 
-    @@map("roles")
+  @@map("roles")
 }
 
 model Usuario {
-    id        String   @id @default(cuid()) @db.Char(36)
-    rolId     Int      @default(1)
-    nombres   String   @db.VarChar(255)
-    apellidos String   @db.VarChar(255)
-    email     String   @unique
-    celular   String   @db.VarChar(15)
-    password  String
-    activo    Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    rol       Rol      @relation(fields: [rolId], references: [id])
+  id        String   @id @default(cuid()) @db.Char(36)
+  rolId     Int      @default(1)
+  nombres   String   @db.VarChar(255)
+  apellidos String   @db.VarChar(255)
+  email     String   @unique
+  celular   String   @db.VarChar(15)
+  password  String
+  activo    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rol       Rol      @relation(fields: [rolId], references: [id], onDelete: Cascade)
 
-    @@map("usuarios")
+  @@map("usuarios")
 }
 
 model Categorias {
-    id         Int      @id @default(autoincrement())
-    nombre     String   @db.VarChar(255)
-    url_imagen String   @db.VarChar(255)
+  id         Int      @id @default(autoincrement())
+  nombre     String   @db.VarChar(255)
+  url_icono  String   @db.VarChar(255)
+  url_imagen String   @db.VarChar(255)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  cursos     Curso[]
+
+  @@map("categorias")
 }

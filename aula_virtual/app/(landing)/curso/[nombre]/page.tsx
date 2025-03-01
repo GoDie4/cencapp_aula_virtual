@@ -1,3 +1,5 @@
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import {
   FiInfo,
@@ -17,6 +19,7 @@ import area1 from '../../../../assets/areas/1.webp'
 import area6 from '../../../../assets/areas/6.webp'
 import { BsWhatsapp } from 'react-icons/bs'
 import * as React from 'react'
+/*
 import { styled } from '@mui/material/styles'
 import MuiAccordion, { type AccordionProps } from '@mui/material/Accordion'
 import MuiAccordionSummary, {
@@ -27,6 +30,7 @@ import Typography from '@mui/material/Typography'
 import { IoChevronDown } from 'react-icons/io5'
 import { Accordion, AccordionSummary } from '../@components/Acordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
+*/
 import { RenderTemarioItem } from '../@components/TemarioItem'
 /*
 const Accordion = styled((props: AccordionProps) => (

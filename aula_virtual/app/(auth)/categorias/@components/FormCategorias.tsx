@@ -1,13 +1,14 @@
 'use client'
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { Global } from '@/helper/Global';
+// import { Global } from '@/helper/Global';
 import { config } from '@/config/config';
 
 const CategoriaFormulario = () => {
     const initialValues = {
         nombres: '',
         url_imagen: null, // Inicialmente no hay imagen seleccionada
+        url_icono: null
     };
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -17,8 +18,11 @@ const CategoriaFormulario = () => {
             if (values.url_imagen) {
                 formData.append('url_imagen', values.url_imagen); // Añade el archivo si se seleccionó
             }
+            if (values.url_icono) {
+              formData.append('url_icono', values.url_icono); // Añade el archivo si se seleccionó
+          }
 
-            const response = await fetch(`${config.apiUrl}/categorias/crear`, { // Reemplaza con la URL correcta de tu API si es diferente
+            const response = await fetch(`${config.apiUrl}/categorias`, { // Reemplaza con la URL correcta de tu API si es diferente
                 method: 'POST',
                 body: formData, // ¡Importante! Enviar FormData como body
             });
@@ -66,6 +70,18 @@ const CategoriaFormulario = () => {
                                 }}
                             />
                             <ErrorMessage name="url_imagen" component="div" className="error" />
+                        </div>
+                        <div>
+                            <label htmlFor="url_icono">Imagen Icono de Categoría:</label>
+                            <input
+                                type="file"
+                                id="url_icono"
+                                name="url_icono"
+                                onChange={(event) => {
+                                    setFieldValue('url_icono', event.currentTarget.files[0]); // Guarda el archivo en Formik
+                                }}
+                            />
+                            <ErrorMessage name="url_icono" component="div" className="error" />
                         </div>
 
                         <button type="submit" disabled={isSubmitting}>

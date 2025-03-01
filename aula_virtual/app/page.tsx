@@ -54,9 +54,9 @@ import Certificados from '../components/public/curso/Certificados';
 import Certificados2 from '../components/public/curso/Certificados2';
 import Link from 'next/link';
 import Image from 'next/image';
-import { redirect } from 'next/navigation';
 import { Header } from '../components/public/estructura/Header';
 import { Footer } from '../components/public/estructura/Footer';
+import Carrito from '../components/public/utils/Carrito';
 
 // Registra el plugin CSS con GSAP
 gsap.registerPlugin(CSSPlugin);
@@ -213,14 +213,15 @@ const Home = (): JSX.Element => {
   return (
     <>
       <Header />
+      <Carrito />
       <main className='w-full'>
         <div className="slide">
           <Slide index={currentSlide} />
           <div className="btn_slides">
-            <button onClick={goToPrevSlide} disabled={isAnimating}>
+            <button title='Anterior' onClick={goToPrevSlide} disabled={isAnimating}>
               <PiArrowLeftThin />
             </button>
-            <button onClick={goToNextSlide} disabled={isAnimating}>
+            <button  title='Siguiente' onClick={goToNextSlide} disabled={isAnimating}>
               <PiArrowRightThin />
             </button>
           </div>
@@ -280,34 +281,42 @@ const Home = (): JSX.Element => {
           <div className="cursos__main">
             <div className="cursos__main__item">
               <CardCurso
+                id='1'
                 horas="40 horas"
                 img={`${curso1.src}`}
                 precio="350"
                 titulo="Topografía aplicada a Obras Civiles"
+                
               />
             </div>
             <div className="cursos__main__item">
               <CardCurso
+                id='2'
                 horas="48 horas"
                 img={`${curso2.src}`}
                 precio="80"
                 titulo="Presupuesto y programación de obras con presupuesto.pe"
+                
               />
             </div>
             <div className="cursos__main__item">
               <CardCurso
+                id='3'
                 horas="32 horas"
                 img={`${curso3.src}`}
                 precio="100"
                 titulo="Elaboración de planos estructurales con Autocad Structural Detailling"
+                
               />
             </div>
             <div className="cursos__main__item">
               <CardCurso
+                id='4'
                 horas="32 horas"
                 img={`${curso4.src}`}
                 precio="120"
                 titulo="Levantamiento topográfico"
+                
               />
             </div>
           </div>

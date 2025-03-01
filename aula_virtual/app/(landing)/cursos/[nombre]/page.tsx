@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 'use server'
 import CardCurso from '../../../../components/public/curso/CardCurso'
@@ -85,6 +86,7 @@ const Cursos = async ({
           {curso.cursos.map((curso: any, index: number) => (
             <div className="gridCursos__main__item" key={index}>
               <CardCurso
+                id={String(index)}
                 horas={curso.horas}
                 img={curso.img}
                 precio={curso.precio}

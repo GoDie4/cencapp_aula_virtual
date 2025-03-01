@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 export const profile = async (req: any, res: any) => {
@@ -22,4 +23,20 @@ export const profile = async (req: any, res: any) => {
       },
     });
   } catch (error) {}
+};
+
+export const getDecodedUser = (req: Request, res: Response) => {
+  try {
+    const user = (req as any).user;
+    if (!user) {
+      res.status(404).json({ message: "Usuario no encontrado en la solicitud." });
+    }
+    res.status(200).json(user);
+  } catch (error: any) {
+    console.error("Error al obtener usuario decodificado:", error);
+    res.status(500).json({ message: "Error interno del servidor.", error: error.message });
+  }
+  finally {
+    prisma.$disconnect();
+  }
 };
