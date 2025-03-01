@@ -27,7 +27,7 @@ export const Footer = (): JSX.Element => {
             <div className="socialMedia">
               <div className="socialMedia__main">
                 <div className="socialMedia__main__item">
-                  <a href="https://www.facebook.com/profile.php?id=100083328371374" target='_blank' rel="noreferrer">
+                  <a title='facebook:CENCAPP' href="https://www.facebook.com/profile.php?id=100083328371374" target='_blank' rel="noreferrer noopener">
                     <BsFacebook />
                   </a>
                 </div>

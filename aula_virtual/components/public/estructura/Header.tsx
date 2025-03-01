@@ -6,6 +6,7 @@ import { MdOutlineMenu } from 'react-icons/md'
 import { CiMobile1 } from 'react-icons/ci'
 import { JSX, useEffect, useState } from 'react'
 import Link from 'next/link'
+
 export const Header = (): JSX.Element => {
   const [scroll, setScroll] = useState(0)
 
@@ -67,7 +68,7 @@ export const Header = (): JSX.Element => {
                 </div>
 
                 <div className="header__nav__button">
-                    <button type="button" onClick={() => { setMenu(!menu) }}><MdOutlineMenu/></button>
+                    <button title='boton' type="button" onClick={() => { setMenu(!menu) }}><MdOutlineMenu/></button>
                 </div>
             </nav>
 

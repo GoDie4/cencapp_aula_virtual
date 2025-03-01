@@ -106,6 +106,8 @@ export const login = async (
         celular: usuarioExiste.celular,
         email: usuarioExiste.email,
       },
+      status: 200,
+      token: token,
     });
   } catch (error: any) {
     console.error("Error al iniciar sesión", error);

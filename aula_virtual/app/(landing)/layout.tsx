@@ -1,5 +1,6 @@
 import { FooterLayout } from "@/layouts/FooterLayout";
 import { HeaderLayout } from "@/layouts/HeaderLayout";
+import Carrito from "../../components/public/utils/Carrito";
 
 /*
 const montserrat = Montserrat({
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <>
       <HeaderLayout />
+      <Carrito />
       {children}
       <FooterLayout />
     </>
