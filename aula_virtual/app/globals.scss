@@ -348,6 +348,10 @@ body {
     transform: scale(1.2);
   }
 
+  &:hover .quieto{
+    transform: scale(1);
+  }
+
   &:hover {
     span {
       background: #ffffff;

@@ -1,18 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-
+import bcrypt from 'bcrypt'
 const prisma = new PrismaClient();
 
 export const crearProfesor = async (req: any, res: any): Promise<void> => {
   const { nombres, apellidos, celular, email, password } = req.body;
   console.log("REQ: ", req.body);
   try {
+    const hashPassword = await bcrypt.hash(password, 10)
     const profesor = await prisma.usuario.create({
       data: {
         nombres: nombres,
         apellidos: apellidos,
         celular: celular,
         email: email,
-        password: password,
+        password: hashPassword,
         rolId: 3,
         activo: false,
       },
