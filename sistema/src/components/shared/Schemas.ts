@@ -15,16 +15,6 @@ export const SchemaCategorias = Yup.object().shape({
   nombre: Yup.string().required('Este campo es requerido').min(1)
 })
 
-export const SchemaProfesores = Yup.object().shape({
-  nombres: Yup.string().required('Este campo es requerido').min(1),
-  apellidos: Yup.string().required('Este campo es requerido').min(1),
-  celular: Yup.string().required('Este campo es requerido').min(1),
-  email: Yup.string().required('Este campo es requerido').min(1),
-  password: Yup.string()
-    .required('Este campo es requerido')
-    .min(8, 'Mínimo 8 caracterees')
-})
-
 export const SchemaDistritos = Yup.object().shape({
   nombre: Yup.string().required('Este campo es requerido').min(1),
   id_departamento: Yup.string().required('Este campo es requerido').min(1),
@@ -49,18 +39,18 @@ export const ScheamaPrimeraSeccion = Yup.object().shape({
 // SEGUNDA SECCION
 export const ScheamaSegundaSeccion = Yup.object().shape({
   titulo: Yup.string().required('El campo es requerido'),
-  descripcion: Yup.string().required('El campo es requerido')
+  descripcion: Yup.string().required('El campo es requerido'),
 })
 
 // VALORES
 export const ScheamaValores = Yup.object().shape({
-  titulo: Yup.string().required('El campo es requerido')
+  titulo: Yup.string().required('El campo es requerido'),
 })
 
 // VALORES
 export const SchemaValores = Yup.object().shape({
   mapa: Yup.string().required('El campo es requerido'),
-  mapa2: Yup.string().required('El campo es requerido')
+  mapa2: Yup.string().required('El campo es requerido'),
 })
 
 // CONFIGURACION
@@ -80,15 +70,35 @@ export const SchemaConfiguracion = Yup.object().shape({
   twiter: Yup.string().nullable(),
   linkedin: Yup.string().nullable(),
   youtube: Yup.string().nullable(),
-  whatsapp: Yup.string().nullable()
+  whatsapp: Yup.string().nullable(),
 })
 
 // VALORES
-export const SchemaBanner = Yup.object().shape({
-  titulo: Yup.string().required('El campo es requerido'),
-  descripcion: Yup.string().required('El campo es requerido')
+
+export const ProfesorSchema = Yup.object().shape({
+  nombres: Yup.string().required('El campo es requerido'),
+  apellidos: Yup.string().required('El campo es requerido'),
+  email: Yup.string()
+    .email('Email invalido')
+    .required('Este campo es requerido'),
+  celular: Yup.string()
+    .required('Este campo es requerido')
+    .min(9, 'El numero debe tener 9 digitos')
+    .max(9, 'El numero debe tener 9 digitos'),
+  password: Yup.string().required('El campo es requerido')
 })
 
+export const ProfesorEditSchema = Yup.object().shape({
+  nombres: Yup.string().required('El campo es requerido'),
+  apellidos: Yup.string().required('El campo es requerido'),
+  email: Yup.string()
+    .email('Email invalido')
+    .required('Este campo es requerido'),
+  celular: Yup.string()
+    .required('Este campo es requerido')
+    .min(9, 'El numero debe tener 9 digitos')
+    .max(9, 'El numero debe tener 9 digitos')
+})
 // TRANSACCIONES
 
 export const SchemaTransacciones = Yup.object().shape({
@@ -109,21 +119,21 @@ export const cuponSchema = Yup.object().shape({
     .nullable() // Permite que el valor sea null
     .transform((value, originalValue) => {
       // Asegúrate de que originalValue sea una cadena antes de aplicar trim
-      const strValue = originalValue ? originalValue.toString() : ''
-      return strValue.trim() === '' ? null : value
+      const strValue = originalValue ? originalValue.toString() : '';
+      return strValue.trim() === '' ? null : value;
     }) // Convierte strings vacíos a null
     .test(
       'isValidPorcentaje',
       'El porcentaje de descuento es obligatorio si seleccionas "Porcentaje"',
       function (value) {
-        const { tipoDescuento } = this.parent
+        const { tipoDescuento } = this.parent;
         if (tipoDescuento === 'porcentaje') {
           return (
             value !== null && value !== undefined && value > 0 && value <= 100
-          )
+          );
         }
-        return true // No se requiere validación si no es "porcentaje"
-      }
+        return true; // No se requiere validación si no es "porcentaje"
+      },
     )
     .typeError('Debe ser un número válido'),
 
@@ -132,19 +142,19 @@ export const cuponSchema = Yup.object().shape({
     .nullable() // Permite que el valor sea null
     .transform((value, originalValue) => {
       // Asegúrate de que originalValue sea una cadena antes de aplicar trim
-      const strValue = originalValue ? originalValue.toString() : ''
-      return strValue.trim() === '' ? null : value
+      const strValue = originalValue ? originalValue.toString() : '';
+      return strValue.trim() === '' ? null : value;
     }) // Convierte strings vacíos a null
     .test(
       'isValidMonto',
       'El monto de descuento es obligatorio si seleccionas "Monto Fijo"',
       function (value) {
-        const { tipoDescuento } = this.parent
+        const { tipoDescuento } = this.parent;
         if (tipoDescuento === 'montoFijo') {
-          return value !== null && value !== undefined && value > 0
+          return value !== null && value !== undefined && value > 0;
         }
-        return true // No se requiere validación si no es "montoFijo"
-      }
+        return true; // No se requiere validación si no es "montoFijo"
+      },
     )
     .typeError('Debe ser un número válido'),
 
@@ -156,7 +166,7 @@ export const cuponSchema = Yup.object().shape({
     .required('La fecha de expiración es obligatoria')
     .min(
       Yup.ref('validoDesde'),
-      'La fecha de expiración debe ser posterior a la fecha de inicio'
+      'La fecha de expiración debe ser posterior a la fecha de inicio',
     )
     .typeError('La fecha de expiración debe ser válida'),
 
@@ -168,5 +178,5 @@ export const cuponSchema = Yup.object().shape({
   valorMinimoPedido: Yup.number()
     .nullable() // Permite null o vacío
     .min(0, 'El valor mínimo debe ser mayor o igual a 0')
-    .typeError('Debe ser un número válido')
-})
+    .typeError('Debe ser un número válido'),
+});

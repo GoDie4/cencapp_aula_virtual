@@ -41,7 +41,6 @@ const Auth = (): JSX.Element | undefined => {
             'Content-Type': 'application/json' // Incluye cualquier encabezado necesario
           }
         })
-        console.log(data)
         if (data.status === 200) {
           console.log(data)
           toast.success('Usuario identificado correctamente')
@@ -83,7 +82,7 @@ const Auth = (): JSX.Element | undefined => {
       })
 
     return (
-      <div className="flex items-center justify-center w-full h-screen">
+      <div className="w-full h-screen flex justify-center items-center">
         <Toaster position="top-center" richColors />
         <div className="w-full rounded-md bg-[#1E1F25] px-6 lg:px-10 py-12 shadow-2xl lg:w-[450px] relative">
           <h1 className="mb-8 text-center text-3xl font-bold uppercase tracking-[5px] text-white">
@@ -99,7 +98,7 @@ const Auth = (): JSX.Element | undefined => {
             >
               <img
                 src="https://api.logosperu.com.pe/public/archivosVarios/google_logo.png"
-                className="w-4 h-4"
+                className="h-4 w-4"
                 alt="Ingresa con google"
               />
               Ingresa con google
@@ -111,7 +110,7 @@ const Auth = (): JSX.Element | undefined => {
                   fill="currentColor"
                   strokeWidth="0"
                   viewBox="0 0 24 24"
-                  className="absolute -translate-y-1/2 left-2 top-1/2 text-main"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-main"
                   height="1em"
                   width="1em"
                   xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +139,7 @@ const Auth = (): JSX.Element | undefined => {
                   fill="currentColor"
                   strokeWidth="0"
                   viewBox="0 0 24 24"
-                  className="absolute -translate-y-1/2 left-2 top-1/2 text-main"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-main"
                   height="1em"
                   width="1em"
                   xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +164,7 @@ const Auth = (): JSX.Element | undefined => {
                     onClick={() => {
                       setShowPassword(!showPassword)
                     }}
-                    className="absolute -translate-y-1/2 right-2 top-1/2 text-main hover:cursor-pointer"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-main hover:cursor-pointer"
                   />
                     )
                   : (
@@ -173,7 +172,7 @@ const Auth = (): JSX.Element | undefined => {
                     onClick={() => {
                       setShowPassword(!showPassword)
                     }}
-                    className="absolute -translate-y-1/2 right-2 top-1/2 text-main hover:cursor-pointer"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-main hover:cursor-pointer"
                     name="password"
                   />
                     )}
@@ -185,7 +184,7 @@ const Auth = (): JSX.Element | undefined => {
               <button
                 type={loadingC ? 'button' : 'submit'}
                 disabled={loadingC}
-                className="w-full px-4 py-3 text-sm font-bold text-white uppercase transition-colors rounded-lg bg-main hover:bg-darKmain"
+                className="w-full rounded-lg bg-main px-4 py-3 text-sm font-bold uppercase text-white transition-colors hover:bg-darKmain"
               >
                 {loadingC ? 'Validando...' : 'Ingresar'}
               </button>
@@ -204,7 +203,7 @@ const Auth = (): JSX.Element | undefined => {
             <span className="flex items-center gap-2 text-gray-300">
               ¿No tienes cuenta?{' '}
               <a
-                className="transition-colors text-main hover:text-gray-100"
+                className="text-main transition-colors hover:text-gray-100"
                 href="https://wa.me//+51987038024"
                 target="_blank"
                 rel="noreferrer noopener"
