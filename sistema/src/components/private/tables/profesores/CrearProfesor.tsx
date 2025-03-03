@@ -1,26 +1,33 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Errors } from '../../../shared/Errors'
-import { InputsBriefs } from '../../../shared/InputsBriefs'
-import { TitleBriefs } from '../../../shared/TitleBriefs'
-import { ProfesorEditSchema } from '../../../shared/Schemas'
-import { toast } from 'sonner'
-import { useFormik } from 'formik'
-import { useEffect, useState } from 'react'
-import { type ProfesorInterface } from '../../../../interfaces/ProfesoresInterface'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Global } from '../../../../helper/Global'
 import { Loading } from '../../../shared/Loading'
+import { useFormik } from 'formik'
+import { ProfesorSchema } from '../../../shared/Schemas'
+import { TitleBriefs } from '../../../shared/TitleBriefs'
+import { InputsBriefs } from '../../../shared/InputsBriefs'
+import { Errors } from '../../../shared/Errors'
+/*
+import {
+  type ImagenState
+} from '../../../shared/Interfaces'
+*/
+// import { ImageUploader } from '../../../shared/ImageUploader'
+import { toast } from 'sonner'
+import { type ProfesorInterface } from '../../../../interfaces/ProfesoresInterface'
 
-export default function EditarProfesor (): JSX.Element {
-  const { id } = useParams()
+export default function CrearProfesor (): JSX.Element {
   const navigate = useNavigate()
-  const token = localStorage.getItem('token')
-  // const [profesor, setProfesor] = useState<ProfesorInterface>()
+  /*
+  const [imagen1, setImagen1] = useState<ImagenState>({
+    archivo: null,
+    archivoName: ''
+  })
+  const [boton1, setBoton1] = useState(false)
+  const [url1, setUrl1] = useState('')
+  */
   const [loadingComponents, setLoadingComponents] = useState(false)
-
-  useEffect(() => {
-    getProfesor()
-  }, [])
 
   const saveBanner = async (
     values: ProfesorInterface
@@ -42,7 +49,7 @@ export default function EditarProfesor (): JSX.Element {
     }
     try {
       const { status } = await axios.post(
-        `${Global.url}/profesores/${id ?? ''}`,
+        `${Global.url}/profesores`,
         body,
         {
           headers: {
@@ -51,8 +58,8 @@ export default function EditarProfesor (): JSX.Element {
           }
         }
       )
-      if (status === 200) {
-        toast.success('Edición exitos')
+      if (status === 201) {
+        toast.success('Registro exitoso')
         navigate('/admin/profesores')
       }
       if (status === 400) {
@@ -68,7 +75,7 @@ export default function EditarProfesor (): JSX.Element {
     setLoadingComponents(false)
   }
 
-  const { handleSubmit, handleChange, errors, values, touched, handleBlur, setValues } =
+  const { handleSubmit, handleChange, errors, values, touched, handleBlur } =
     useFormik({
       initialValues: {
         nombres: '',
@@ -77,38 +84,15 @@ export default function EditarProfesor (): JSX.Element {
         celular: '',
         password: ''
       },
-      validationSchema: ProfesorEditSchema,
+      validationSchema: ProfesorSchema,
       onSubmit: saveBanner
     })
-
-  const getProfesor = async (): Promise<void> => {
-    try {
-      const { data } = await axios.get(
-        `${Global.url}/profesores/${id ?? ''}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token !== null && token !== '' ? token : ''
-              }`
-          }
-        }
-      )
-      setValues({
-        ...values,
-        nombres: data.profesor.nombres,
-        apellidos: data.profesor.apellidos,
-        email: data.profesor.email,
-        celular: data.profesor.celular
-      })
-      setLoadingComponents(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
   return (
     <>
       {loadingComponents
         ? (
-          <Loading />)
+          <Loading />
+          )
         : (
           <form
             className="bg-secondary-100 p-8 rounded-xl mt-4"
