@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export const crearProfesor = async (req: any, res: any): Promise<void> => {
   const { nombres, apellidos, celular, email, password } = req.body;
-
+  console.log("REQ: ", req.body);
   try {
     const profesor = await prisma.usuario.create({
       data: {
@@ -14,7 +14,7 @@ export const crearProfesor = async (req: any, res: any): Promise<void> => {
         email: email,
         password: password,
         rolId: 3,
-        activo: false
+        activo: false,
       },
     });
 
@@ -24,11 +24,13 @@ export const crearProfesor = async (req: any, res: any): Promise<void> => {
     });
   } catch (error: any) {
     console.error("Error al crear profesor:", error);
-    res.status(500).json({ message: "Error al crear profesor", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al crear profesor", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const showAllProfesores = async (req: any, res: any): Promise<void> => {
   try {
@@ -40,11 +42,13 @@ export const showAllProfesores = async (req: any, res: any): Promise<void> => {
     res.status(200).json({ profesores });
   } catch (error) {
     console.error("Error al obtener profesores:", error);
-    res.status(500).json({ message: "Error al obtener profesores", error: error });
+    res
+      .status(500)
+      .json({ message: "Error al obtener profesores", error: error });
   } finally {
     await prisma.$disconnect();
   }
-}; 
+};
 
 export const actualizarProfesor = async (req: any, res: any): Promise<void> => {
   const { id } = req.params;
@@ -68,7 +72,9 @@ export const actualizarProfesor = async (req: any, res: any): Promise<void> => {
     });
   } catch (error: any) {
     console.error("Error al actualizar profesor:", error);
-    res.status(500).json({ message: "Error al actualizar profesor", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al actualizar profesor", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
@@ -76,7 +82,7 @@ export const actualizarProfesor = async (req: any, res: any): Promise<void> => {
 
 export const deleteProfesor = async (req: any, res: any): Promise<void> => {
   const { id } = req.params;
-
+    console.log(req.params)
   try {
     const profesor = await prisma.usuario.delete({
       where: { id: id },
@@ -88,13 +94,18 @@ export const deleteProfesor = async (req: any, res: any): Promise<void> => {
     });
   } catch (error: any) {
     console.error("Error al eliminar profesor:", error);
-    res.status(500).json({ message: "Error al eliminar profesor", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al eliminar profesor", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
 };
 
-export const obtenerProfesorPorId = async (req: any, res: any): Promise<void> => {
+export const obtenerProfesorPorId = async (
+  req: any,
+  res: any
+): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -109,7 +120,9 @@ export const obtenerProfesorPorId = async (req: any, res: any): Promise<void> =>
     });
   } catch (error: any) {
     console.error("Error al obtener profesor por ID:", error);
-    res.status(500).json({ message: "Error al obtener profesor", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al obtener profesor", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
