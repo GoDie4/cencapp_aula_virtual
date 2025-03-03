@@ -1,5 +1,6 @@
 import { config } from "@/config/config"
 import { Categoria } from "@/interfaces/CategoriaInterface"
+import { useCarrito } from "@/store/useCarrito"
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -16,7 +17,7 @@ export const getCategorias = async (setCategorias: React.Dispatch<React.SetState
 
 export function useCategorias () {
   const [categorias, setCategorias] = useState<Categoria[]>([])
-
+  const {  } = useCarrito.getState()
   useEffect(() => {
     getCategorias(setCategorias)
   }, [])

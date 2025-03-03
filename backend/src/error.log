@@ -40,3 +40,7 @@
 2025-03-03T22:02:31.095Z [ERROR] GET /api/categoriaBuscar/bim | Status: 404 | Time: 4.371 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
 2025-03-03T22:24:29.178Z [ERROR] GET /api/public/categorias/url_imagen-1741035358573-191088704.webp | Status: 404 | Time: 6.658 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
 2025-03-03T22:24:31.715Z [ERROR] GET /api/public/categorias/url_imagen-1741035358573-191088704.webp | Status: 404 | Time: 1.604 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+2025-03-03T22:49:27.232Z [ERROR] GET /api/alumno | Status: 401 | Time: 76.144 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
+2025-03-03T23:17:12.292Z [ERROR] POST /api/cursos | Status: 500 | Time: 186.046 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+2025-03-03T23:17:27.126Z [ERROR] POST /api/cursos | Status: 500 | Time: 30.143 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+2025-03-03T23:19:12.120Z [ERROR] POST /api/cursos/cm7tolz7o0001u7rgdphk1sli | Status: 500 | Time: 48.850 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
