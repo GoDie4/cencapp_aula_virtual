@@ -83,58 +83,6 @@ export const createCategoriaMemory = async (
       error: error.message,
     });
   }
-  /*
-  if (req.file) {
-    
-  
-
-    // En este ejemplo, simplemente guardaremos la ruta de un archivo temporal (simulando que la guardamos en disco después de procesarla)
-    const tempFilePath = `/public/categorias/${Date.now()}-${imagenOriginalName}`;
-    const tempFilePath2 = `/public/categoriasIcono/${Date.now()}-${imagenOriginalName}`; // Ruta temporal simulada
-    console.log("Simulando guardar el archivo procesado en:", tempFilePath);
-
-    const url_imagen_path = tempFilePath; // Usar la ruta temporal simulada como url_imagen
-    const url_icono_path = tempFilePath2; // Usar la ruta temporal simulada como url_icono
-    try {
-      const nuevaCategoria = await prisma.categorias.create({
-        data: {
-          nombre: nombres,
-          url_imagen: url_imagen_path,
-          url_icono: url_icono_path,
-        },
-      });
-      res
-        .status(201)
-        .json({
-          message: "Categoría creada con éxito (usando memoryStorage)",
-          categorias: nuevaCategoria,
-        });
-      return;
-    } catch (error: any) {
-      console.error("Error al crear categoría:", error);
-      if (error.code === "P2002") {
-        res
-          .status(409)
-          .json({ message: "Ya existe una categoría con ese nombre." });
-        return;
-      }
-      res
-        .status(500)
-        .json({
-          message: "Error interno del servidor al crear la categoría",
-          error: error.message,
-        });
-      return;
-    }
-  } else {
-    res
-      .status(400)
-      .json({
-        message: "Por favor, sube un archivo de imagen para la categoría.",
-      });
-    return;
-  }
-    */
 };
 
 export const showAllCategorias = async (
@@ -143,9 +91,7 @@ export const showAllCategorias = async (
 ): Promise<void> => {
   try {
     // Utiliza prisma.categorias.findMany() para obtener todas las categorías de la base de datos
-    const categorias = await prisma.categorias.findMany({
-      include: { cursos: true }
-    });
+    const categorias = await prisma.categorias.findMany();
 
     // Envía una respuesta exitosa con el código de estado 200 y las categorías en formato JSON
     res.status(200).json({ categorias });
@@ -290,6 +236,7 @@ export const obtenerCategoriaPorId = async (
     // Buscar una categoría por ID en la base de datos
     const categoria = await prisma.categorias.findUnique({
       where: { id: categoriaId },
+      include: { cursos: true }
     });
 
     if (categoria) {
@@ -308,6 +255,31 @@ export const obtenerCategoriaPorId = async (
     await prisma.$disconnect();
   }
 };
+
+export const obtenerCategoriaPorNombre = async (req: Request, res: Response) => {
+  const { nombre } = req.params
+  try {
+    
+    const categoria = await prisma.categorias.findFirst({
+      where: {
+        nombre: {
+          contains: nombre,
+        }
+      },
+      include: {
+        cursos: true
+      }
+    })
+
+    res.status(200).json({
+      categoria: categoria
+    })
+  }
+  catch (e) {
+    console.error(e)
+    return
+  }
+}
 
 export const deleteCategoria = async (
   req: Request,

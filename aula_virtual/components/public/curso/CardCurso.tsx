@@ -12,17 +12,25 @@ const CardCurso = ({
   horas,
   titulo,
   precio,
+  pedido1
 }: {
   id: string;
   img: string;
   horas: string;
   titulo: string;
   precio: string;
+  pedido1?: boolean
 }): JSX.Element => {
   const [pedido, setPedido] = useState(false);
   const { carrito, agregarCarrito, removerCarrito } = useCarrito();
+
   useEffect(() => {
+    console.log("Cambio de estado")
     setPedido(carrito.some((c) => c.id === id));
+    if (pedido1) {
+      console.log(pedido1)
+      setPedido(true)
+    }
   }, [carrito.length]);
 
   const handleClick = (
@@ -37,6 +45,7 @@ const CardCurso = ({
         horas: parseInt(horas),
         imagen: img,
         categoriaId: 1,
+        pedido: false
       });
       toast.success("Curso eliminado del carrito");
     } else {
@@ -47,6 +56,7 @@ const CardCurso = ({
         horas: parseInt(horas),
         imagen: img,
         categoriaId: 1,
+        pedido: true
       });
       toast.success("Curso agregado al carrito");
     }

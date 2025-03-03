@@ -1,10 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-
+import bcrypt from 'bcrypt'
 const prisma = new PrismaClient();
 
 export const crearAlumno = async (req: any, res: any): Promise<void> => {
   const { nombres, apellidos, celular, email, password } = req.body;
 
+  const hashPassword = await bcrypt.hash(password, 10)
   try {
     const alumno = await prisma.usuario.create({
       data: {
@@ -12,7 +13,7 @@ export const crearAlumno = async (req: any, res: any): Promise<void> => {
         apellidos: apellidos,
         celular: celular,
         email: email,
-        password: password,
+        password: hashPassword,
         rolId: 2,
       },
     });

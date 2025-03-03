@@ -53,7 +53,6 @@ export const uploadImageCurso = upload.fields([
   { name: "url_banner", maxCount: 1 },
 ]);
 
-// En tu controlador, cuando uses este middleware, el archivo estará disponible en req.file (en memoria)
 export const createCurso = async (
   req: Request,
   res: Response
@@ -61,6 +60,7 @@ export const createCurso = async (
   const {
     nombre,
     precio,
+    horas,
     categoriaId,
     descripcion,
     dirigido,
@@ -104,6 +104,7 @@ export const createCurso = async (
           imagen: urlImagenPath ?? "",
           banner: urlBannerPath ?? "",
           precio: parseFloat(precio).toFixed(2),
+          horas: horas,
           presentacion: descripcion ?? "",
           dirigido: dirigido ?? "",
           metodologia: metodologia ?? "",
@@ -169,6 +170,7 @@ export const actualizarCurso = async (
   const {
     nombre,
     precio,
+    horas,
     categoriaId,
     descripcion,
     dirigido,
@@ -215,6 +217,7 @@ export const actualizarCurso = async (
         nombre: nombre,
         precio,
         categoriaId: Number(categoriaId),
+        horas,
         imagen: urlImagenPath !== null ? urlImagenPath : cursoExistente.imagen,
         banner: urlBannerPath !== null ? urlBannerPath : cursoExistente.banner,
         presentacion: descripcion,
