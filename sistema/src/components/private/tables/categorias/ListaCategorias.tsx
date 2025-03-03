@@ -131,7 +131,7 @@ export const ListaCategorias = (): JSX.Element => {
                   <img
                     src={`${Global.urlImages}${pro.url_imagen}`}
                     alt=""
-                    className="w-full h-full flex object-contain bg-white"
+                    className="w-full h-full flex object-contain bg-transparent"
                   />
                 </div>
                 <div className="flex flex-col items-center justify-center mt-2 px-2">

@@ -12,6 +12,9 @@ import curso2 from '../../../../assets/cursos/2.webp'
 import curso3 from '../../../../assets/cursos/3.webp'
 import curso4 from '../../../../assets/cursos/4.webp'
 import { JSX } from 'react'
+import { revertUrl } from '@/logic/formateador'
+import { getCategoriaSelected } from '@/server/getCategoriaSelected'
+import { config } from '@/config/config'
 
 const Cursos = async ({
   params,
@@ -25,6 +28,7 @@ const Cursos = async ({
     window.scrollTo(0, 0)
   }, [])
   */
+  /*
   const cursosInfo = {
     topografiayfotogametria: {
       titulo: 'Topografía y Fotogametría',
@@ -69,21 +73,39 @@ const Cursos = async ({
       ]
     }
   }
-
+  */
+  const categoria = await getCategoriaSelected(revertUrl(nombre))
+  console.log(categoria)
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const curso = cursosInfo[nombre] // Obtenemos los datos del curso según el nombre de la URL
-
-  if (!curso) {
+  // const curso = cursosInfo[nombre] // Obtenemos los datos del curso según el nombre de la URL
+  // console.log(nombre)
+  if (!categoria) {
     return <div>Curso no encontrado</div>
   }
   return (
     <>
-      <Banner imagen={`${curso.fondo}`} titulo={curso.titulo} />
+      <Banner imagen={`http://localhost:4000${categoria.url_imagen}`} titulo={categoria.nombre} />
       <div className="gridCursos">
-        <div className="gridCursos__title"></div>
+        <div className="gridCursos__title">
+          {categoria.nombre}
+        </div>
         <div className="gridCursos__main">
-          {curso.cursos.map((curso: any, index: number) => (
+          {
+            categoria.cursos?.map((curso) => {
+              return (
+                <div className="gridCursos__main__item" key={curso.id}>
+                  <CardCurso
+                    id={String(curso.id)}
+                    horas={String(curso.horas)}
+                    img={`http://localhost:4000${curso.imagen}`}
+                    precio={String(curso.precio)}
+                    titulo={curso.nombre}
+                  />
+                </div>
+              )
+            })
+          }
+          {/* curso.cursos.map((curso: any, index: number) => (
             <div className="gridCursos__main__item" key={index}>
               <CardCurso
                 id={String(index)}
@@ -93,7 +115,7 @@ const Cursos = async ({
                 titulo={curso.titulo}
               />
             </div>
-          ))}
+          )) */}
         </div>
       </div>
     </>

@@ -24,6 +24,7 @@ model Curso {
   nombre        String        @db.VarChar(255)
   imagen        String        @db.VarChar(255)
   banner        String        @db.VarChar(255)
+  horas         Int           
   precio        Decimal
   categoriaId   Int
   presentacion  String        @db.Text @default("")
