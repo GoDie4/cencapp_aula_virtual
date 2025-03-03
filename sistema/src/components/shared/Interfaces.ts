@@ -171,6 +171,7 @@ export interface productosValuesModificate {
   nombre: string
   categoriaId: string
   precio: string
+  horas: number
 }
 
 // UPDATE-CREATE

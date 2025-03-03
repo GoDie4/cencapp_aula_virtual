@@ -85,6 +85,7 @@ export const CrearProducto = (): JSX.Element => {
     const formData = new FormData()
     formData.append('categoriaId', values.categoriaId)
     formData.append('nombre', values.nombre)
+    formData.append('horas', String(values.horas))
     formData.append('descripcion', content)
     formData.append('dirigido', dirigido)
     formData.append('objetivo', objetivo)
@@ -143,7 +144,8 @@ export const CrearProducto = (): JSX.Element => {
       initialValues: {
         nombre: '',
         categoriaId: '',
-        precio: ''
+        precio: '',
+        horas: 0
       },
       validationSchema: ScheamaProductos,
       onSubmit: saveProducto
