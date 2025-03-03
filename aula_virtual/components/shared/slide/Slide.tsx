@@ -1,104 +1,122 @@
-import React, { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import  { Navigation, Autoplay }  from 'swiper/modules'
-import 'swiper/css/navigation'
-import 'swiper/css'
-import { slide1, slide2 } from '../images'
-import Link from 'next/link'
-interface SlideProps {
-  index: number
-}
+import { Swiper, SwiperSlide } from "swiper/react";
 
-const Slide: React.FC<SlideProps> = ({ index }) => {
-  const slideRef = useRef(null)
-  const parallaxRef = useRef(null)
-  const textRef = useRef(null)
+import { EffectFade, Autoplay, Navigation } from "swiper/modules";
+import "swiper/css";
+import { motion } from "framer-motion";
 
-  useEffect(() => {
-    const slideElement = slideRef.current
-    const parallaxElement = parallaxRef.current
-    const textElement = textRef.current
+import { useState } from "react";
 
-    if (slideElement && parallaxElement && textElement) {
-      gsap.from(slideElement, {
-        opacity: 0,
-        x: -100,
-        duration: 1,
-        ease: 'power3.out'
-      })
+import { BiSolidChevronRight } from "react-icons/bi";
+import { BiSolidChevronLeft } from "react-icons/bi";
+import { slide1, slide2 } from "../images";
+import { ContentMain } from "../../public/estructura/ContentMain";
+import Link from "next/link";
+import { slidesValues } from "@/interfaces/SlidesInterface";
+export const Slide = () => {
+  //   const [slides, setSlides] = useState([])
+  const [currentSlide, setCurrentSlide] = useState(0);
+  //   const slideVariants = {
+  //     hidden: { opacity: 0 },
+  //     visible: { opacity: 1 },
+  //   };
 
-      gsap.to(parallaxElement, {
-        yPercent: -20,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: slideElement,
-          start: 'top center',
-          end: 'bottom center',
-          scrub: true
-        }
-      })
+  const slides: slidesValues[] = [
+    {
+      imagen1: slide1.src,
+      titulo1:
+        "Bievenidos a Cencapp Ofrecemos capacitaciones en ingeniería y afines.",
+      descripcion: "Ofrecemos capacitaciones en ingeniería y afines.",
+      id: "SLD-001",
+    },
+    {
+      imagen1: slide2.src,
+      titulo1:
+        "Bievenidos a Cencapp Ofrecemos capacitaciones en ingeniería y afines.",
+      descripcion: "Ofrecemos capacitaciones en ingeniería y afines.",
+      id: "SLD-001",
+    },
+  ];
 
-      // Animación en 3D del texto
-      gsap.from(textElement, {
-        duration: 1,
-        rotationY: 360, // Rotación horizontal
-        rotationX: 45, // Rotación vertical
-        scale: 0.8, // Escala
-        opacity: 0,
-        ease: 'power3.out',
-        stagger: 0.2, // Retardo para la animación
-        onComplete: () => {
-          // Lógica adicional después de la animación (si es necesario)
-        }
-      })
-    }
-  }, [index])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSlideChange = (swiper: any): void => {
+    setCurrentSlide(swiper.activeIndex);
+  };
 
   return (
-    <>
-      <Swiper className="slide" navigation={true} modules={[Navigation, Autoplay]} loop
-        autoplay={{
-          delay: 3500,
-          disableOnInteraction: false
-        }}
-      >
-        <SwiperSlide style={{ backgroundImage: `url(${slide1.src})` }}>
-          <div className="contentSlide">
-            <h1 ref={textRef} className="slideContent">
-              Bienvenido a CENCAPP
-              <br />
-              <span>
-                Ofrecemos capacitaciones <br />
-                en Ingeniería y afines{' '}
-              </span>
-            </h1>
+    <Swiper
+      modules={[Autoplay, EffectFade, Navigation]}
+      className={`relative h-screen`}
+      allowTouchMove={false}
+      id="inicio"
+      navigation={{
+        nextEl: ".parriba",
+        prevEl: ".pabajo",
+      }}
+      autoplay={{
+        delay: 7500,
+        disableOnInteraction: false,
+      }}
+      onSlideChange={handleSlideChange}
+    >
+      <>
+        {slides.map((slide: slidesValues, index: number) => (
+          <SwiperSlide key={index}>
+            <div
+              style={{
+                backgroundImage: `url(${slide.imagen1})`,
+              }}
+              className="flex h-full slide-gradient bg-cover bg-center w-full relative z-10 before:absolute before:w-full before:h-full before:top-0 before:left-0 before:bg-black-main before:opacity-50 before:-z-10"
+            >
+              <ContentMain className="w-full py-20 md:py-0 gap-16 sm:gap-0 flex flex-col lg:flex-row justify-center md:justify-start items-center">
+                <motion.div
+                  className="w-full lg:w-3/5"
+                  initial="hidden"
+                  animate={currentSlide === index ? "visible" : "hidden"}
+                  variants={{
+                    hidden: { opacity: 0, y: 50 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 1 },
+                    },
+                  }}
+                  transition={{ duration: 1 }}
+                >
+                  <h1 className="leading-[64px] text-3xl font-[500] text-center md:text-left lg:text-[48px] uppercase text-white-main">
+                    {slide.titulo1}{" "}
+                  </h1>
+                  {/* <motion.div
+                    initial="hidden"
+                    animate={currentSlide === index ? "visible" : "hidden"}
+                    variants={slideVariants}
+                    dangerouslySetInnerHTML={{
+                      __html: slide.descripcion,
+                    }}
+                    className="text-white-main font-body text-justify md:text-left text-sm md:text-base mt-5 w-full lg:w-3/4"
+                  ></motion.div> */}
+                  <div className="flex flex-col md:flex-row items-center gap-4 mt-5">
+                    <Link
+                      href={"#servicios"}
+                      className="bg-secondary-main text-white-main group  flex items-center gap-1 w-fit rounded-main px-8 font-semibold text-xs md:text-sm py-2 border border-secondary-main transition-all hover:bg-secondary-800 hover:border-secondary-800 hover:text-white-main hover:scale-[1.02]"
+                    >
+                      Comencemos{" "}
+                    </Link>
+                  </div>
+                </motion.div>
+              </ContentMain>
+            </div>
+          </SwiperSlide>
+        ))}
+      </>
 
-            <Link href="/contacto">Contactar</Link>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide style={{ backgroundImage: `url(${slide2.src})` }}>
-          <div className="contentSlide">
-            <h1 ref={textRef} className="slideContent">
-              Bienvenido a CENCAPP
-              <br />
-              <span>
-                Ofrecemos capacitaciones <br />
-                en Ingeniería y afines{' '}
-              </span>
-            </h1>
-
-            <Link href="/contacto">Contactar</Link>
-          </div>
-        </SwiperSlide>
-      </Swiper>
-      {/* <div ref={slideRef} className="slide" style={{ backgroundImage }}>
-      <div ref={parallaxRef} className="parallax-content">
-
+      <div className="absolute  mx-auto md:mx-0 right-52 flex gap-0 -bottom-12 my-auto h-[200px] z-[999]">
+        <div className=" rounded-full w-fit h-fit p-1 md:p-3 parriba cursor-pointer mb-4">
+          <BiSolidChevronLeft className="text-6xl  text-primary-main " />
+        </div>
+        <div className=" rounded-full w-fit h-fit p-1 -ml-6 md:p-3 cursor-pointer mb-4 pabajo">
+          <BiSolidChevronRight className="text-6xl text-primary-main" />
+        </div>
       </div>
-    </div> */}
-    </>
-  )
-}
-
-export default Slide
+    </Swiper>
+  );
+};
