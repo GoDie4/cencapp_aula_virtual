@@ -8,12 +8,12 @@ export default function Carrito() {
   return (
     <Link
       href="/carrito"
-      className="carrito fixed bottom-5 right-5 z-50 bg-primary-main text-white h-20 w-20 flex justify-center items-center rounded-md shadow-lg shadow-black/80 hover:bg-primary/90 duration-500 ease-in-out transition-colors"
+      className="carrito rounded-full fixed bottom-5 border border-secondary-main right-5 z-50 bg-primary-main text-white-main h-16 w-16 flex justify-center items-center shadow-2xl shadow-black/90 hover:bg-primary/90 duration-500 ease-in-out transition-colors"
     >
-      <div className="w-10 h-10 absolute -top-5 -left-5 bg-secondary-main  shadow-xl rounded-full flex justify-center items-center">
+      <div className="w-7 h-7 absolute -top-2 -left-2 bg-secondary-main  shadow-xl rounded-full flex justify-center items-center">
         {carrito.length}
       </div>
-      <FiShoppingCart size={25} />
+      <FiShoppingCart size={22} />
     </Link>
   );
 }

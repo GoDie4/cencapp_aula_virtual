@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { Typography } from "@mui/material"
 import { Accordion, AccordionDetails, AccordionSummary } from "./Acordion"

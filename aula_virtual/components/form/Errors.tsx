@@ -5,7 +5,7 @@ interface Errores {
 
 export const Errors = (props: Errores) => {
   return (
-    <p className="text-sm mb-4 mt-1 text-red-500">
+    <p className="text-sm  mt-1 text-red-500">
       {props.errors !== null &&
         props.errors !== undefined &&
         props.errors !== "" &&

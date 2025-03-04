@@ -3,15 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware (req: NextRequest) {
   const token = req.headers.get('authorization')?.split(' ')[1]; // Obtener el token del encabezado
-
-  if (req.nextUrl.pathname.startsWith('/protected')) {
+    console.log(token)
+  if (req.nextUrl.pathname.startsWith('/asdas')) {
+    console.log(token)
     if (!token) {
       return NextResponse.redirect(new URL('/login', req.url));
     }
 
     try {
       // Llamada a la API para verificar el token
-      await axios.get(`http://localhost:4000/api/user`, {
+      await axios.get(`http://localhost:4000/api/alumno`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

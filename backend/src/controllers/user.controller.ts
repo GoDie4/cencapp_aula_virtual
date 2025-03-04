@@ -27,6 +27,7 @@ export const profile = async (req: any, res: any) => {
 
 export const getDecodedUser = (req: Request, res: Response) => {
   try {
+
     const user = (req as any).user;
     if (!user) {
       res.status(404).json({ message: "Usuario no encontrado en la solicitud." });

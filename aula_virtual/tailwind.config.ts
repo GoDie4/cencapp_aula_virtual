@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       borderRadius: {
-        main: "0.6rem",
+        main: "0.8rem",
       },
       colors: {
         background: "var(--background)",

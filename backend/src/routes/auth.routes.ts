@@ -5,10 +5,11 @@ import { login, logout, register } from "../controllers/auth.controller";
 import { actualizarCategoria, createCategoriaMemory, deleteCategoria, obtenerCategoriaPorId, showAllCategorias, upload } from "../controllers/categoria.controller";
 import { actualizarCurso, createCurso, deleteCurso, obtenerCursoPorId, showAllCursos, uploadImageCurso } from "../controllers/curso.controller";
 // import { createCursoSchema } from "../schemas/curso.schema";
-import { verifyAdmin } from "../middlewares/JWTMiddleware";
+import { verifyAdmin, verifyAlumno } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
 import { actualizarProfesor, crearProfesor, deleteProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
 import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
+import { authRequired } from "../middlewares/validateToken";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
@@ -16,8 +17,8 @@ const router = Router();
 router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/logout", logout);
-router.get('/user', verifyAdmin, getDecodedUser)
-
+router.get('/user', authRequired, getDecodedUser)
+router.get('/alumno', verifyAlumno, getDecodedUser)
 router.post('/alumnos', verifyAdmin)
 
 /** Categorias */

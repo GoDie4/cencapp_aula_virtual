@@ -10,11 +10,15 @@ import { toast } from "sonner";
 import { Errors } from "../../../../components/form/Errors";
 import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
+import { InputForm } from "../../../../components/form/InputForm";
+import Link from "next/link";
+import { CheckInput } from "../../../../components/form/CheckInput";
+import { ButtonSubmit } from "../../../../components/form/ButtonSubmit";
 
 const FormLogin = () => {
   const { setIsAuthenticated, setUser, setToken } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const login = async (values: LoginInterface): Promise<void> => {
     setLoading(true);
@@ -36,11 +40,13 @@ const FormLogin = () => {
         setToken(response.data.token);
         toast.success(response.data.message);
         localStorage.setItem("token", response.data.token);
-        router.push('/aula');
+        router.push("/aula");
       }
     } catch (error: any) {
       console.log(error);
-      toast.error(error.response.data.message);
+      console.log(error.message);
+
+      toast.error(error.response ? error.response.data.message : error.message);
     } finally {
       setLoading(false);
     }
@@ -74,48 +80,62 @@ const FormLogin = () => {
   }, [touched, errors, isSubmitting]);
 
   return (
-    <form className="p-5 max-w-xl w-full"  onSubmit={handleSubmit}>
-      <div className="w-full mb-5 flex flex-col gap-1">
-        <label htmlFor="email">Correo electrónico</label>
-        <input
-          type="email"
-          name="email"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.email}
-          className={`${
-            errors.email && touched.email
-              ? "border-red-500 focus:border-red-500"
-              : ""
-          } border rounded-md p-2`}
-          placeholder="Escribe tu correo electrónico"
-        />
-        <Errors errors={errors.email} touched={touched.email} />
+    <form className="p-3 sm:p-5 max-w-xl w-full" onSubmit={handleSubmit}>
+      <div className="w-full space-y-6">
+        <div className="w-full flex flex-col gap-1">
+          <InputForm
+            label="Correo electrónico"
+            name="email"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            placeholder="Escribe tu correo electrónico"
+            type="email"
+            value={values.email}
+            className={`${
+              errors.email && touched.email
+                ? "border-red-500 focus:border-red-500"
+                : "border-secondary-main focus:border-secondary-main"
+            }`}
+          />
+          {errors.email && (
+            <Errors errors={errors.email} touched={touched.email} />
+          )}
+        </div>
+        <div className="w-full flex flex-col gap-1 ">
+          <InputForm
+            label="Contraseña"
+            name="password"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            placeholder="Escribe tu contraseña"
+            type="password"
+            value={values.password}
+            className={`${
+              errors.email && touched.email
+                ? "border-red-500 focus:border-red-500"
+                : " focus:border-secondary-main"
+            }`}
+          />
+          {errors.password && (
+            <Errors errors={errors.password} touched={touched.password} />
+          )}
+        </div>
       </div>
-      <div className="w-full flex flex-col gap-1 mb-8">
-        <label htmlFor="password">Contraseña</label>
-        <input
-          type="password"
-          name="password"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.password}
-          className={`${
-            errors.password && touched.password
-              ? "border-red-500 focus:border-red-500"
-              : ""
-          } border rounded-md p-2`}
-          placeholder="Escribe tu Contraseña"
-        />
-        <Errors errors={errors.password} touched={touched.password} />
+      <div className="w-full mt-3 mb-10 flex items-center justify-between">
+        <div className="w-fit flex items-center gap-2">
+          <CheckInput />
+          <p className="text-xs text-white-main">Mantenerme conectado</p>
+        </div>
+
+        <Link
+          href={"/micontrasena"}
+          className="text-xs underline text-white-main"
+        >
+          Olvidé mi contraseña
+        </Link>
       </div>
 
-      <button
-        type={loading ? "button" : "submit"}
-        className="w-full text-center text-white justify-center flex py-3 rounded-md bg-blue-700 "
-      >
-        {loading ? "Ingresando..." : "Ingresar"}
-      </button>
+      <ButtonSubmit loading={loading} text="Ingresar" />
     </form>
   );
 };

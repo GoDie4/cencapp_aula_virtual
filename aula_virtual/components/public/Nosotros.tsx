@@ -10,7 +10,7 @@ import Banner from './Banner'
 import { slide1 } from '../shared/images'
 import { useEffect } from 'react'
 
-const Nosotros = (): JSX.Element => {
+const Nosotros = () => {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])

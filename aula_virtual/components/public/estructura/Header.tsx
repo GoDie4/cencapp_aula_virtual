@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 // Imagenes
 import { logo, logo_white } from "../../shared/images";
@@ -10,6 +11,15 @@ import useAuth from "@/hooks/useAuth";
 import InicioSesionBoton from "../../auth/InicioSesionBoton";
 import UsuarioAutenticado from "../../auth/UsuarioAutenticado";
 import { ContentMain } from "./ContentMain";
+import { NavLinkMenu } from "./components/NavLinkMenu";
+
+const navLinks = [
+  { id: 1, text: "Inicio", href: "/" },
+  { id: 2, text: "Nosotros", href: "/nosotros" },
+  { id: 3, text: "Capacitaciones", href: "/capacitaciones" },
+  { id: 4, text: "Inscripción", href: "/inscripcion" },
+  { id: 5, text: "Contacto", href: "/contacto" },
+];
 
 export const Header = (): JSX.Element => {
   const [scroll, setScroll] = useState(0);
@@ -22,21 +32,20 @@ export const Header = (): JSX.Element => {
       setScroll(window.scrollY);
     };
 
-    // Asigna el evento de scroll al montar el componente
     window.addEventListener("scroll", handleScroll);
 
-    // Limpia el evento al desmontar el componente
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const headerClass = scroll > 0 ? "fixedActive" : "";
+  const headerClass =
+    scroll > 0 ? "bg-white-main shadow-lg" : "text-white-main";
   return (
     <>
       <header
-        className={`fixed w-full z-[998] transition-all duration-200 ${headerClass} ${
-          menu ? "fixedActive" : ""
+        className={`fixed w-full z-[998] transition-all  ${headerClass} ${
+          menu ? "bg-white-main" : ""
         }`}
       >
         <ContentMain>
@@ -44,62 +53,29 @@ export const Header = (): JSX.Element => {
             <div className="pt-1.5 pb-1.5 w-20">
               <picture>
                 <Link href="/">
-                  <img src={logo_white.src} alt="" className="w-20 lg_white" />
+                  <img
+                    src={logo_white.src}
+                    alt=""
+                    className={`w-20 ${scroll > 0 || menu ? "hidden" : "block"}`}
+                  />
                 </Link>
                 <Link href="/">
-                  <img src={logo.src} alt="" className="w-20 lg" />
+                  <img src={logo.src} alt="" className={`w-20 ${scroll > 0 || menu ? "block" : "hidden"}`} />
                 </Link>
               </picture>
             </div>
             <div className="hidden md:block">
               {" "}
-              {/* Oculto en móviles */}
               <ul className="flex gap-10">
-                <li>
-                  <Link
-                    onClick={() => setMenu(false)}
-                    href="/"
-                    className="text-lg font-medium text-white relative transition-all duration-300 hover:text-green-500 hover:tracking-wider before:content-[''] before:absolute before:w-0 before:top-full before:h-[2px] before:left-0 before:bg-green-500 before:transition-all before:duration-200 hover:before:w-full"
-                  >
-                    Inicio
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={() => setMenu(false)}
-                    href="/nosotros"
-                    className="text-lg font-medium text-white relative transition-all duration-300 hover:text-green-500 hover:tracking-wider before:content-[''] before:absolute before:w-0 before:top-full before:h-[2px] before:left-0 before:bg-green-500 before:transition-all before:duration-200 hover:before:w-full"
-                  >
-                    Nosotros
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={() => setMenu(false)}
-                    href="/capacitaciones"
-                    className="text-lg font-medium text-white relative transition-all duration-300 hover:text-green-500 hover:tracking-wider before:content-[''] before:absolute before:w-0 before:top-full before:h-[2px] before:left-0 before:bg-green-500 before:transition-all before:duration-200 hover:before:w-full"
-                  >
-                    Capacitaciones
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={() => setMenu(false)}
-                    href="/inscripcion"
-                    className="text-lg font-medium text-white relative transition-all duration-300 hover:text-green-500 hover:tracking-wider before:content-[''] before:absolute before:w-0 before:top-full before:h-[2px] before:left-0 before:bg-green-500 before:transition-all before:duration-200 hover:before:w-full"
-                  >
-                    Inscripción
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={() => setMenu(false)}
-                    href="/contacto"
-                    className="text-lg font-medium text-white relative transition-all duration-300 hover:text-green-500 hover:tracking-wider before:content-[''] before:absolute before:w-0 before:top-full before:h-[2px] before:left-0 before:bg-green-500 before:transition-all before:duration-200 hover:before:w-full"
-                  >
-                    Contacto
-                  </Link>
-                </li>
+                {navLinks.map(({ id, text, href }) => (
+                  <li key={id}>
+                    <NavLinkMenu
+                      href={href}
+                      text={text}
+                      onClick={() => setMenu(false)}
+                    />
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="hidden md:flex gap-10 items-center">
@@ -132,47 +108,20 @@ export const Header = (): JSX.Element => {
           </nav>
           {/* Menú móvil */}
           <div
-            className={`md:hidden absolute top-full left-0 w-full bg-white flex flex-col items-center justify-center py-6 gap-4 transition-all duration-300 ${
+            className={`md:hidden absolute text-black-900 top-full left-0 w-full bg-white-main flex flex-col items-center justify-center py-6 gap-4 transition-all duration-300 ${
               menu
-                ? "clip-path-[polygon(0_0,100%_0,100%_100%,0_100%)]"
-                : "clip-path-[polygon(0_0,100%_0,100%_0,0_0)]"
+                ? "menuShow"
+                : "menuOculto"
             }`}
           >
-            <Link
-              onClick={() => setMenu(false)}
-              href="/"
-              className="text-base font-medium text-gray-800"
-            >
-              Inicio
-            </Link>
-            <Link
-              onClick={() => setMenu(false)}
-              href="/nosotros"
-              className="text-base font-medium text-gray-800"
-            >
-              Nosotros
-            </Link>
-            <Link
-              onClick={() => setMenu(false)}
-              href="/capacitaciones"
-              className="text-base font-medium text-gray-800"
-            >
-              Capacitaciones
-            </Link>
-            <Link
-              onClick={() => setMenu(false)}
-              href="/inscripcion"
-              className="text-base font-medium text-gray-800"
-            >
-              Inscripción
-            </Link>
-            <Link
-              onClick={() => setMenu(false)}
-              href="/contacto"
-              className="text-base font-medium text-gray-800"
-            >
-              Contacto
-            </Link>
+            {navLinks.map(({ id, text, href }) => (
+              <NavLinkMenu
+                key={id}
+                href={href}
+                text={text}
+                onClick={() => setMenu(false)}
+              />
+            ))}
           </div>
         </ContentMain>
       </header>

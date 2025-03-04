@@ -8,7 +8,7 @@ export default function InicioSesionBoton() {
       <span>
         <FaUser color="white" />
       </span>
-      <span>Iniciar Sesión</span>
+      <span className="text-white-main">Iniciar Sesión</span>
     </div>
   );
 }

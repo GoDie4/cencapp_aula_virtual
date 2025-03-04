@@ -30,13 +30,14 @@ export const AuthContext = createContext<AuthContextInterface | undefined>(undef
 
 export async function getUser(setUser: React.Dispatch<SetStateAction<UserInterface | null>>, token: string | null) {
   try {
-    const response = await axios.get(`${config.apiUrl}/user`, {
+    const response = await axios.get(`${config.apiUrl}/alumno`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token") || token}`,
       },
     });
 
     if (response.status === 200) {
+        console.log(response.data)
       setUser(response.data);
     }
   }
