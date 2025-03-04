@@ -4,7 +4,7 @@ import { CgLogOut } from "react-icons/cg";
 import { FaUser } from "react-icons/fa6";
 export const MenuProfile = () => {
   return (
-    <div className="absolute top-full menuProfile  bg-white-main w-52 rounded-main right-4 shadow--menuProfile p-4 transition-all duration-500 ease-out">
+    <div className="absolute z-[999] top-full menuProfile  bg-white-main w-52 rounded-main right-0 shadow--menuProfile p-4 transition-all duration-500 ease-out">
       <ul className="space-y-4">
         <li className="hover:bg-secondary-main/10 px-4 py-2 rounded-main">
           <Link href={""} className="flex items-center gap-2">

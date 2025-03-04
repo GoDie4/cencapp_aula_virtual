@@ -1,7 +1,7 @@
 "use client";
 import { AulaProvider } from "@/context/AulaContext";
 import { SideBarAula } from "./@components/estructura/SideBarAula";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeaderAula } from "./@components/estructura/HeaderAula";
 
 export default function AulaLayout({
@@ -10,22 +10,47 @@ export default function AulaLayout({
   children: React.ReactNode;
 }>) {
   const [ocultarSideBar, setOcultarSideBar] = useState<boolean>(false);
-  localStorage.getItem("sidebar");
+  const [menuShow, setMenuShow] = useState<boolean>(false);
+  const [scrolled, setScrolled] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <AulaProvider>
       <div className="flex">
         <SideBarAula
+          showMenu={menuShow}
           ocultarSideBar={ocultarSideBar}
           setOcultarSideBar={setOcultarSideBar}
+          setShowMenu={setMenuShow}
         />
         <div
           className={`${
-            ocultarSideBar ? "w-[calc(100%-80px)]" : "w-[calc(100%-256px)]"
+            ocultarSideBar
+              ? "w-full lg:w-[calc(100%-80px)]"
+              : "w-full lg:w-[calc(100%-256px)]"
           } bg-secondary-50  transition-all duration-500 ease-out`}
         >
-          <HeaderAula />
-          <div className="w-full p-6">
-            <div className="w-full bg-white-main p-4 rounded-main">
+          <HeaderAula
+            scrolled={scrolled}
+            setShowMenu={setMenuShow}
+            showMenu={menuShow}
+          />
+          <div className={`w-full p-4 md:p-6 ${scrolled ? "mt-20" : ""}`}>
+            <div className="w-full bg-white-main p-1 sm:p-2 md:p-4 rounded-main">
               {children}
             </div>
           </div>

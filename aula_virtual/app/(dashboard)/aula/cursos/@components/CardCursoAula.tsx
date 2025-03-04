@@ -5,8 +5,8 @@ import React from "react";
 export const CardCursoAula = () => {
   return (
     <div className="w-full group shadow--cursoAula rounded-main overflow-hidden p-2">
-      <div className="w-full flex flex-col md:flex-row gap-4">
-        <div className="w-full z-10 md:w-1/5 relative overflow-hidden  rounded-main">
+      <div className="w-full flex flex-col xl:flex-row gap-1 sm:gap-4">
+        <div className="w-full z-10 xl:w-1/5 relative overflow-hidden  rounded-main">
           <div className="absolute flex items-center justify-center w-full h-full top-full group-hover:top-0 left-0 bg-secondary-main/70 transition-all duration-200">
             <Link
               href={"/"}
@@ -21,7 +21,7 @@ export const CardCursoAula = () => {
             className="block w-full h-full object-cover"
           />
         </div>
-        <div className="w-full md:w-4/5 py-2">
+        <div className="w-full xl:w-4/5 py-2">
           <h5 className="text-xl font-bold text-primary-900 mb-1">
             Topografía en obras civiles
           </h5>
@@ -31,7 +31,7 @@ export const CardCursoAula = () => {
             topográficos para los distintos tipos de proyectos en la elaboracion
             de estudios y ejecución de obras de ingeniería.
           </p>
-          <span className="text-sm w-fit block rounded-full py-1 px-4 text-black-900 bg-secondary-100">
+          <span className="text-sm w-fit block rounded-full py-1 px-4  bg-secondary-200">
             Topografía y Fotogametría
           </span>
         </div>

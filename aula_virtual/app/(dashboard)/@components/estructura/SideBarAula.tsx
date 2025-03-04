@@ -19,9 +19,13 @@ const rutasHeaderAula = [
 ];
 
 export const SideBarAula = ({
+  showMenu,
+  setShowMenu,
   ocultarSideBar,
   setOcultarSideBar,
 }: {
+  showMenu: boolean;
+  setShowMenu: Dispatch<SetStateAction<boolean>>;
   ocultarSideBar: boolean;
   setOcultarSideBar: Dispatch<SetStateAction<boolean>>;
 }) => {
@@ -30,31 +34,33 @@ export const SideBarAula = ({
   );
   return (
     <header
-      className={`py-12 px-5 ${
-        ocultarSideBar ? "w-20" : "w-64"
-      }   bg-gradient-to-br from-primary-950 to-primary-main h-screen relative transition-all duration-500 ease-out`}
+      className={`py-8 lg:py-12 fixed z-[1201] top-[79px] lg:top-0 ${
+        showMenu ? "left-0" : "-left-full lg:left-0"
+      }  lg:relative lg:block px-5 ${
+        ocultarSideBar ? "w-full lg:w-20" : "w-full lg:w-64"
+      }   bg-gradient-to-br from-primary-950 to-primary-main h-auto min-h-dvh  transition-all duration-500 ease-out`}
     >
       <button
         type="button"
         onClick={() => {
           setOcultarSideBar(!ocultarSideBar);
         }}
-        className={`bg-gradient-to-br z-50  from-secondary-800 to-secondary-main absolute top-6 -right-4  w-8 h-8 flex items-center justify-center text-white-main text-2xl rounded-full transition-all duration-500 ease-out ${
+        className={`hidden lg:flex bg-gradient-to-br z-[1200]  from-secondary-800 to-secondary-main absolute top-6 -right-4  w-8 h-8  items-center justify-center text-white-main text-2xl rounded-full transition-all duration-500 ease-out ${
           ocultarSideBar ? "rotate-180" : "rotate-0"
         }`}
       >
         <IoChevronBackOutline />
       </button>
-      <div className="h-full flex flex-col justify-between">
+      <div className="h-auto flex flex-col justify-between">
         <div className="w-full">
           <div className="w-full">
             <img
               src="/assets/images/logo/logo-white.png"
               alt=""
-              className="block w-32 mx-auto"
+              className="hidden lg:block w-32 mx-auto"
             />
           </div>
-          <nav className="py-10 h-auto ">
+          <nav className="lg:py-10 h-auto ">
             <ul className="space-y-4">
               {rutasHeaderAula.map((item, index) => (
                 <li
@@ -70,7 +76,10 @@ export const SideBarAula = ({
                 >
                   <Link
                     href={`/aula/${item.ruta}`}
-                    onClick={() => setItemActive(item.nombre.toLowerCase())}
+                    onClick={() => {
+                      setItemActive(item.nombre.toLowerCase());
+                      setShowMenu(false);
+                    }}
                     className={`flex items-center gap-2 ${
                       itemActive === item.nombre.toLowerCase()
                         ? "text-white-main"
