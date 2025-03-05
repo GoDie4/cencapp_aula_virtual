@@ -36,7 +36,7 @@ router.post('/borrarCurso/:id', verifyAdmin, deleteCurso)
 
 /** Profesores */
 router.post('/profesores', verifyAdmin, crearProfesor)
-router.get('/profesores', showAllProfesores)
+router.get('/profesores', verifyAdmin, showAllProfesores)
 router.get('/profesores/:id', verifyAdmin, obtenerProfesorPorId)
 router.post('/profesores/:id', verifyAdmin, actualizarProfesor)
 router.post('/borrarProfesor/:id', verifyAdmin, deleteProfesor)
