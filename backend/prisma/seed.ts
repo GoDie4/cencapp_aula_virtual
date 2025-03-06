@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient();
 
@@ -20,6 +21,22 @@ async function registrarRoles() {
   }
 }
 
+async function registrarAdministrador() {
+
+  const hashPassword = await bcrypt.hash('administrador', 10)
+  await prisma.usuario.create({
+    data: {
+      nombres: 'Administrador',
+      apellidos: '',
+      celular: '983432123',
+      email: 'administrador@gmail.com',
+      password: hashPassword,
+      rolId: 1
+    }
+  })
+  console.log('Administrador Creado')
+}
+
 registrarRoles()
   .catch((e) => {
     console.error(e);
@@ -28,3 +45,12 @@ registrarRoles()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+registrarAdministrador()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })

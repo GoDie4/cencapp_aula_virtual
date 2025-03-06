@@ -10,9 +10,11 @@ import { toast } from "sonner";
 import { Errors } from "../../../../components/form/Errors";
 import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
+import { useToRedirect } from "@/store/useToRedirect";
 
 const FormLogin = () => {
   const { setIsAuthenticated, setUser, setToken } = useAuth();
+  const { path } = useToRedirect()
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter()
 
@@ -36,6 +38,10 @@ const FormLogin = () => {
         setToken(response.data.token);
         toast.success(response.data.message);
         localStorage.setItem("token", response.data.token);
+        if (path) {
+          router.push(path)
+          return
+        }
         router.push('/aula');
       }
     } catch (error: any) {
