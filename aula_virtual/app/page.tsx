@@ -1,11 +1,11 @@
-'use client'
-import { gsap } from 'gsap'; // Importa MorphSVGPlugin
-import { CSSPlugin } from 'gsap/CSSPlugin'; // Importa el plugin CSS de GSAP
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+/* eslint-disable @next/next/no-img-element */
+"use client";
+import { gsap } from "gsap"; // Importa MorphSVGPlugin
+import { CSSPlugin } from "gsap/CSSPlugin"; // Importa el plugin CSS de GSAP
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
-import { PiArrowRightThin, PiArrowLeftThin } from 'react-icons/pi';
-import Slide from '../components/shared/slide/Slide';
-import { slide1, slide2 } from '../components/shared/images';
+import { PiArrowRightThin, PiArrowLeftThin } from "react-icons/pi";
+import { slide1, slide2 } from "../components/shared/images";
 import {
   FaBuilding,
   FaCity,
@@ -13,50 +13,52 @@ import {
   FaProjectDiagram,
   FaHardHat,
   FaMapMarkerAlt,
-} from 'react-icons/fa';
-import area1 from '../assets/areas/1.webp';
-import area2 from '../assets/areas/2.webp';
-import area3 from '../assets/areas/3.webp';
-import area4 from '../assets/areas/4.webp';
-import area5 from '../assets/areas/5.webp';
-import area6 from '../assets/areas/6.webp';
-import area7 from '../assets/areas/7.webp';
-import area8 from '../assets/areas/8.webp';
-import curso1 from '../assets/cursos/1.webp';
-import curso2 from '../assets/cursos/2.webp';
-import curso3 from '../assets/cursos/3.webp';
-import curso4 from '../assets/cursos/4.webp';
+} from "react-icons/fa";
+import area1 from "../assets/areas/1.webp";
+import area2 from "../assets/areas/2.webp";
+import area3 from "../assets/areas/3.webp";
+import area4 from "../assets/areas/4.webp";
+import area5 from "../assets/areas/5.webp";
+import area6 from "../assets/areas/6.webp";
+import area7 from "../assets/areas/7.webp";
+import area8 from "../assets/areas/8.webp";
+import curso1 from "../assets/cursos/1.webp";
+import curso2 from "../assets/cursos/2.webp";
+import curso3 from "../assets/cursos/3.webp";
+import curso4 from "../assets/cursos/4.webp";
 
-import { GiMining, GiRoad } from 'react-icons/gi'; // Para Geotecnia
-import { useRef, useState, useEffect, JSX } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { GiMining, GiRoad } from "react-icons/gi"; // Para Geotecnia
+import { useRef, useState, useEffect, JSX } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import { Autoplay } from 'swiper/modules';
-import 'swiper/css/navigation';
-import { useFormik } from 'formik';
-import Swal from 'sweetalert2';
-import ReCAPTCHA from 'react-google-recaptcha';
-import axios from 'axios';
-import { Global } from '@/helper/Global';
-import { SchemaContacto } from '../components/shared/Schemas';
-import { Errors } from '../components/shared/Errors';
-import convenio1 from '../assets/convenios/1.webp';
-import convenio2 from '../assets/convenios/2.jpeg';
-import convenio3 from '../assets/convenios/3.jpeg';
-import convenio4 from '../assets/convenios/4.jpeg';
+import { Autoplay } from "swiper/modules";
+import "swiper/css/navigation";
+import { useFormik } from "formik";
+import Swal from "sweetalert2";
+import ReCAPTCHA from "react-google-recaptcha";
+import axios from "axios";
+import { Global } from "@/helper/Global";
+import { SchemaContacto } from "../components/shared/Schemas";
+import { Errors } from "../components/shared/Errors";
+import convenio1 from "../assets/convenios/1.webp";
+import convenio2 from "../assets/convenios/2.jpeg";
+import convenio3 from "../assets/convenios/3.jpeg";
+import convenio4 from "../assets/convenios/4.jpeg";
 
-import 'swiper/css';
-import 'swiper/css/free-mode';
+import "swiper/css";
+import "swiper/css/free-mode";
 
-import 'swiper/css/thumbs';
-import CardCurso from '../components/public/curso/CardCurso';
-import Certificados from '../components/public/curso/Certificados';
-import Certificados2 from '../components/public/curso/Certificados2';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Header } from '../components/public/estructura/Header';
-import { Footer } from '../components/public/estructura/Footer';
-import Carrito from '../components/public/utils/Carrito';
+import "swiper/css/thumbs";
+import CardCurso from "../components/public/curso/CardCurso";
+import Certificados from "../components/public/curso/Certificados";
+import Certificados2 from "../components/public/curso/Certificados2";
+import Link from "next/link";
+import Image from "next/image";
+import { Header } from "../components/public/estructura/Header";
+import { Footer } from "../components/public/estructura/Footer";
+import Carrito from "../components/public/utils/Carrito";
+import { Slide } from "../components/shared/slide/Slide";
+import { ContentMain } from "../components/public/estructura/ContentMain";
 
 // Registra el plugin CSS con GSAP
 gsap.registerPlugin(CSSPlugin);
@@ -66,11 +68,11 @@ const Home = (): JSX.Element => {
   }, []);
   const slides = [
     {
-      content: 'Contenido de la Diapositiva 1',
+      content: "Contenido de la Diapositiva 1",
       backgroundImage: `url(${slide1})`,
     },
     {
-      content: 'Contenido de la Diapositiva 2',
+      content: "Contenido de la Diapositiva 2",
       backgroundImage: `url(${slide2})`,
     },
   ];
@@ -78,7 +80,7 @@ const Home = (): JSX.Element => {
   const [isAnimating, setAnimating] = useState<boolean>(false);
   const slideRefs = useRef<Array<HTMLDivElement | null>>([]);
   function eliminarTildes(texto: string): string {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
   function formatearURL(nombre: string): string {
     // Eliminar espacios al principio y al final del nombre
@@ -88,13 +90,13 @@ const Home = (): JSX.Element => {
     url = url.toLowerCase();
 
     // Reemplazar los espacios por guiones
-    url = url.replace(/ /g, '');
+    url = url.replace(/ /g, "");
 
     // Eliminar tildes
     url = eliminarTildes(url);
 
     // Reemplazar caracteres especiales por sus equivalentes URL seguros
-    url = url.replace(/[^a-zA-Z0-9-]/g, '');
+    url = url.replace(/[^a-zA-Z0-9-]/g, "");
 
     // Retornar la URL formateada
     return url;
@@ -104,7 +106,7 @@ const Home = (): JSX.Element => {
       opacity: 0,
       x: -100,
       duration: 1,
-      ease: 'power3.out',
+      ease: "power3.out",
       onComplete: () => {
         setAnimating(false);
       },
@@ -122,7 +124,7 @@ const Home = (): JSX.Element => {
     if (!isAnimating) {
       setAnimating(true);
       setCurrentSlide(
-        (prevSlide) => (prevSlide - 1 + slides.length) % slides.length,
+        (prevSlide) => (prevSlide - 1 + slides.length) % slides.length
       );
     }
   };
@@ -131,19 +133,20 @@ const Home = (): JSX.Element => {
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const enviarCorreo = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     values: any,
-    recaptchaValue: string,
+    recaptchaValue: string
   ): Promise<void> => {
     setLoadingCorreo(true);
 
     const data = new FormData();
-    data.append('nombres', values.nombres);
-    data.append('celular', values.celular);
-    data.append('mensaje', values.mensaje);
-    data.append('email', values.email);
-    data.append('recaptcha', recaptchaValue);
+    data.append("nombres", values.nombres);
+    data.append("celular", values.celular);
+    data.append("mensaje", values.mensaje);
+    data.append("email", values.email);
+    data.append("recaptcha", recaptchaValue);
 
-    console.log('Datos enviados al backend:', {
+    console.log("Datos enviados al backend:", {
       nombres: values.nombres,
       celular: values.celular,
       mensaje: values.mensaje,
@@ -153,16 +156,16 @@ const Home = (): JSX.Element => {
     try {
       const respuesta = await axios.post(`${Global.url}/enviarCorreo`, data);
 
-      if (respuesta.data.status === 'success') {
-        Swal.fire('Correo enviado', '', 'success');
+      if (respuesta.data.status === "success") {
+        Swal.fire("Correo enviado", "", "success");
         resetForm();
       } else {
-        Swal.fire('Error al enviar el correo', '', 'error');
+        Swal.fire("Error al enviar el correo", "", "error");
         resetForm();
       }
     } catch (error) {
       console.log(error);
-      Swal.fire('Error al enviar el correo', '', 'error');
+      Swal.fire("Error al enviar el correo", "", "error");
     }
     setLoadingCorreo(false);
   };
@@ -177,18 +180,18 @@ const Home = (): JSX.Element => {
     resetForm,
   } = useFormik({
     initialValues: {
-      nombres: '',
-      celular: '',
-      email: '',
-      mensaje: '',
+      nombres: "",
+      celular: "",
+      email: "",
+      mensaje: "",
     },
     validationSchema: SchemaContacto,
     onSubmit: async (values) => {
       const recaptchaValue = recaptchaRef.current?.getValue();
-      console.log('Token reCAPTCHA:', recaptchaValue);
+      console.log("Token reCAPTCHA:", recaptchaValue);
 
       if (!recaptchaValue) {
-        Swal.fire('Por favor, completa el reCAPTCHA', '', 'warning');
+        Swal.fire("Por favor, completa el reCAPTCHA", "", "warning");
         setLoadingCorreo(false);
         return;
       }
@@ -207,21 +210,29 @@ const Home = (): JSX.Element => {
   }, [touched, errors, isSubmitting]);
 
   const mapStyles = {
-    height: '500px',
-    width: '100%',
+    height: "500px",
+    width: "100%",
   };
   return (
     <>
       <Header />
       <Carrito />
-      <main className='w-full'>
+      <main className="w-full">
         <div className="slide">
-          <Slide index={currentSlide} />
+          <Slide />
           <div className="btn_slides">
-            <button title='Anterior' onClick={goToPrevSlide} disabled={isAnimating}>
+            <button
+              title="Anterior"
+              onClick={goToPrevSlide}
+              disabled={isAnimating}
+            >
               <PiArrowLeftThin />
             </button>
-            <button  title='Siguiente' onClick={goToNextSlide} disabled={isAnimating}>
+            <button
+              title="Siguiente"
+              onClick={goToNextSlide}
+              disabled={isAnimating}
+            >
               <PiArrowRightThin />
             </button>
           </div>
@@ -274,155 +285,226 @@ const Home = (): JSX.Element => {
           </div>
         </section> */}
 
-        <section className="cursos">
-          <div className="cursos__title">
-            <h2>Cursos</h2>
-          </div>
-          <div className="cursos__main">
-            <div className="cursos__main__item">
-              <CardCurso
-                id='1'
-                horas="40 horas"
-                img={`${curso1.src}`}
-                precio="350"
-                titulo="Topografía aplicada a Obras Civiles"
-                
-              />
+        <section className="">
+          <ContentMain className="py-20">
+            <div className="w-full mb-10">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl text-primary-main font-bold text-center">
+                Cursos
+              </h2>
             </div>
-            <div className="cursos__main__item">
-              <CardCurso
-                id='2'
-                horas="48 horas"
-                img={`${curso2.src}`}
-                precio="80"
-                titulo="Presupuesto y programación de obras con presupuesto.pe"
-                
-              />
+            <div className="w-full grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="w-full">
+                <CardCurso
+                  id="1"
+                  horas="40 horas"
+                  img={`${curso1.src}`}
+                  precio="350"
+                  titulo="Topografía aplicada a Obras Civiles"
+                />
+              </div>
+              <div className="w-full">
+                <CardCurso
+                  id="2"
+                  horas="48 horas"
+                  img={`${curso2.src}`}
+                  precio="80"
+                  titulo="Presupuesto y programación de obras con presupuesto.pe"
+                />
+              </div>
+              <div className="w-full">
+                <CardCurso
+                  id="3"
+                  horas="32 horas"
+                  img={`${curso3.src}`}
+                  precio="100"
+                  titulo="Elaboración de planos estructurales con Autocad Structural Detailling"
+                />
+              </div>
+              <div className="w-full">
+                <CardCurso
+                  id="4"
+                  horas="32 horas"
+                  img={`${curso4.src}`}
+                  precio="120"
+                  titulo="Levantamiento topográfico"
+                />
+              </div>
             </div>
-            <div className="cursos__main__item">
-              <CardCurso
-                id='3'
-                horas="32 horas"
-                img={`${curso3.src}`}
-                precio="100"
-                titulo="Elaboración de planos estructurales con Autocad Structural Detailling"
-                
-              />
-            </div>
-            <div className="cursos__main__item">
-              <CardCurso
-                id='4'
-                horas="32 horas"
-                img={`${curso4.src}`}
-                precio="120"
-                titulo="Levantamiento topográfico"
-                
-              />
-            </div>
-          </div>
+          </ContentMain>
         </section>
 
-        <section className="areas">
-          <div className="areas__title">
-            <h2>Áreas de capacitación</h2>
-          </div>
-          <div className="areas__main">
-            <div className="areas__main__item">
-              <Link href={`/cursos/${formatearURL('estructuras')}`}>
-                <div className="cardArea">
-                  <Image src={area1} alt="" />
-                  <div className="cardArea__content">
-                    <span>
-                      <FaBuilding />
-                    </span>
-                    <h5>Estructuras</h5>
+        <section className="w-full ">
+          <ContentMain className="py-20">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl font-bold text-blue-800">
+                Áreas de capacitación
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="group">
+                <Link
+                  href={`/cursos/${formatearURL("estructuras")}`}
+                  className="block"
+                >
+                  <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                    <img
+                      src={area1.src}
+                      alt=""
+                      className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                      <div className="text-white text-center">
+                        <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                          <FaBuilding />
+                        </span>
+                        <h5 className="text-lg text-white-main">Estructuras</h5>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+              {/* Infraestructura en edificaciones */}
+              <div className="group">
+                <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                  <img
+                    src={area2.src}
+                    alt=""
+                    className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                    <div className="text-white text-center">
+                      <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                        <FaCity />
+                      </span>
+                      <h5 className="text-lg text-white-main">
+                        Infraestructura en edificaciones
+                      </h5>
+                    </div>
                   </div>
                 </div>
-              </Link>
-            </div>
-            <div className="areas__main__item">
-              <div className="cardArea">
-                <Image src={area2} alt="" />
-                <div className="cardArea__content">
-                  <span>
-                    <FaCity />
-                  </span>
-                  <h5>Infraestructura en edificaciones</h5>
-                </div>
               </div>
-            </div>
-            <div className="areas__main__item">
-              <div className="cardArea">
-                <Image src={area3} alt="" />
-                <div className="cardArea__content">
-                  <span>
-                    <GiRoad />
-                  </span>
-                  <h5>Infraestructura en Obras Viales</h5>
-                </div>
-              </div>
-            </div>
-            <div className="areas__main__item">
-              <div className="cardArea">
-                <Image src={area4} alt="" />
-                <div className="cardArea__content">
-                  <span>
-                    <FaTint />
-                  </span>
-                  <h5>Infraestructura de Obras de Saneamiento</h5>
-                </div>
-              </div>
-            </div>
-
-            <div className="areas__main__item">
-              <div className="cardArea">
-                <Image src={area5} alt="" />
-                <div className="cardArea__content">
-                  <span>
-                    <FaProjectDiagram />
-                  </span>
-                  <h5>BIM</h5>
-                </div>
-              </div>
-            </div>
-            <div className="areas__main__item">
-              <Link href={`/cursos/${formatearURL('construcción')}`}>
-                <div className="cardArea">
-                  <Image src={area6} alt="" />
-                  <div className="cardArea__content">
-                    <span>
-                      <FaHardHat />
-                    </span>
-                    <h5>Construcción</h5>
+              {/* Infraestructura en Obras Viales */}
+              <div className="group">
+                <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                  <img
+                    src={area3.src}
+                    alt=""
+                    className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                    <div className="text-white text-center">
+                      <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                        <GiRoad />
+                      </span>
+                      <h5 className="text-lg text-white-main">
+                        Infraestructura en Obras Viales
+                      </h5>
+                    </div>
                   </div>
                 </div>
-              </Link>
-            </div>
-            <div className="areas__main__item">
-              <div className="cardArea">
-                <Image src={area7} alt="" />
-                <div className="cardArea__content">
-                  <span>
-                    <GiMining />
-                  </span>
-                  <h5>Geotecnia</h5>
+              </div>
+              {/* Infraestructura de Obras de Saneamiento */}
+              <div className="group">
+                <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                  <img
+                    src={area4.src}
+                    alt=""
+                    className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                    <div className="text-white text-center">
+                      <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                        <FaTint />
+                      </span>
+                      <h5 className="text-lg text-white-main">
+                        Infraestructura de Obras de Saneamiento
+                      </h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* BIM */}
+              <div className="group">
+                <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                  <img
+                    src={area5.src}
+                    alt=""
+                    className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                    <div className="text-white text-center">
+                      <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                        <FaProjectDiagram />
+                      </span>
+                      <h5 className="text-lg text-white-main">BIM</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="group">
+                <Link
+                  href={`/cursos/${formatearURL("construcción")}`}
+                  className="block"
+                >
+                  <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                    <img
+                      src={area6.src}
+                      alt=""
+                      className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                      <div className="text-white text-center">
+                        <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                          <FaHardHat />
+                        </span>
+                        <h5 className="text-lg text-white-main">
+                          Construcción
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+              {/* Geotecnia */}
+              <div className="group">
+                <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                  <img
+                    src={area7.src}
+                    alt=""
+                    className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                    <div className="text-white text-center">
+                      <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                        <GiMining />
+                      </span>
+                      <h5 className="text-lg text-white-main">Geotecnia</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Topografía */}
+              <div className="group">
+                <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                  <img
+                    src={area8.src}
+                    alt=""
+                    className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                    <div className="text-white text-center">
+                      <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                        <FaMapMarkerAlt />
+                      </span>
+                      <h5 className="text-lg text-white-main">
+                        Topografía y Fotogametría
+                      </h5>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="areas__main__item">
-              <Link href={`/cursos/${formatearURL('Topografía y Fotogametría')}`}>
-                <div className="cardArea">
-                  <Image src={area8} alt="" />
-                  <div className="cardArea__content">
-                    <span>
-                      <FaMapMarkerAlt />
-                    </span>
-                    <h5>Topografía y Fotogametría</h5>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </div>
+          </ContentMain>
         </section>
 
         {/* <section className="banner">
@@ -596,7 +678,7 @@ const Home = (): JSX.Element => {
                 >
                   <Marker
                     position={{ lat: -12.0420486, lng: -77.0436353 }}
-                    icon={''}
+                    icon={""}
                   />
                 </GoogleMap>
               </LoadScript>
@@ -690,4 +772,3 @@ const Home = (): JSX.Element => {
 };
 
 export default Home;
-
