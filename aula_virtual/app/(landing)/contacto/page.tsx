@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import Banner from '../../../components/public/Banner';
 import { st1 } from '../../../components/shared/images';
@@ -10,6 +11,7 @@ import axios from 'axios';
 import { Global } from '@/helper/Global';
 import { SchemaContacto } from '../../../components/shared/Schemas';
 import { Errors } from '../../../components/shared/Errors';
+import { ContentMain } from '../../../components/public/estructura/ContentMain';
 const Contacto = (): JSX.Element => {
   const mapStyles = {
     height: '500px',
@@ -100,104 +102,116 @@ const Contacto = (): JSX.Element => {
   return (
     <>
       <Banner titulo="Contacto" imagen={`${st1.src}`} />
-      <section className="contacto">
-        <div className="contacto__main">
-          <div className="contacto__main__item">
-            <LoadScript googleMapsApiKey="AIzaSyCnURlOXZMHX5yPBdb8_Rn-m_Y8McBHEjw">
-              <GoogleMap
-                mapContainerStyle={mapStyles}
-                zoom={16} // Nivel de zoom inicial
-                center={{ lat: -12.0420486, lng: -77.0436353 }} // Coordenadas de la ubicación inicial del mapa
-              >
-                <Marker
-                  position={{ lat: -12.0420486, lng: -77.0436353 }}
-                  icon={''}
-                />
-              </GoogleMap>
-            </LoadScript>
-          </div>
-          <div className="contacto__main__item">
-            <h5>Formulario de contacto</h5>
-            <form onSubmit={handleSubmit}>
-              <div className="group-inputs">
-                <div className="group-inputs-item">
-                  <input
-                    placeholder="Nombres"
-                    className="inputForm"
-                    name="nombres"
-                    type="text"
-                    value={values.nombres}
+      <section className="px-8 lg:px-20">
+          <ContentMain className="py-20">
+            <div className="flex flex-col lg:flex-row">
+              <div className="flex flex-col justify-center w-full lg:w-1/2">
+                <LoadScript googleMapsApiKey="AIzaSyCnURlOXZMHX5yPBdb8_Rn-m_Y8McBHEjw">
+                  <GoogleMap
+                    mapContainerStyle={mapStyles}
+                    zoom={16}
+                    center={{ lat: -12.0420486, lng: -77.0436353 }}
+                  >
+                    <Marker
+                      position={{ lat: -12.0420486, lng: -77.0436353 }}
+                      icon={""}
+                    />
+                  </GoogleMap>
+                </LoadScript>
+              </div>
+              <div className="w-full mt-8 lg:w-1/2 lg:pl-20 lg:mt-0">
+                <h5 className="mb-10 text-3xl font-semibold text-center uppercase lg:text-4xl text-primary-main">
+                  Formulario de contacto
+                </h5>
+                <form onSubmit={handleSubmit}>
+                  <div className="flex flex-col gap-4 mb-4 lg:flex-row">
+                    <div className="w-full">
+                      <input
+                        placeholder="Nombres"
+                        className="w-full p-3 border rounded-md"
+                        name="nombres"
+                        type="text"
+                        value={values.nombres}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                      />
+                      <Errors
+                        errors={errors.nombres}
+                        touched={touched.nombres}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <input
+                        placeholder="Asunto"
+                        className="w-full p-3 border rounded-md"
+                        name="asunto"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-4 mb-4 lg:flex-row">
+                    <div className="w-full">
+                      <input
+                        placeholder="Email"
+                        className="w-full p-3 border rounded-md"
+                        name="email"
+                        type="text"
+                        value={values.email}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                      />
+                      <Errors errors={errors.email} touched={touched.email} />
+                    </div>
+                    <div className="w-full">
+                      <input
+                        placeholder="Celular"
+                        className="w-full p-3 border rounded-md"
+                        name="celular"
+                        type="text"
+                        value={values.celular}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                      />
+                      <Errors
+                        errors={errors.celular}
+                        touched={touched.celular}
+                      />
+                    </div>
+                  </div>
+                  <textarea
+                    name="mensaje"
+                    className="w-full p-3 mb-4 border rounded-md"
+                    placeholder="Mensaje"
+                    rows={5}
+                    value={values.mensaje}
                     onBlur={handleBlur}
                     onChange={handleChange}
-                  />
-                  <Errors errors={errors.nombres} touched={touched.nombres} />
-                </div>
-                <div className="group-inputs-item">
-                  <input
-                    placeholder="Asunto"
-                    className="inputForm"
-                    name="asunto"
-                    type="text"
-                  />
-                </div>
+                  ></textarea>
+                  <Errors errors={errors.mensaje} touched={touched.mensaje} />
+                  <div className="mb-4">
+                    <ReCAPTCHA
+                      sitekey="6LfYvjUqAAAAACjMMq91FI2TkrTbRALRjoqusd-w"
+                      ref={recaptchaRef}
+                    />
+                  </div>
+                  {loadingCorreo ? (
+                    <input
+                      type="button"
+                      value="Enviando..."
+                      className="w-full p-3 rounded-md cursor-wait bg-primary-main text-white-main"
+                    />
+                  ) : (
+                    <input
+                      type="submit"
+                      value="Enviar"
+                      className="w-full p-3 rounded-md cursor-pointer bg-primary-main text-white-main"
+                    />
+                  )}
+                </form>
               </div>
-              <div className="group-inputs">
-                <div className="group-inputs-item">
-                  <input
-                    placeholder="Email"
-                    className="inputForm"
-                    name="email"
-                    type="text"
-                    value={values.email}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                  />
-                  <Errors errors={errors.email} touched={touched.email} />
-                </div>
-                <div className="group-inputs-item">
-                  <input
-                    placeholder="Celular"
-                    className="inputForm"
-                    name="celular"
-                    type="text"
-                    value={values.celular}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                  />
-                  <Errors errors={errors.celular} touched={touched.celular} />
-                </div>
-              </div>
-
-              <textarea
-                name="mensaje"
-                id=""
-                className="inputForm"
-                placeholder="Mensaje"
-                rows={5}
-                value={values.mensaje}
-                onBlur={handleBlur}
-                onChange={handleChange}
-              ></textarea>
-              <Errors errors={errors.mensaje} touched={touched.mensaje} />
-              <div className="col-lg-12">
-                <ReCAPTCHA
-                  sitekey="6LfYvjUqAAAAACjMMq91FI2TkrTbRALRjoqusd-w"
-                  ref={recaptchaRef}
-                />
-              </div>
-              {loadingCorreo ? (
-                <input
-                  type="button"
-                  value="Enviando..."
-                  className="btn_submit"
-                />
-              ) : (
-                <input type="submit" value="Enviar" className="btn_submit" />
-              )}
-            </form>
-          </div>
-        </div>
-      </section>
+            </div>
+          </ContentMain>
+        </section>
     </>
   );
 };
