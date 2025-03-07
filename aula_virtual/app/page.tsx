@@ -59,6 +59,10 @@ import { Footer } from "../components/public/estructura/Footer";
 import Carrito from "../components/public/utils/Carrito";
 import { Slide } from "../components/shared/slide/Slide";
 import { ContentMain } from "../components/public/estructura/ContentMain";
+import { useCategorias } from "@/hooks/useCategorias";
+import { formatUrl } from "@/logic/formateador";
+import { config } from "@/config/config";
+import { useCursos } from "@/hooks/useCursos";
 
 // Registra el plugin CSS con GSAP
 gsap.registerPlugin(CSSPlugin);
@@ -76,31 +80,13 @@ const Home = (): JSX.Element => {
       backgroundImage: `url(${slide2})`,
     },
   ];
+  const { categorias } = useCategorias()
+  const { cursos } = useCursos()
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [isAnimating, setAnimating] = useState<boolean>(false);
   const slideRefs = useRef<Array<HTMLDivElement | null>>([]);
-  function eliminarTildes(texto: string): string {
-    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-  function formatearURL(nombre: string): string {
-    // Eliminar espacios al principio y al final del nombre
-    let url = nombre.trim();
 
-    // Convertir todo el string a minúsculas
-    url = url.toLowerCase();
-
-    // Reemplazar los espacios por guiones
-    url = url.replace(/ /g, "");
-
-    // Eliminar tildes
-    url = eliminarTildes(url);
-
-    // Reemplazar caracteres especiales por sus equivalentes URL seguros
-    url = url.replace(/[^a-zA-Z0-9-]/g, "");
-
-    // Retornar la URL formateada
-    return url;
-  }
+  console.log(cursos)
   useEffect(() => {
     gsap.from(slideRefs.current[currentSlide], {
       opacity: 0,
@@ -293,7 +279,22 @@ const Home = (): JSX.Element => {
               </h2>
             </div>
             <div className="w-full grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="w-full">
+              {
+                cursos.map((cur) => {
+                  return (
+                    <div className="w-full" key={cur.id}>
+                      <CardCurso
+                        id={cur.id ?? ''}
+                        horas={String(cur.horas)}
+                        img={`${config.imagesUrl}${cur.imagen}`}
+                        precio={String(cur.precio)}
+                        titulo={cur.nombre}
+                      />
+                    </div>
+                  )
+                })
+              }
+              {/* <div className="w-full">
                 <CardCurso
                   id="1"
                   horas="40 horas"
@@ -328,7 +329,7 @@ const Home = (): JSX.Element => {
                   precio="120"
                   titulo="Levantamiento topográfico"
                 />
-              </div>
+              </div> */}
             </div>
           </ContentMain>
         </section>
@@ -341,30 +342,36 @@ const Home = (): JSX.Element => {
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="group">
-                <Link
-                  href={`/cursos/${formatearURL("estructuras")}`}
-                  className="block"
-                >
-                  <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
-                    <img
-                      src={area1.src}
-                      alt=""
-                      className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
-                      <div className="text-white text-center">
-                        <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
-                          <FaBuilding />
-                        </span>
-                        <h5 className="text-lg text-white-main">Estructuras</h5>
-                      </div>
+              {
+                categorias.map((cat) => {
+                  return (
+                    <div className="group" key={cat.id}>
+                      <Link
+                        href={`/cursos/${formatUrl(cat.nombre)}`}
+                        className="block"
+                      >
+                        <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
+                          <img
+                            src={`${config.imagesUrl}${cat.url_imagen}`}
+                            alt=""
+                            className="w-full h-[350px] object-cover group-hover:scale-125 transition-transform duration-300"
+                          />
+                          <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
+                            <div className="text-white text-center">
+                              <span className="text-3xl mx-auto w-fit h-fit rounded-full p-4 mb-2 flex justify-center text-secondary-main bg-transparent group-hover:bg-white-main">
+                                <Image src={`${config.imagesUrl}${cat.url_icono}`} width={30} height={30} alt={cat.nombre} />
+                              </span>
+                              <h5 className="text-lg text-white-main">{cat.nombre}</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
                     </div>
-                  </div>
-                </Link>
-              </div>
+                  )
+                })
+              }
               {/* Infraestructura en edificaciones */}
-              <div className="group">
+              {/* <div className="group">
                 <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
                   <img
                     src={area2.src}
@@ -383,7 +390,6 @@ const Home = (): JSX.Element => {
                   </div>
                 </div>
               </div>
-              {/* Infraestructura en Obras Viales */}
               <div className="group">
                 <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
                   <img
@@ -403,7 +409,7 @@ const Home = (): JSX.Element => {
                   </div>
                 </div>
               </div>
-              {/* Infraestructura de Obras de Saneamiento */}
+              
               <div className="group">
                 <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
                   <img
@@ -423,7 +429,7 @@ const Home = (): JSX.Element => {
                   </div>
                 </div>
               </div>
-              {/* BIM */}
+              
               <div className="group">
                 <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
                   <img
@@ -465,7 +471,7 @@ const Home = (): JSX.Element => {
                   </div>
                 </Link>
               </div>
-              {/* Geotecnia */}
+              
               <div className="group">
                 <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
                   <img
@@ -483,7 +489,7 @@ const Home = (): JSX.Element => {
                   </div>
                 </div>
               </div>
-              {/* Topografía */}
+              
               <div className="group">
                 <div className="relative overflow-hidden flex items-center justify-center rounded-lg shadow-md transition-transform duration-300">
                   <img
@@ -502,11 +508,10 @@ const Home = (): JSX.Element => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>*/ }
             </div>
           </ContentMain>
         </section>
-
         {/* <section className="banner">
           <h2>
             Construyendo el mañana, hoy: capacitación de ingeniería que impulsa

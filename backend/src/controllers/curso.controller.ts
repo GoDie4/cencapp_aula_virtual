@@ -65,10 +65,11 @@ export const createCurso = async (
     descripcion,
     dirigido,
     metodologia,
+    objetivo,
     certificacion,
   } = req.body;
 
-  if (!nombre && !precio && !categoriaId) {
+  if (!nombre && !precio && !categoriaId && !horas && !objetivo && !metodologia && !dirigido && !descripcion && !certificacion) {
     res.status(400).json({ message: "Faltan datos para crear el curso." });
     return;
   }
@@ -104,13 +105,23 @@ export const createCurso = async (
           imagen: urlImagenPath ?? "",
           banner: urlBannerPath ?? "",
           precio: parseFloat(precio).toFixed(2),
-          horas: parseInt(horas),
+          horas: Number(horas),
+        },
+        include: {
+          detalles: true
+        }
+      });
+      await prisma.cursoDetalles.create({
+        data: {
+          cursoId: nuevoCurso.id,
           presentacion: descripcion ?? "",
+          objetivo: objetivo ?? "",
           dirigido: dirigido ?? "",
           metodologia: metodologia ?? "",
           certificacion: certificacion ?? "",
-        },
-      });
+        }
+      })
+
       res.status(201).json({
         message: "Categoría creada con éxito (usando memoryStorage)",
         curso: nuevoCurso,
@@ -145,7 +156,7 @@ export const showAllCursos = async (
   try {
     // Utiliza prisma.curso.findMany() para obtener todas las categorías de la base de datos
     const cursos = await prisma.curso.findMany({
-      include: { categoria: true },
+      include: { categoria: true, detalles: true },
     });
 
     // Envía una respuesta exitosa con el código de estado 200 y las categorías en formato JSON
@@ -176,9 +187,10 @@ export const actualizarCurso = async (
     dirigido,
     metodologia,
     certificacion,
+    objetivo
   } = req.body; // Nuevo nombre de categoría desde req.body
 
-  if (!nombre && !precio && !categoriaId) {
+  if (!nombre && !precio && !categoriaId && !horas && !objetivo && !metodologia && !dirigido && !descripcion && !certificacion) {
     res.status(400).json({
       message: "Faltan datos para actualizar el curso.",
     });
@@ -205,73 +217,82 @@ export const actualizarCurso = async (
       urlImagenPath = files["url_imagen"][0].path;
       urlImagenPath = "/" + files["url_imagen"][0].path.replace(/\\/g, "/");
     }
-  
+
     if (files["url_banner"] && files["url_banner"][0]) {
       urlBannerPath = files["url_banner"][0].path;
       urlBannerPath = "/" + files["url_banner"][0].path.replace(/\\/g, "/");
     }
-    
+
     const cursoActualizado = await prisma.curso.update({
       where: { id: cursoId },
       data: {
         nombre: nombre,
         precio,
         categoriaId: Number(categoriaId),
-        horas: parseInt(horas),
+        horas: Number(horas),
         imagen: urlImagenPath !== null ? urlImagenPath : cursoExistente.imagen,
         banner: urlBannerPath !== null ? urlBannerPath : cursoExistente.banner,
+      },
+      include: {
+        detalles: true
+      }
+    });
+    await prisma.cursoDetalles.create({
+      data: {
+        cursoId: cursoActualizado.id,
         presentacion: descripcion,
+        objetivo: objetivo,
         dirigido: dirigido,
         metodologia: metodologia,
         certificacion: certificacion,
-      },
-    });
+      }
+    })
 
     if (
-          files &&
-          files["url_imagen"] &&
-          files["url_imagen"][0] &&
-          cursoExistente?.imagen
-        ) {
-          const filePathToDelete = path.join(
-            process.cwd(),
-            cursoExistente.imagen
+      files &&
+      files["url_imagen"] &&
+      files["url_imagen"][0] &&
+      cursoExistente?.imagen
+    ) {
+      const filePathToDelete = path.join(
+        process.cwd(),
+        cursoExistente.imagen
+      );
+      try {
+        await fs.unlink(filePathToDelete);
+        console.log(`Archivo viejo de imagen borrado: ${filePathToDelete}`);
+      } catch (unlinkError: any) {
+        if (unlinkError.code !== "ENOENT") {
+          // Ignorar error si el archivo no existe (ENOENT)
+          console.error(
+            "Error al borrar archivo viejo de imagen:",
+            unlinkError
           );
-          try {
-            await fs.unlink(filePathToDelete);
-            console.log(`Archivo viejo de imagen borrado: ${filePathToDelete}`);
-          } catch (unlinkError: any) {
-            if (unlinkError.code !== "ENOENT") {
-              // Ignorar error si el archivo no existe (ENOENT)
-              console.error(
-                "Error al borrar archivo viejo de imagen:",
-                unlinkError
-              );
-            }
-            return
-          }
         }
-        if (
-          files &&
-          files["url_banner"] &&
-          files["url_banner"][0] &&
-          cursoExistente?.banner
-        ) {
-          const filePathToDelete = path.join(
-            process.cwd(),
-            cursoExistente?.banner
-          );
-          console.log(`[ACTUALIZAR CATEGORIA] Intentando borrar imagen vieja: ${filePathToDelete}`);
-          try {
-            await fs.unlink(filePathToDelete);
-            console.log(`Archivo viejo de icono borrado: ${filePathToDelete}`);
-          } catch (unlinkError: any) {
-            if (unlinkError.code !== "ENOENT") {
-              // Ignorar error si el archivo no existe (ENOENT)
-              console.error("Error al borrar archivo viejo de icono:", unlinkError);
-            }
-          }
+        return
+      }
+    }
+    if (
+      files &&
+      files["url_banner"] &&
+      files["url_banner"][0] &&
+      cursoExistente?.banner
+    ) {
+      const filePathToDelete = path.join(
+        process.cwd(),
+        cursoExistente?.banner
+      );
+      console.log(`[ACTUALIZAR CATEGORIA] Intentando borrar imagen vieja: ${filePathToDelete}`);
+      try {
+        await fs.unlink(filePathToDelete);
+        console.log(`Archivo viejo de icono borrado: ${filePathToDelete}`);
+      } catch (unlinkError: any) {
+        if (unlinkError.code !== "ENOENT") {
+          // Ignorar error si el archivo no existe (ENOENT)
+          console.error("Error al borrar archivo viejo de icono:", unlinkError);
         }
+      }
+    }
 
     res.status(200).json({
       message: "Categoría actualizada con éxito.",
@@ -304,11 +325,7 @@ export const obtenerCursoPorId = async (
     // Buscar una categoría por ID en la base de datos
     const curso = await prisma.curso.findUnique({
       where: { id: cursoId },
-      include: { secciones: {
-        include: {
-          clases: true
-        }
-      } }
+      include: { detalles: true }
     });
 
     if (curso) {
@@ -382,3 +399,26 @@ export const deleteCurso = async (
     await prisma.$disconnect();
   }
 };
+
+export const buscarPorNombre = async (req: Request, res: Response) => {
+  const { nombre } = req.params
+  try {
+
+    const curso = await prisma.curso.findFirst({
+      where: {
+        nombre: {
+          contains: nombre,
+        }
+      },
+      include: {
+        detalles: true,
+      }
+    })
+
+    res.status(200).json(curso)
+  }
+  catch (e) {
+    console.error(e)
+    return
+  }
+}

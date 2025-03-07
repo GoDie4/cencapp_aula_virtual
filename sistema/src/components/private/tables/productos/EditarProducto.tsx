@@ -83,13 +83,23 @@ export const EditarProducto = (): JSX.Element => {
         ...values,
         categoriaId: data.curso.categoriaId,
         nombre: data.curso.nombre,
-        precio: data.curso.precio
+        precio: data.curso.precio,
+        horas: data.curso.horas
       })
-      setContent(data.curso.presentacion)
-      setDirigido(data.curso.dirigido)
-      setObjetivo(data.curso.objetivo)
-      setMetodologia(data.curso.metodologia)
-      setCertificacion(data.curso.certificacion)
+      if (data.curso.detalles) {
+        setContent(data.curso.detalles.presentacion)
+        setDirigido(data.curso.detalles.dirigido)
+        setObjetivo(data.curso.detalles.objetivo)
+        setMetodologia(data.curso.detalles.metodologia)
+        setCertificacion(data.curso.detalles.certificacion)
+      }
+      else {
+        setContent("")
+        setDirigido("")
+        setObjetivo("")
+        setMetodologia("")
+        setCertificacion("")
+      }
       setImagen1(data.curso.imagen)
       if (data.curso.banner) {
         setImagen2(data.curso.banner)
@@ -108,6 +118,7 @@ export const EditarProducto = (): JSX.Element => {
     const formData = new FormData()
     formData.append('categoriaId', values.categoriaId)
     formData.append('nombre', values.nombre)
+    formData.append('horas', String(values.horas))
     formData.append('descripcion', content)
     formData.append('dirigido', dirigido)
     formData.append('objetivo', objetivo)
@@ -169,7 +180,8 @@ export const EditarProducto = (): JSX.Element => {
     initialValues: {
       nombre: '',
       categoriaId: '',
-      precio: ''
+      precio: '',
+      horas: 0
     },
     validationSchema: ScheamaProductos,
     onSubmit: updateProducto
@@ -191,7 +203,7 @@ export const EditarProducto = (): JSX.Element => {
           onSubmit={handleSubmit}
         >
           <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">
-            <div className="w-full lg:w-1/3">
+            <div className="w-full lg:w-1/2">
               <TitleBriefs titulo="Nombre del curso" />
               <InputsBriefs
                 name="nombre"
@@ -202,7 +214,7 @@ export const EditarProducto = (): JSX.Element => {
               />
               <Errors errors={errors.nombre} touched={touched.nombre} />
             </div>
-            <div className="w-full lg:w-1/3">
+            <div className="w-full lg:w-1/2">
               <TitleBriefs titulo="Asignar categoria" />
               <select
                 title='Selecciona una categoria'
@@ -227,7 +239,20 @@ export const EditarProducto = (): JSX.Element => {
                 touched={touched.categoriaId}
               />
             </div>
-            <div className="w-full lg:w-1/3">
+          </div>
+          <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">
+            <div className="w-full lg:w-1/2">
+              <TitleBriefs titulo="Horas del Curso" />
+              <InputsBriefs
+                name="horas"
+                type="number"
+                value={values.horas}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Errors errors={errors.horas} touched={touched.horas} />
+            </div>
+            <div className="w-full lg:w-1/2">
               <TitleBriefs titulo="Precio del Curso" />
               <InputsBriefs
                 name="precio"
@@ -248,7 +273,7 @@ export const EditarProducto = (): JSX.Element => {
                 Imagen Principal del Curso<span className="text-red-500">*</span>
               </p>
               <div className="flex-1 flex flex-col lg:flex-row  items-center gap-4">
-              <ImageUpdate
+                <ImageUpdate
                   globalUrl="categorias/uploads"
                   url={url1}
                   setUrl={setUrl1}
@@ -335,7 +360,7 @@ export const EditarProducto = (): JSX.Element => {
               value="Registrar"
             />
           </div>
-        </form>
+        </form >
       )}
     </>
   )
