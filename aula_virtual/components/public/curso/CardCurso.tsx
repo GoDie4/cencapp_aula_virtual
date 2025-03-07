@@ -91,7 +91,7 @@ const CardCurso = ({
         href={`/curso/${formatUrl(titulo)}`}
         className="relative overflow-hidden "
       >
-        <Image
+        <img
           src={img}
           alt=""
           width={700}

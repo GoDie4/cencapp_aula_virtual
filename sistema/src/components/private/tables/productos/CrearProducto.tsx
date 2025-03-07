@@ -221,17 +221,6 @@ export const CrearProducto = (): JSX.Element => {
               />
               <Errors errors={errors.precio} touched={touched.precio} />
             </div>
-            <div className="w-full lg:w-1/2">
-              <TitleBriefs titulo="Horas del Curso" />
-              <InputsBriefs
-                name="horas"
-                type="number"
-                value={values.horas}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <Errors errors={errors.horas} touched={touched.horas} />
-            </div>
           </div>
           {/* Display Color Previews */}
 

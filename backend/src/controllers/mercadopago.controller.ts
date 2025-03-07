@@ -7,9 +7,10 @@ import { InfoRequest } from '../interfaces/InfoRequest'
 import crypto from 'crypto'
 import { PaymentResponse } from 'mercadopago/dist/clients/payment/commonTypes'
 import { PrismaClient } from '@prisma/client'
+import { Decimal } from '@prisma/client/runtime/library'
 
 const client = new MercadoPagoConfig({
-  accessToken: ENV.ACCESS_TOKEN,
+  accessToken: process.env.ACCESS_TOKEN_MERCADO_PAGO || '',
   options: {
     timeout: 10000,
     idempotencyKey: 'mercadopago'
@@ -45,9 +46,6 @@ export async function enviarVenta(req: Request, res: Response): Promise<void> {
       },
       metadata: {
         user_id_con : info.id,
-      },
-      back_urls: {
-        success: ENV.Success
       }
     }
     const { init_point } = await preference.create({ body })
@@ -74,6 +72,7 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
     const parts = xSignature?.split(',');
     let ts;
     let hash;
+    /** Cuando el pago se ha realizado correctamente  */
     if (action === 'payment.created') {
       // Parts
       parts.forEach(part => {
@@ -99,8 +98,28 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
         // HMAC verification passed
         
         const datos: PaymentResponse = await payment.get({ id: data.id })
+        console.log(datos.payment_method)
+        const newCursoPagado = await prisma.cursoPagado.create({
+          data: {
+            mercadoPaymentId: datos.order ? String(datos.order.id) : '',
+            totalPagado: datos.transaction_details ? datos.transaction_details.total_paid_amount as unknown as Decimal : 0 as unknown as Decimal,
+            userId: datos.metadata.user_id_con
+          }
+        })
 
-        datos.additional_info?.items?.map(async (item) => {
+        if (!datos.additional_info) {
+          res.status(404).json({
+            message: 'Faltó información adicional'
+          })
+          return
+        }
+        if (!datos.additional_info.items || datos.additional_info.items.length === 0) {
+          res.status(404).json({
+            message: 'Faltaron cursos para pedir'
+          })
+          return
+        }
+        datos.additional_info.items.map(async (item) => {
           await prisma.cursoUsuario.create({
             data: {
               tipo: 'MATRICULADO',
@@ -109,15 +128,28 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
               userId: datos.metadata.user_id_con
             }
           })
+          await prisma.cursoPagadoDetalles.create({
+            data: {
+              cursoPagadoId: newCursoPagado.id,
+              precio: item.unit_price,
+              cantidad: Number(item.quantity),
+              cursoId: item.id
+            }
+          })
         })
       } else {
         // HMAC verification failed
         console.log("HMAC verification failed");
         throw new Error('error')
       }
+      res.status(200).json({
+        message: 'Orden Guardada'
+      })
+      return
     }
+    /** Cuando no ha sido permitido el pago  */
     res.status(200).json({
-      message: 'Orden Guardada'
+      message: 'Orden no permitida 🤷‍♂️'
     })
     return
   }

@@ -20,21 +20,45 @@ datasource db {
 }
 
 model Curso {
+  id              String            @id @default(cuid())
+  nombre          String            @db.VarChar(255)
+  imagen          String            @db.VarChar(255)
+  banner          String            @db.VarChar(255)
+  horas           Int
+  precio          Decimal
+  categoriaId     Int
+  categoria       Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  cursosUsuarios  CursoUsuario[]
+  secciones       Seccion[]
+  detalles        CursoDetalles?
+  beneficios      Beneficio[]
+  curso_detalles  CursoPagadoDetalles[]
+  @@map("cursos")
+}
+
+model Seccion {
   id            String            @id @default(cuid())
-  nombre        String            @db.VarChar(255)
-  imagen        String            @db.VarChar(255)
-  banner        String            @db.VarChar(255)
-  horas         Int
-  precio        Decimal
-  categoriaId   Int
-  categoria     Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  nombre        String   
+  cursoId       String
+  curso         Curso             @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  posicion      Int
+  clases        Clases[]
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
-  cursosUsuarios CursoUsuario[]
-  secciones     SeccionesCursos[]
-  detalles      CursoDetalles?
-  beneficios    Beneficio[]
-  @@map("cursos")
+}
+
+model Clases {
+  id            String            @id @default(cuid())
+  nombre        String
+  duracion      String
+  posicion      Int
+  url_video     String
+  seccionId     String
+  seccion       Seccion           @relation(fields: [seccionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 }
 
 model CursoDetalles {
@@ -78,16 +102,6 @@ enum CursoUsuarioTipo {
   CARGO
 }
 
-model SeccionesCursos {
-  id        String   @id @default(cuid())
-  cursoId   String   @db.Char(36)
-  seccionId String   @db.Char(36)
-  curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@map("secciones_cursos")
-}
-
 model Rol {
   id        Int       @id @default(autoincrement())
   nombre    String    @unique @db.VarChar(20)
@@ -110,8 +124,51 @@ model Usuario {
   updatedAt         DateTime         @updatedAt
   rol               Rol              @relation(fields: [rolId], references: [id], onDelete: Cascade)
   cursosUsuarios    CursoUsuario[]
+  cursosPagados     CursoPagado[]
   @@map("usuarios")
 }
+
+model CursoPagado {
+  id                         String           @id @default(cuid())
+  mercadoPaymentId           String
+  userId                     String
+  usuario                    Usuario          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalPagado                Decimal
+  createdAt                  DateTime         @default(now())
+  updatedAt                  DateTime         @updatedAt
+
+  @@map("ventas")
+}
+
+model CardVenta {
+  id                         Int              @id @default(autoincrement())
+  cardId                     String           
+  country                    String
+  date_created               DateTime
+  date_last_updated          DateTime
+  expiration_month           Int
+  expiration_year            Int
+  first_six_digits           String
+  last_four_digits           String
+}
+
+model MethodVenta {
+  id                         Int              @id @default(autoincrement())
+  methodId                   String
+  tipo                       String
+}
+
+model CursoPagadoDetalles {
+  id                         String           @id @default(cuid())
+  cursoPagadoId              String
+  cursoId                    String
+  cantidad                   Int              @default(1)
+  precio                     Decimal
+  curso                      Curso            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+
+  @@map("ventas_detalles")
+}
+
 
 model Categorias {
   id            Int       @id @default(autoincrement())
