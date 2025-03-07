@@ -78,11 +78,11 @@ export const ListaProductos = (): JSX.Element => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mt-6">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-6">
             {filterDate().map((pro: productosValues) => (
               <div
                 key={pro.id}
-                className='flex border flex-col bg-secondary-100 min-h-[300px] pt-2 pb-1 px-3 rounded-2xl relative overflow-hidden group transition-all'
+                className='flex bg-transparent border flex-col bg-secondary-100 min-h-[300px] pt-2 pb-1 px-3 rounded-2xl relative overflow-hidden group transition-all'
               >
                 <div className="flex items-center justify-center absolute top-0 left-0 w-full h-full bg-black/50 z-[-300] opacity-0 group-hover:z-[300] group-hover:opacity-100 transition-all ">
                   <div className="flex gap-4">
@@ -129,7 +129,7 @@ export const ListaProductos = (): JSX.Element => {
                   <img
                     src={`${Global.urlImages}${pro.imagen}`}
                     alt=""
-                    className="w-full h-full flex object-contain bg-white"
+                    className="w-full h-full flex object-contain bg-transparent"
                   />
                 </div>
                 <div className="flex flex-col items-center justify-center mt-2 px-2">

@@ -187,7 +187,7 @@ const SideBar = (): JSX.Element => {
                 onClick={() => {
                   setShowMenu(false)
                 }}
-                to="transacciones"
+                to="alumnos"
                 className="flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-secondary-900 transition-colors"
               >
                 <RiStackFill className="text-main" /> Alumnos

@@ -126,6 +126,8 @@ export default function ProfesoresColumnas ({ pro, token, getProfesores, totalPo
           <MenuItem onClick={() => { setModalContent({ title: 'Datos del Profesor', content: <VerProfesor pro={pro} /> }) }}>Ver</MenuItem>
           <MenuItem onClick={handleEditar}>Editar</MenuItem>
           <MenuItem onClick={() => { preguntar(pro.id ?? '') }}>Eliminar</MenuItem>
+          <MenuItem >Darle un curso</MenuItem>
+          <MenuItem >Ver cursos a cargo</MenuItem>
         </Menu>
       </div>
 
