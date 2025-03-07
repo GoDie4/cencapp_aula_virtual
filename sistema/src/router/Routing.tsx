@@ -26,6 +26,12 @@ import ListaProfesor from '../components/private/tables/profesores/ListaProfesor
 import CrearProfesor from '../components/private/tables/profesores/CrearProfesor'
 import EditarProfesor from '../components/private/tables/profesores/EditarProfesor'
 import ModalProvider from '../context/ModalProvider'
+import ListaClases from '../components/private/tables/clases/ListaClases'
+import CrearClase from '../components/private/tables/clases/CrearClase'
+import EditarClase from '../components/private/tables/clases/EditarClase'
+import EditarSeccion from '../components/private/tables/secciones/EditarSeccion'
+import CrearSeccion from '../components/private/tables/secciones/CrearSeccion'
+import ListaSecciones from '../components/private/tables/secciones/ListaSecciones'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -50,6 +56,16 @@ export const Routing = (): JSX.Element => {
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
+
+              {/** Secciones */}
+              <Route path="secciones" element={<ListaSecciones />} />
+              <Route path="secciones/agregar" element={<CrearSeccion />} />
+              <Route path="secciones/editar/:id" element={<EditarSeccion />} />
+
+              {/** Clases */}
+              <Route path="clases" element={<ListaClases />} />
+              <Route path="clases/agregar" element={<CrearClase />} />
+              <Route path="clases/editar/:id" element={<EditarClase />} />
 
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />

@@ -161,7 +161,7 @@ export const CrearProducto = (): JSX.Element => {
           onSubmit={handleSubmit}
         >
           <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">
-            <div className="w-full lg:w-1/3">
+            <div className="w-full lg:w-1/2">
               <TitleBriefs titulo="Nombre del curso" />
               <InputsBriefs
                 name="nombre"
@@ -172,7 +172,7 @@ export const CrearProducto = (): JSX.Element => {
               />
               <Errors errors={errors.nombre} touched={touched.nombre} />
             </div>
-            <div className="w-full lg:w-1/3">
+            <div className="w-full lg:w-1/2">
               <TitleBriefs titulo="Asignar categoria" />
               <select
                 title='Selecciona una categoria'
@@ -197,7 +197,9 @@ export const CrearProducto = (): JSX.Element => {
                 touched={touched.categoriaId}
               />
             </div>
-            <div className="w-full lg:w-1/3">
+          </div>
+          <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">
+            <div className="w-full lg:w-1/2">
               <TitleBriefs titulo="Precio del Curso" />
               <InputsBriefs
                 name="precio"
@@ -207,6 +209,17 @@ export const CrearProducto = (): JSX.Element => {
                 onBlur={handleBlur}
               />
               <Errors errors={errors.precio} touched={touched.precio} />
+            </div>
+            <div className="w-full lg:w-1/2">
+              <TitleBriefs titulo="Horas del Curso" />
+              <InputsBriefs
+                name="horas"
+                type="number"
+                value={values.horas}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Errors errors={errors.horas} touched={touched.horas} />
             </div>
           </div>
 

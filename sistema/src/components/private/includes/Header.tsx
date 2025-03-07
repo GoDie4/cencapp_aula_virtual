@@ -10,11 +10,10 @@ import { IoSearchSharp } from 'react-icons/io5'
 import { useEffect, useState } from 'react'
 import { icono } from '../../shared/Images'
 import { Toaster } from 'sonner'
-import { FaBell } from 'react-icons/fa'
 import { WebSocketNotifications } from '../../shared/notificaciones/WebSocketNotification'
 
 const Header = (): JSX.Element => {
-  const { auth, setLoading, setAuth, setShowNotificaciones, notificationCount } = useAuth()
+  const { auth, setLoading, setAuth } = useAuth()
   const navigate = useNavigate()
   const [date] = useState(new Date())
   const [hora, setHora] = useState(date.toLocaleTimeString())
@@ -75,11 +74,6 @@ const Header = (): JSX.Element => {
         </div>
         <nav className="flex items-center gap-2">
         <WebSocketNotifications/>
-
-          <button onClick={() => { setShowNotificaciones(true) }} type="button" className="text-4xl text-main relative flex items-center justify-center">
-            <span className="block absolute inset-0 m-auto text-white text-sm w-fit h-fit font-extrabold">{notificationCount}</span>
-            <FaBell />
-          </button>
 
           <Menu
             menuButton={
