@@ -127,3 +127,81 @@ export const verifyProfesor = async (
     res.status(401).json({ message: "Token inválido." });
   }
 };
+
+export const verifyAlumnoOrProfesor = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  if (!req.headers.authorization) {
+    res.status(401).json({ message: "Token no proporcionado." });
+    return;
+  }
+    
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    res.status(401).json({ message: "Token no proporcionado." });
+    return
+  }
+
+  try {
+    const decoded = jwt.verify(token ?? '', ENV.TOKEN_SECRET as string) as JwtPayload;
+    const user = await prisma.usuario.findUnique({
+      where: { id: decoded.id },
+      include: { rol: true },
+    });
+
+    if (!user) {
+      res.status(404).json({ message: "Usuario no encontrado." });
+      return
+    }
+
+    if (user?.rolId !== 2 && user?.rolId !== 3) {
+      res.status(403).json({ message: "No tienes permisos de alumno o profesor." });
+      return
+    }
+
+    (req as any).user = user; // Agrega el usuario decodificado a la solicitud
+    next();
+  } catch (error) {
+    console.error("Error al verificar el rol de usuario:", error);
+    res.status(500).json({ message: "Error al verificar el rol de usuario" });
+    return
+  } 
+}
+
+export const verifyAdminOrProfesor = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  if (!req.headers.authorization) {
+    res.status(401).json({ message: "Token no proporcionado." });
+    return;
+  }
+    
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    res.status(401).json({ message: "Token no proporcionado." });
+    return
+  }
+
+  try {
+    const decoded = jwt.verify(token ?? '', ENV.TOKEN_SECRET as string) as JwtPayload;
+    const user = await prisma.usuario.findUnique({
+      where: { id: decoded.id },
+      include: { rol: true },
+    });
+
+    if (!user) {
+      res.status(404).json({ message: "Usuario no encontrado." });
+      return
+    }
+
+    if (user?.rolId !== 1 && user?.rolId !== 3) {
+      res.status(403).json({ message: "No tienes permisos de administrador o profesor." });
+      return
+    }
+
+    (req as any).user = user; // Agrega el usuario decodificado a la solicitud
+    next();
+  } catch (error) {
+    console.error("Error al verificar el rol de usuario:", error);
+    res.status(500).json({ message: "Error al verificar el rol de usuario" });
+    return
+  } 
+}

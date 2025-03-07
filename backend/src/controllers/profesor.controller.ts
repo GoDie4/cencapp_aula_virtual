@@ -57,6 +57,10 @@ export const actualizarProfesor = async (req: any, res: any): Promise<void> => {
   const { nombres, apellidos, celular, email, password } = req.body;
 
   try {
+    const profesorBuscado = await prisma.usuario.findUnique({
+      where: { id: id },
+    });
+
     const profesor = await prisma.usuario.update({
       where: { id: id },
       data: {
@@ -64,7 +68,7 @@ export const actualizarProfesor = async (req: any, res: any): Promise<void> => {
         apellidos: apellidos,
         celular: celular,
         email: email,
-        password: password,
+        password: password ?? profesorBuscado?.password,
       },
     });
 

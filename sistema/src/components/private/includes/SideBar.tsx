@@ -19,7 +19,7 @@ import { Global } from '../../../helper/Global'
 import { icono } from '../../shared/Images'
 
 const SideBar = (): JSX.Element => {
-  const { auth, setAuth, setLoading, setShowNotificaciones, notificationCount } = useAuth()
+  const { auth, setAuth, setLoading, setShowNotificaciones } = useAuth()
   const token = localStorage.getItem('token')
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
@@ -67,9 +67,6 @@ const SideBar = (): JSX.Element => {
                 setShowNotificaciones(true)
               }}
             >
-              <div className="w-6 h-6 bg-main rounded-full absolute top-0 -right-4 flex items-center justify-center p-2">
-                {notificationCount}
-              </div>
               <img
                 src={icono}
                 alt=""
@@ -115,7 +112,7 @@ const SideBar = (): JSX.Element => {
                 />
               </button>
               <ul
-                className={` ${showSubmenu ? 'h-[100px]' : 'h-0'
+                className={` ${showSubmenu ? 'h-[170px]' : 'h-0'
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -143,6 +140,34 @@ const SideBar = (): JSX.Element => {
                     }}
                   >
                     Cursos
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="secciones"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 96 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(96)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Secciones
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="clases"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 95 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(95)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Clases
                   </Link>
                 </li>
               </ul>

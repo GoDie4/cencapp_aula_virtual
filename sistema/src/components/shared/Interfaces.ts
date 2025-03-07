@@ -166,6 +166,34 @@ export interface categoriasValuesMoficate {
   nombre: string
 }
 
+export interface seccionValues {
+  id: string
+  nombre: string
+  posicion: number
+  cursoId: string
+}
+
+export interface SeccionValues {
+  posicion: string
+  nombre: string
+  cursoId: string
+}
+
+export interface ClaseValues {
+  nombre: string
+  duracion: string
+  posicion: string
+  seccionId: string
+}
+
+export interface ClaseValuesModificate {
+  nombre: string
+  duracion: string
+  posicion: string
+  seccionId: string
+  url_video: string
+}
+
 // PRODUCTOS
 export interface productosValuesModificate {
   nombre: string
