@@ -65,9 +65,9 @@ export const Slide = () => {
               style={{
                 backgroundImage: `url(${slide.imagen1})`,
               }}
-              className="flex h-full slide-gradient bg-cover bg-center w-full relative z-10 before:absolute before:w-full before:h-full before:top-0 before:left-0 before:bg-black-main before:opacity-50 before:-z-10"
+              className="relative z-10 flex w-full h-full bg-center bg-cover slide-gradient before:absolute before:w-full before:h-full before:top-0 before:left-0 before:bg-black-main before:opacity-50 before:-z-10"
             >
-              <ContentMain className="w-full py-20 md:py-0 gap-16 sm:gap-0 flex flex-col lg:flex-row justify-center md:justify-start items-center">
+              <ContentMain className="flex flex-col items-center justify-center w-full gap-16 py-20 md:py-0 sm:gap-0 lg:flex-row md:justify-start">
                 <motion.div
                   className="w-full lg:w-3/5"
                   initial="hidden"
@@ -92,9 +92,9 @@ export const Slide = () => {
                     dangerouslySetInnerHTML={{
                       __html: slide.descripcion,
                     }}
-                    className="text-white-main font-body text-justify md:text-left text-sm md:text-base mt-5 w-full lg:w-3/4"
+                    className="w-full mt-5 text-sm text-justify text-white-main font-body md:text-left md:text-base lg:w-3/4"
                   ></motion.div> */}
-                  <div className="flex flex-col md:flex-row items-center gap-4 mt-5">
+                  <div className="flex flex-col items-center gap-4 mt-5 md:flex-row">
                     <Link
                       href={"#servicios"}
                       className="bg-secondary-main text-white-main group  flex items-center gap-1 w-fit rounded-main px-8 font-semibold text-xs md:text-sm py-2 border border-secondary-main transition-all hover:bg-secondary-800 hover:border-secondary-800 hover:text-white-main hover:scale-[1.02]"
@@ -110,10 +110,10 @@ export const Slide = () => {
       </>
 
       <div className="absolute  mx-auto md:mx-0 right-52 flex gap-0 -bottom-12 my-auto h-[200px] z-[999]">
-        <div className=" rounded-full w-fit h-fit p-1 md:p-3 parriba cursor-pointer mb-4">
-          <BiSolidChevronLeft className="text-6xl  text-primary-main " />
+        <div className="p-1 mb-4 rounded-full cursor-pointer  w-fit h-fit md:p-3 parriba">
+          <BiSolidChevronLeft className="text-6xl text-primary-main " />
         </div>
-        <div className=" rounded-full w-fit h-fit p-1 -ml-6 md:p-3 cursor-pointer mb-4 pabajo">
+        <div className="p-1 mb-4 -ml-6 rounded-full cursor-pointer  w-fit h-fit md:p-3 pabajo">
           <BiSolidChevronRight className="text-6xl text-primary-main" />
         </div>
       </div>
