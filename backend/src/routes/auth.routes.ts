@@ -5,11 +5,13 @@ import { crearAdmin, login, logout, register } from "../controllers/auth.control
 import { actualizarCategoria, createCategoriaMemory, deleteCategoria, obtenerCategoriaPorId, obtenerCategoriaPorNombre, showAllCategorias, upload } from "../controllers/categoria.controller";
 import { actualizarCurso, createCurso, deleteCurso, obtenerCursoPorId, showAllCursos, uploadImageCurso } from "../controllers/curso.controller";
 // import { createCursoSchema } from "../schemas/curso.schema";
-import { verifyAdmin, verifyAlumno, verifyProfesor } from "../middlewares/JWTMiddleware";
+import { verifyAdmin, verifyAdminOrProfesor, verifyAlumno, verifyProfesor } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
 import { actualizarProfesor, crearProfesor, deleteProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
 import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
 import { enviarVenta } from "../controllers/mercadopago.controller";
+import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
+import { actualizarClase, createClase, deleteClase, obtenerClasePorId, obtenerClases, showAllClases } from "../controllers/clase.controller";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
@@ -41,10 +43,10 @@ router.post('/cursos/:id', verifyAdmin, uploadImageCurso , actualizarCurso)
 router.post('/borrarCurso/:id', verifyAdmin, deleteCurso)
 
 /** Profesores */
-router.post('/profesores', validateSchema(registerSchema) ,verifyAdmin, crearProfesor)
-router.get('/profesores',showAllProfesores)
-router.get('/profesores/:id' ,verifyAdmin, obtenerProfesorPorId)
-router.post('/profesores/:id', validateSchema(registerSchema) ,verifyAdmin, actualizarProfesor)
+router.post('/profesores', verifyAdmin, crearProfesor)
+router.get('/profesores', verifyAdmin, showAllProfesores)
+router.get('/profesores/:id', verifyAdmin, obtenerProfesorPorId)
+router.post('/profesores/:id', verifyAdmin, actualizarProfesor)
 router.post('/borrarProfesor/:id', verifyAdmin, deleteProfesor)
 
 /** Alumnos */
@@ -55,5 +57,20 @@ router.post('/alumnos/:id', validateSchema(registerSchema), verifyAdmin, actuali
 router.post('/borrarAlumno/:id', verifyAdmin, deleteAlumno)
 
 router.get('/mercado', enviarVenta)
+
+router.get('/secciones', verifyAdminOrProfesor, showAllSecciones)
+router.post('/secciones', verifyAdminOrProfesor, createSeccion)
+router.get('/secciones/:id', verifyAdminOrProfesor, obtenerSeccionPorId)
+router.post('/secciones/:id', verifyAdminOrProfesor, actualizarSeccion)
+router.post('/borrarSeccion/:id', verifyAdminOrProfesor, deleteSeccion)
+router.get('/seccionesBuscar/:nombre', verifyAdminOrProfesor, obtenerSecciones)
+router.get('/seccionesCurso/:id', verifyAdminOrProfesor, obtenerSeccionesCurso)
+
+router.get('/clases', verifyAdminOrProfesor, showAllClases)
+router.post('/clases', verifyAdminOrProfesor, createClase)
+router.get('/clases/:id', verifyAdminOrProfesor, obtenerClasePorId)
+router.post('/clases/:id', verifyAdminOrProfesor, actualizarClase)
+router.post('/borrarClase/:id', verifyAdminOrProfesor, deleteClase)
+router.get('/clasesBuscar/:nombre', verifyAdminOrProfesor, obtenerClases)
 
 export default router;

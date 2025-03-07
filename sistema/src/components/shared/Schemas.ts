@@ -27,7 +27,8 @@ export const ScheamaProductos = Yup.object().shape({
   nombre: Yup.string().required('El campo es requerido'),
   precio: Yup.number()
     .required('El campo es requerido')
-    .positive('El valor no puede ser negativo')
+    .positive('El valor no puede ser negativo'),
+  horas: Yup.number().required('El campo es requerido')
 })
 
 // PRIMERASECCION

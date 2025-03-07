@@ -104,7 +104,7 @@ export const createCurso = async (
           imagen: urlImagenPath ?? "",
           banner: urlBannerPath ?? "",
           precio: parseFloat(precio).toFixed(2),
-          horas: horas,
+          horas: parseInt(horas),
           presentacion: descripcion ?? "",
           dirigido: dirigido ?? "",
           metodologia: metodologia ?? "",
@@ -217,7 +217,7 @@ export const actualizarCurso = async (
         nombre: nombre,
         precio,
         categoriaId: Number(categoriaId),
-        horas,
+        horas: parseInt(horas),
         imagen: urlImagenPath !== null ? urlImagenPath : cursoExistente.imagen,
         banner: urlBannerPath !== null ? urlBannerPath : cursoExistente.banner,
         presentacion: descripcion,
@@ -304,6 +304,11 @@ export const obtenerCursoPorId = async (
     // Buscar una categoría por ID en la base de datos
     const curso = await prisma.curso.findUnique({
       where: { id: cursoId },
+      include: { secciones: {
+        include: {
+          clases: true
+        }
+      } }
     });
 
     if (curso) {

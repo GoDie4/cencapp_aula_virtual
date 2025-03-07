@@ -125,9 +125,9 @@ export const EditarCategoria = (): JSX.Element => {
 
   return (
     <>
-      {loadingComponents ? (
-        <Loading />
-      ) : (
+      {loadingComponents
+        ? (<Loading />)
+        : (
         <form
           className="bg-secondary-100 p-8 rounded-xl mt-4"
           onSubmit={handleSubmit}
@@ -202,7 +202,7 @@ export const EditarCategoria = (): JSX.Element => {
             />
           </div>
         </form>
-      )}
+          )}
     </>
   )
 }
