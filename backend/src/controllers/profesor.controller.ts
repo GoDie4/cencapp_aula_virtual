@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+import { Request, Response } from 'express';
 import bcrypt from 'bcrypt'
 const prisma = new PrismaClient();
 
@@ -83,7 +84,7 @@ export const actualizarProfesor = async (req: any, res: any): Promise<void> => {
 
 export const deleteProfesor = async (req: any, res: any): Promise<void> => {
   const { id } = req.params;
-    console.log(req.params)
+  console.log(req.params)
   try {
     const profesor = await prisma.usuario.delete({
       where: { id: id },
@@ -103,10 +104,7 @@ export const deleteProfesor = async (req: any, res: any): Promise<void> => {
   }
 };
 
-export const obtenerProfesorPorId = async (
-  req: any,
-  res: any
-): Promise<void> => {
+export const obtenerProfesorPorId = async (req: any, res: any): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -127,4 +125,36 @@ export const obtenerProfesorPorId = async (
   } finally {
     await prisma.$disconnect();
   }
+};
+
+export const darleCargoCurso = async (req: Request, res: Response): Promise<void> => {
+  const { cursoId, usuarioId } = req.body
+
+  if (!cursoId && !usuarioId) {
+    res.status(404).json({
+      message: 'Faltan datos'
+    })
+    return
+  }
+
+  try {
+    await prisma.cursoUsuario.create({
+      data: {
+        cursoId: cursoId,
+        userId: usuarioId,
+        tipo: 'CARGO',
+      }
+    })
+    res.status(200).json({
+      message: 'El procedimiento se ha completado exitosamente'
+    })
+    return
+  } catch (error) {
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor'
+    })
+  } finally {
+    prisma.$disconnect
+  }
+
 };

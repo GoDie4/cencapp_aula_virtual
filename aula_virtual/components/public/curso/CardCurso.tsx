@@ -1,4 +1,5 @@
 "use client";
+import { formatUrl } from "@/logic/formateador";
 import { useCarrito } from "@/store/useCarrito";
 import Image from "next/image";
 import Link from "next/link";
@@ -45,7 +46,7 @@ const CardCurso = ({
         horas: parseInt(horas),
         imagen: img,
         categoriaId: 1,
-        pedido: false
+        pedido: false,
       });
       toast.success("Curso eliminado del carrito");
     } else {
@@ -87,7 +88,7 @@ const CardCurso = ({
   return (
     <div className="rounded-lg group  overflow-hidden relative transition-all duration-300 shadow-md hover:before:h-full hover:after:h-full hover:before:bg-green-500 hover:after:bg-green-500 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[1px] hover:before:z-20 hover:after:absolute hover:after:top-0 hover:after:right-0 hover:after:w-[1px] hover:after:z-20 hover:img:scale-110 hover:div.vermas:clip-path-[polygon(0_0,100%_0,100%_100%,0_100%)] hover:div.vermas:animate-show">
       <Link
-        href={`/curso/${formatearURL(titulo)}`}
+        href={`/curso/${formatUrl(titulo)}`}
         className="relative overflow-hidden "
       >
         <Image
@@ -98,7 +99,7 @@ const CardCurso = ({
           className="rounded-t-lg transition-all duration-300"
         />
         <span className="absolute top-4 left-4  px-4 py-2 text-white-main bg-primary-main  rounded-md block w-fit">
-          {horas}
+          {horas} horas
         </span>
         <span className="absolute top-4 right-4  px-4 py-2 text-white-main bg-secondary-main rounded-md block w-fit">
           S/{precio}.00

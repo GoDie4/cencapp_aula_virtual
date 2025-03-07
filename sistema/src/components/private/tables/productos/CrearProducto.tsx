@@ -161,7 +161,7 @@ export const CrearProducto = (): JSX.Element => {
           onSubmit={handleSubmit}
         >
           <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">
-            <div className="w-full lg:w-1/3">
+            <div className="w-full lg:w-1/2">
               <TitleBriefs titulo="Nombre del curso" />
               <InputsBriefs
                 name="nombre"
@@ -196,17 +196,6 @@ export const CrearProducto = (): JSX.Element => {
                 errors={errors.categoriaId}
                 touched={touched.categoriaId}
               />
-            </div>
-            <div className="w-full lg:w-1/2">
-              <TitleBriefs titulo="Precio del Curso" />
-              <InputsBriefs
-                name="precio"
-                type="number"
-                value={values.precio}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <Errors errors={errors.precio} touched={touched.precio} />
             </div>
           </div>
           <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">

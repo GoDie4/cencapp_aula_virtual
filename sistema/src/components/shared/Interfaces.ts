@@ -210,8 +210,22 @@ export interface productosValues {
   imagen: string
   precio: string
   categoria: categoriasValues
+  detalles: CursoDetalles
   createdAt: string | null
   updatedAt: string | null
+}
+
+export interface CursoDetalles {
+  id: string
+  cursoId: string
+  presentacion?: string
+  dirigido?: string
+  metodologia?: string
+  objetivo?: string
+  certificacion?: string
+  createdAt?: Date
+  updatedAt?: Date
+  curso?: productosValues
 }
 
 export interface CuponValues {

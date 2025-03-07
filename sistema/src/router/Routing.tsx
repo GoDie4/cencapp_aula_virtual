@@ -8,8 +8,6 @@ import { EditarCategoria } from '../components/private/tables/categorias/EditarC
 import { ListaProductos } from '../components/private/tables/productos/ListaProductos'
 import { CrearProducto } from '../components/private/tables/productos/CrearProducto'
 import { EditarProducto } from '../components/private/tables/productos/EditarProducto'
-import { EditarConfiguracion } from '../components/private/tables/configuracion/EditarConfiguracion'
-import { ListaTransacciones } from '../components/private/tables/transacciones/ListaTransacciones'
 import { EditarTransaccion } from '../components/private/tables/transacciones/EditarTransaccion'
 import Auth from '../components/public/Auth'
 import { ListaDepartamentos } from '../components/private/tables/departamentos/ListaDepartamentos'
@@ -26,6 +24,9 @@ import ListaProfesor from '../components/private/tables/profesores/ListaProfesor
 import CrearProfesor from '../components/private/tables/profesores/CrearProfesor'
 import EditarProfesor from '../components/private/tables/profesores/EditarProfesor'
 import ModalProvider from '../context/ModalProvider'
+import { ListaAlumnos } from '../components/private/tables/alumnos/ListaAlumnos'
+import { CrearAlumno } from '../components/private/tables/alumnos/CrearAlumno'
+import { EditarAlumno } from '../components/private/tables/alumnos/EditarAlumno'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -37,16 +38,22 @@ export const Routing = (): JSX.Element => {
             <Route path="login" element={<Auth />} />
             <Route path="admin" element={<PrivateLayout />}>
               <Route element={<ListaBanners />} />
+
+              {/** Alumnos */}
+              <Route path="alumnos/editar/:id" element={<EditarAlumno />} />
+              <Route path="alumnos/agregar" element={<CrearAlumno />} />
+              <Route path="alumnos" element={<ListaAlumnos />} />
+
               {/** Profesores */}
               <Route path="profesores" element={<ListaProfesor />} />
               <Route path="profesores/agregar" element={<CrearProfesor />} />
               <Route path="profesores/editar/:id" element={<EditarProfesor />} />
-              {/* CATEGORIAS */}
+              {/* Ccategorias */}
               <Route index element={<ListaCategorias />} />
               <Route path="categorias" element={<ListaCategorias />} />
               <Route path="categorias/agregar" element={<CrearCategoria />} />
               <Route path="categorias/editar/:id" element={<EditarCategoria />} />
-              {/* CURSOS */}
+              {/* Cursos */}
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
@@ -72,8 +79,6 @@ export const Routing = (): JSX.Element => {
               <Route path="distritos/editar/:id" element={<EditarDistrito />} />
 
               {/* CONFIGURACION */}
-              <Route path="configuracion/:id" element={<EditarConfiguracion />} />
-              <Route path="transacciones" element={<ListaTransacciones />} />
               <Route
                 path="transacciones/viewTransaccion/:id"
                 element={<EditarTransaccion />}

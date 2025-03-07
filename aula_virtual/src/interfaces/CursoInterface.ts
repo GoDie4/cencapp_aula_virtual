@@ -6,25 +6,25 @@ export interface Curso {
   precio: number
   horas: number
   imagen: string
+  banner?: string
   categoriaId: number
-  presentacion?: string
-  dirigido?: string
-  metodologia?: string
-  certificacion?: string
   categoria?: Categoria
+  detalles?: CursoDetalles
   createdAt?: Date
   updatedAt?: Date
+  dolar?: number
+  descuento?: number
 }
-/*
+
 export interface CursoDetalles {
   id: string
   cursoId: string
-  presentacion: string
-  dirigido: string
-  metodologia: string
-  certificacion: string
+  presentacion?: string
+  dirigido?: string
+  metodologia?: string
+  objetivo?: string
+  certificacion?: string
   createdAt?: Date
   updatedAt?: Date
   curso?: Curso
 }
-*/

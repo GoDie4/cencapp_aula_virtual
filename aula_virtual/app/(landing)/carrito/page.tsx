@@ -13,7 +13,7 @@ import { config } from '@/config/config'
 
 export default function CarritoPage() {
   const navigate = useRouter()
-  const { carrito } = useCarrito()
+  const { carrito, carritoMercadoPago } = useCarrito()
   const { user } = useAuth()
   const { setRedirect } = useToRedirect()
   const [renderButton, setRenderButton] = useState<boolean>(false)
@@ -27,7 +27,14 @@ export default function CarritoPage() {
 
   async function validarDatos () {
     if (user?.id) {
-      const response = await axios.get(`${config.apiUrl}/mercado`)
+      const data = {
+        items: carritoMercadoPago,
+        info: {
+          email: user.email,
+          id: user.id
+        }
+      }
+      const response = await axios.post(`${config.apiUrl}/mercado`, data)
       if (response.status === 200) {
         window.open(response.data.init_point)
       }

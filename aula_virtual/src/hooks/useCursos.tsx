@@ -1,20 +1,20 @@
 import { config } from "@/config/config";
 import { Curso } from "@/interfaces/CursoInterface";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const getCursos = async () => {
+const getCursos = async (setCursos: Dispatch<SetStateAction<Curso[]>>) => {
   const response = await axios.get(`${config.apiUrl}/cursos`)
-  
-  return response.data.cursos
+  console.log(response.data.cursos)
+  setCursos(response.data.cursos)
 }
 
 export function useCursos () {
   const [cursos, setCursos] = useState<Curso[]>([])
 
   useEffect(() => {
-    getCursos().then(cursos => setCursos(cursos))
-  })
+    getCursos(setCursos)
+  }, [])
 
   return {
     cursos
