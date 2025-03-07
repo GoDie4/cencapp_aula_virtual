@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@justinribeiro/lite-youtube": "^1.7.1",
     "@material-tailwind/react": "^2.0.4",
     "@mui/material": "^5.13.5",
     "@szhsin/react-menu": "^4.0.0",
@@ -20,12 +21,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.9.0",
+    "react-lite-youtube-embed": "^2.4.0",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.13.0",
     "socket.io-client": "^4.8.1",
     "sonner": "^1.5.0",
     "sweetalert2": "^11.7.12",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

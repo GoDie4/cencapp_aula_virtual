@@ -49,28 +49,6 @@ export default function ListaProfesor (): JSX.Element {
     getProfesores()
   }, [])
 
-  /*
-  const updateCuponEstado = async (id: string, nuevoEstado: number): Promise<void> => {
-    try {
-      setLoadingComponents(true)
-      const { data } = await axios.post(
-        `${Global.url}/profesores/updateEstado/${id}`,
-        { estado: nuevoEstado },
-        {
-          headers: {
-            Authorization: `Bearer ${token !== null && token !== '' ? token : ''}`
-          }
-        }
-      )
-      console.log(data)
-      getProfesores()
-    } catch (error) {
-      console.error('Error al actualizar el estado del cupón:', error)
-    } finally {
-      setLoadingComponents(false)
-    }
-  }
-    */
   return (
     <>
       {loadingComponents
