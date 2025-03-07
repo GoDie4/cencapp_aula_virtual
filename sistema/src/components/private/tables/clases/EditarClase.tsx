@@ -1,44 +1,46 @@
 import { useFormik } from 'formik'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Global } from '../../../../helper/Global'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import { type SeccionValues } from '../../../shared/Interfaces'
+import { ClaseValuesModificate } from '../../../shared/Interfaces'
 import { InputsBriefs } from '../../../shared/InputsBriefs'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
+import { Loading } from '../../../shared/Loading'
+import '@justinribeiro/lite-youtube'
+import { extraerIdYouTube } from '../../../../logic/extraerID'
+import { ClasesInterface } from '../../../../interfaces/ClasesInterface'
 
-export default function EditarClase (): JSX.Element {
+export default function EditarClase(): JSX.Element {
+  const { id } = useParams()
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
-  const [cursos, setCursos] = useState([])
+  const [clase, setClase] = useState<ClasesInterface>()
+  const [videoId, setVideoId] = useState('')
+  const [videoIdNuevo, setVideoIdNuevo] = useState('')
   const [loadingComponents, setLoadingComponents] = useState(false)
+  const [url, setUrl] = useState('')
 
-  const getCursos = async (): Promise<void> => {
-    try {
-      const { data } = await axios.get(`${Global.url}/cursos`, {
-        headers: {
-          Authorization: `Bearer ${token !== null && token !== '' ? token : ''
-            }`
-        }
-      })
-      setCursos(data.cursos)
-      setLoadingComponents(false)
-    } catch (error) {
-      toast.error('Error al traer los datos de las cursos')
-      console.log(error)
-    }
+  useEffect(() => {
+    getClase()
+  }, [])
+
+  const handleVideoId = (e: { target: { value: string } }) => {
+    setUrl(e.target.value)
+    setVideoIdNuevo(extraerIdYouTube(e.target.value) ?? '')
   }
 
   const saveSeccion = async (
-    values: SeccionValues
+    values: ClaseValuesModificate
   ): Promise<void> => {
     setLoadingComponents(true)
-    const datos = {
+    const datos: ClaseValuesModificate = {
       nombre: values.nombre,
       posicion: values.posicion,
-      cursoId: values.cursoId
+      duracion: values.duracion,
+      url_video: videoIdNuevo ? videoIdNuevo : videoId
     }
     /*
     const formData = new FormData()
@@ -48,7 +50,7 @@ export default function EditarClase (): JSX.Element {
     */
     try {
       const { status, data } = await axios.post(
-        `${Global.url}/secciones`,
+        `${Global.url}/clases/${clase?.id}`,
         datos,
         {
           headers: {
@@ -56,11 +58,11 @@ export default function EditarClase (): JSX.Element {
           }
         }
       )
-      if (status !== 201) {
+      if (status !== 200) {
         toast.warning(data.message)
-      } else if (status === 201) {
+      } else if (status === 200) {
         toast.success('Creado correctamente')
-        navigate('/admin/secciones')
+        navigate('/admin/clases')
       }
     } catch (error) {
       console.log(error)
@@ -71,20 +73,40 @@ export default function EditarClase (): JSX.Element {
     setLoadingComponents(false)
   }
 
-  useEffect(() => {
-    getCursos()
-  }, [])
-
-  const { handleSubmit, handleChange, errors, values, touched, handleBlur } =
+  const { handleSubmit, handleChange, errors, values, touched, handleBlur, setValues } =
     useFormik({
       initialValues: {
         nombre: '',
-        posicion: '',
-        cursoId: ''
+        duracion: '',
+        posicion: ''
       },
       // validationSchema: SchemaCategorias,
       onSubmit: saveSeccion
-    })
+    });
+  const getClase = async (): Promise<void> => {
+    try {
+      const { data } = await axios.get(
+        `${Global.url}/clases/${id ?? ''}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token !== null && token !== '' ? token : ''
+              }`
+          }
+        }
+      )
+      setClase(data.clase)
+      setValues({
+        ...values,
+        nombre: data.clase.nombre,
+        duracion: data.clase.duracion,
+        posicion: data.clase.posicion,
+      })
+      setVideoId(data.clase.url_video)
+      setLoadingComponents(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -131,55 +153,6 @@ export default function EditarClase (): JSX.Element {
                   <Errors errors={errors.posicion} touched={touched.posicion} />
                 </div>
               </div>
-              <div className="w-full flex flex-col gap-5 lg:flex-row">
-                <div className="w-full lg:w-1/2 mb-5">
-                  <TitleBriefs titulo="Asignar curso" />
-                  <select
-                    title='Buscar un curso'
-                    className="border border-black  placeholder-gray-400 outline-none focus:outline-none
-                                                                            focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-secondary-900
-                                                                            rounded-md transition-all"
-                    name="cursoId"
-                    value={cursoId}
-                    autoComplete="off"
-                    onChange={handleCursoId}
-                    onBlur={handleBlur}
-                  >
-                    <option value="">Seleccionar Curso</option>
-                    {cursos.map((curso: Curso) => (
-                      <option value={curso.id} key={curso.id}>
-                        {curso.nombre}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="w-full lg:w-1/2 mb-5">
-                  <TitleBriefs titulo="Asignar a una Sección" />
-                  <select
-                    title='Selecciona una curso'
-                    className="border border-black  placeholder-gray-400 outline-none focus:outline-none
-                                                                            focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-secondary-900
-                                                                            rounded-md transition-all"
-                    name="seccionId"
-                    value={values.seccionId}
-                    autoComplete="off"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    disabled={cursoId === ''}
-                  >
-                    <option value="">Seleccionar Sección</option>
-                    {secciones.map((curso: SeccionInterface) => (
-                      <option value={curso.id} key={curso.id}>
-                        {curso.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  <Errors
-                    errors={errors.seccionId}
-                    touched={touched.seccionId}
-                  />
-                </div>
-              </div>
               <div className='w-full mb-5'>
                 <TitleBriefs titulo="Url del video" />
                 <InputsBriefs
@@ -191,9 +164,16 @@ export default function EditarClase (): JSX.Element {
                 />
               </div>
               {
-                url_video !== '' && (
+                videoId !== '' && videoIdNuevo === '' && (
                   <div className='w-full mb-5'>
-                    <lite-youtube videoid={url_video}></lite-youtube>
+                    <lite-youtube videoid={videoId}></lite-youtube>
+                  </div>
+                )
+              }
+              {
+                videoIdNuevo !== '' && (
+                  <div className='w-full mb-5'>
+                    <lite-youtube videoid={videoIdNuevo}></lite-youtube>
                   </div>
                 )
               }
