@@ -32,43 +32,27 @@ import { Accordion, AccordionSummary } from '../@components/Acordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 */
 import { RenderTemarioItem } from '../@components/TemarioItem'
-/*
-const Accordion = styled((props: AccordionProps) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
-  '&:not(:last-child)': {
-    borderBottom: 0
-  },
-  '&::before': {
-    display: 'none'
-  }
-}))
 
-const AccordionSummary = styled((props: AccordionSummaryProps) => (
-  <MuiAccordionSummary
-    expandIcon={<IoChevronDown style={{ fontSize: '0.9rem' }} />}
-    {...props}
-  />
-))(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === 'dark'
-      ? 'rgba(255, 255, 255, .05)'
-      : 'rgba(0, 0, 0, .03)',
-  flexDirection: 'row-reverse',
-  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-    transform: 'rotate(90deg)'
-  },
-  '& .MuiAccordionSummary-content': {
-    marginLeft: theme.spacing(1)
-  }
-}))
+import { Curso } from '@/interfaces/CursoInterface'
+import axios from 'axios'
+import { config } from '@/config/config'
+import { revertUrl } from '@/logic/formateador'
+import { CarritoButton } from '../@components/CarritoButton'
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
-  borderTop: '1px solid rgba(0, 0, 0, .125)'
-}))
-*/
+
+async function getCurso(nombre: string): Promise<Curso> {
+  const response = await axios.get(`${config.apiUrl}/cursosBuscar/${nombre}`)
+  return response.data
+}
+
+/**
+ * {
+  curso,
+  params,
+}: {
+  params: Promise<{ nombre: string }>
+}
+ */
 
 const ViewCurso = async ({
   params,
@@ -182,27 +166,27 @@ const ViewCurso = async ({
         {
           icono: 'video',
           descripcion:
-                'Las sesiones serán grabadas para posteriormente visualizarse en el aula virtual.'
+            'Las sesiones serán grabadas para posteriormente visualizarse en el aula virtual.'
         },
         {
           icono: 'award',
           descripcion:
-                'Certificación por 48 horas académicas. Para los participantes del exterior será de manera digital y para los participantes de Perú será físico (previa coordinación para pago de envío).'
+            'Certificación por 48 horas académicas. Para los participantes del exterior será de manera digital y para los participantes de Perú será físico (previa coordinación para pago de envío).'
         },
         {
           icono: 'message',
           descripcion:
-                'Se creará un grupo de WhatsApp para consultas fuera de horario de clases virtuales.'
+            'Se creará un grupo de WhatsApp para consultas fuera de horario de clases virtuales.'
         },
         {
           icono: 'clock',
           descripcion:
-                'Acceso al aula virtual (Google Classroom) las 24 horas y estará disponible durante 6 meses luego de culminado el curso.'
+            'Acceso al aula virtual (Google Classroom) las 24 horas y estará disponible durante 6 meses luego de culminado el curso.'
         },
         {
           icono: 'clipboard',
           descripcion:
-                'Para la obtención del certificado el participante deberá obtener una nota mínima de 14.'
+            'Para la obtención del certificado el participante deberá obtener una nota mínima de 14.'
         },
         {
           icono: 'tool',
@@ -486,9 +470,8 @@ const ViewCurso = async ({
   }
 
   const nombre = (await params).nombre
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const curso = cursosData[nombre] // Obtenemos los datos del curso según el nombre de la URL
+  const curso: Curso = await getCurso(revertUrl(nombre))
+  console.log(curso)
 
   if (!curso) {
     return <div>Curso no encontrado</div>
@@ -536,67 +519,80 @@ const ViewCurso = async ({
       <AccordionDetails>
         <ul>
           {/* Acceder a los detalles de la sesión actual *//*}
-          {detalles.map((detalle: any, i: any) => (
-            <li key={i}>{detalle}</li>
-          ))}
-        </ul>
-      </AccordionDetails>
-    </Accordion>
-  )*/
-  
+{detalles.map((detalle: any, i: any) => (
+<li key={i}>{detalle}</li>
+))}
+</ul>
+</AccordionDetails>
+</Accordion>
+)*/
   return (
     <>
-      <Banner titulo={curso.titulo} imagen={`${curso.imagen ?? ''}`} />
+      <Banner titulo={curso.nombre} imagen={`${config.imagesUrl}${curso.banner ?? ''}`} />
 
       <div className="curso">
         <div className="container2">
           <div className="section-left">
-            {}
-            <section className="presentacion section">
-              <h2>
-                <FiInfo className="section-icon" />
-                Presentación del curso
-              </h2>
-              <p>{curso.presentacion}</p>
-            </section>
+            
+            {
+              curso.detalles && curso.detalles.presentacion && (
+                <section className="presentacion section">
+                  <h2>
+                    <FiInfo className="section-icon" />
+                    Presentación del curso
+                  </h2>
+                  <div dangerouslySetInnerHTML={{
+                    __html: curso.detalles.presentacion
+                  }}></div>
+                </section>
+              )
+            }
 
-            {curso.dirigido && (
+            { curso.detalles && curso.detalles.dirigido && (
               <section className="metodologia section">
                 <h2>
                   <FiSettings className="section-icon" />
                   Dirigido a
                 </h2>
-                <p>{curso.dirigido}</p>
+                <div dangerouslySetInnerHTML={{
+                  __html: curso.detalles.dirigido
+                }}></div>
               </section>
             )}
 
-            {curso.objetivo && (
+            {curso.detalles && curso.detalles.objetivo && (
               <section className="objetivo section">
                 <h2>
                   {' '}
                   <FiTarget className="section-icon" />
                   Objetivo
                 </h2>
-                <p>{curso.objetivo}</p>
+                <div dangerouslySetInnerHTML={{
+                  __html: curso.detalles.objetivo
+                }}></div>
               </section>
             )}
 
-            {curso.metodologia && (
+            { curso.detalles && curso.detalles.metodologia && (
               <section className="metodologia section">
                 <h2>
                   <FiSettings className="section-icon" />
                   Metodología
                 </h2>
-                <p>{curso.metodologia}</p>
+                <div dangerouslySetInnerHTML={{
+                  __html: curso.detalles.metodologia
+                }}></div>
               </section>
             )}
-            {curso.certifica && (
+            { curso.detalles && curso.detalles.certificacion && (
               <section className="certifica section">
                 <h2>
                   <FiAward className="section-icon" />
                   Certificación
                 </h2>
-                <p>{curso.certifica}</p>
+                <div dangerouslySetInnerHTML={{
+                  __html: curso.detalles.certificacion
+                }}></div>
               </section>
             )}
             {/* <section className="temario section">
@@ -621,9 +617,9 @@ const ViewCurso = async ({
           </div>
           <div className="section-right">
             <h2 className="beneficios_title">
-                Beneficios
+              Beneficios
             </h2>
-            {curso.beneficios && (
+            {/* curso.beneficios && (
               <section className="beneficios">
                 <div className="benefit-grid">
                   {curso.beneficios.map((beneficio: any, index: number) => (
@@ -631,8 +627,8 @@ const ViewCurso = async ({
                       {renderIcon(beneficio.icono)}
                       <p>{beneficio.descripcion}</p>
                     </div>
-                  ))}
-                  {/* <div className="benefit-item shadow-lg">
+                  )) */}
+            {/* <div className="benefit-item shadow-lg">
             <FiVideo className="benefit-icon" />
             <p>
               Las sesiones serán grabadas para posteriormente visualizarse en el
@@ -675,11 +671,11 @@ const ViewCurso = async ({
               instalación para la exitosa instalación de: AUTOCAD STRUCTURAL
               DETAILING 2015
             </p>
-          </div> */}
-                  {/* Agrega aquí los demás beneficios */}
+          </div> 
+                  
                 </div>
               </section>
-            )}
+            )*/}
             <section className="inversion section">
               <h2>
                 <FiDollarSign className="icon" />
@@ -687,13 +683,13 @@ const ViewCurso = async ({
               </h2>
               {curso.dolar
                 ? (
-                <div className="icon-text">
-                  S/ {curso.precio}.00 Soles ó {curso.dolar}.00 Dólares
-                </div>
-                  )
+                  <div className="icon-text">
+                    S/ {curso.precio}.00 Soles ó {curso.dolar}.00 Dólares
+                  </div>
+                )
                 : (
-                <div className="icon-text">S/ {curso.precio}.00 Soles </div>
-                  )}
+                  <div className="icon-text">S/ {curso.precio}.00 Soles </div>
+                )}
 
               {curso.descuento && (
                 <>
@@ -727,8 +723,9 @@ const ViewCurso = async ({
             </section> */}
 
             <div className="masinfo">
-                <a href="https://wa.me//+51973044253" target='_blank' rel="noreferrer"><BsWhatsapp/>Más información</a>
+              <a href="https://wa.me//+51973044253" target='_blank' rel="noreferrer"><BsWhatsapp />Más información</a>
             </div>
+            <CarritoButton curso={curso} />
           </div>
         </div>
       </div>
