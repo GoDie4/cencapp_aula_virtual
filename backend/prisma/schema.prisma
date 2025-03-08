@@ -135,6 +135,7 @@ enum CursoUsuarioTipo {
     CARGO
 }
 
+
 model SeccionesCursos {
     id        String   @id @default(cuid())
     cursoId   String   @db.Char(36)
