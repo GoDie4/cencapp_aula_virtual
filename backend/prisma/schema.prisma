@@ -128,6 +128,7 @@ enum CursoUsuarioTipo {
   CARGO
 }
 
+
 model SeccionesCursos {
   id        String   @id @default(cuid())
   cursoId   String   @db.Char(36)
@@ -163,6 +164,7 @@ model Usuario {
   rol            Rol            @relation(fields: [rolId], references: [id], onDelete: Cascade)
   cursosUsuarios CursoUsuario[]
   Comentarios    Comentarios[]
+  ventas         Ventas[]
 
   @@map("usuarios")
 }
@@ -190,4 +192,33 @@ model Comentarios {
   clase      Clases   @relation(fields: [claseId], references: [id])
 
   @@map("comentarios")
+}
+
+model Ventas {
+  id                    String   @id @default(cuid())   
+  usuarioId             String
+  pedidoMercadoId       String   @unique
+  fecha_aprobada        DateTime 
+  estado                String
+  estado_detalle        String
+  total_neto            Decimal
+  total                 Decimal
+  ultimo_caracteres     String
+  usuario               Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  detalles              VentasDetalles[]
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("ventas")
+}
+
+model VentasDetalles {
+  id            String   @id @default(cuid())
+  ventaId       String
+  productoId    String
+  cantidad      Int
+  precio        Decimal
+  venta         Ventas   @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+
+  @@map("ventas_detalles")
 }
