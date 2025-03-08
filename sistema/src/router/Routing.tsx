@@ -33,6 +33,7 @@ import EditarSeccion from '../components/private/tables/secciones/EditarSeccion'
 import ListaClases from '../components/private/tables/clases/ListaClases'
 import CrearClase from '../components/private/tables/clases/CrearClase'
 import EditarClase from '../components/private/tables/clases/EditarClase'
+import ListaVentas from '../components/private/tables/ventas/ListaVentas'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -73,6 +74,9 @@ export const Routing = (): JSX.Element => {
               <Route path="clases" element={<ListaClases />} />
               <Route path="clases/agregar" element={<CrearClase />} />
               <Route path="clases/editar/:id" element={<EditarClase />} />
+
+              {/** Ventas */}
+              <Route path="ventas" element={<ListaVentas />} />
 
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />
