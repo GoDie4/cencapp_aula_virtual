@@ -4,11 +4,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Global } from '../../../../helper/Global'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import { type SeccionValues } from '../../../shared/Interfaces'
 import { InputsBriefs } from '../../../shared/InputsBriefs'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
 import { Loading } from '../../../shared/Loading'
+import { extraerIdYouTube } from '../../../../logic/extraerID'
+import { ClaseValues } from '../../../shared/Interfaces'
 
 export default function EditarClase(): JSX.Element {
   const { id } = useParams();

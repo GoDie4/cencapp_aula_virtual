@@ -249,13 +249,13 @@ model Ventas {
 }
 
 model VentasDetalles {
-    id         String  @id @default(cuid())
-    ventaId    String
-    productoId String
-    cantidad   Int
-    precio     Decimal
-    venta      Ventas  @relation(fields: [ventaId], references: [id], onDelete: Cascade)
-    curso      Curso   @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  id            String   @id @default(cuid())
+  ventaId       String
+  productoId    String
+  cantidad      Int
+  precio        Decimal
+  venta         Ventas   @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  curso         Curso    @relation(fields: [productoId], references: [id], onDelete: Cascade)
 
     @@map("ventas_detalles")
 }
