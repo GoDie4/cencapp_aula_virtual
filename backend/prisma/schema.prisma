@@ -20,22 +20,22 @@ datasource db {
 }
 
 model Curso {
-    id             String            @id @default(cuid())
-    nombre         String            @db.VarChar(255)
-    slug           String            @default("") @db.VarChar(255)
-    imagen         String            @db.VarChar(255)
-    banner         String            @db.VarChar(255)
-    horas          Int
-    precio         Decimal
-    categoriaId    Int
-    categoria      Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
-    createdAt      DateTime          @default(now())
-    updatedAt      DateTime          @updatedAt
-    cursosUsuarios CursoUsuario[]
-    secciones      SeccionesCursos[]
-    detalles       CursoDetalles?
-    beneficios     Beneficio[]
-    Seccion        Seccion[]
+  id             String            @id @default(cuid())
+  nombre         String            @db.VarChar(255)
+  imagen         String            @db.VarChar(255)
+  banner         String            @db.VarChar(255)
+  horas          Int
+  precio         Decimal
+  categoriaId    Int
+  categoria      Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  cursosUsuarios CursoUsuario[]
+  secciones      SeccionesCursos[]
+  detalles       CursoDetalles?
+  beneficios     Beneficio[]
+  Seccion        Seccion[]
+  ventas_detalles VentasDetalles[]
 
     @@map("cursos")
 }
@@ -223,6 +223,7 @@ model VentasDetalles {
   cantidad      Int
   precio        Decimal
   venta         Ventas   @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  curso         Curso    @relation(fields: [productoId], references: [id], onDelete: Cascade)
 
   @@map("ventas_detalles")
 }
