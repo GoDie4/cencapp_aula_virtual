@@ -1,10 +1,13 @@
-import { NextPage } from "next";
 import { WrapperCursos } from "./@components/WrapperCursos";
 import { CardCursoAula } from "./@components/CardCursoAula";
 import { ProgressCurso } from "./@components/ProgressCurso";
 import { TitleAula } from "../../@components/estructura/TitleAula";
+import { getServerSideProps } from "@/server/getServerSideProps";
+import { Curso } from "@/interfaces/CursoInterface";
 
-const Page: NextPage = () => {
+export default async function Page() {
+  const data = await getServerSideProps("cursos");
+
   return (
     <>
       <div className="w-full mb-6">
@@ -16,14 +19,13 @@ const Page: NextPage = () => {
             Ver progreso
           </a>
         </TitleAula>
-      
       </div>
       <div className="w-full flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-3/5">
           <WrapperCursos>
-            <CardCursoAula />
-            <CardCursoAula />
-            <CardCursoAula />
+            {data.cursos.map((curso: Curso) => (
+              <CardCursoAula curso={curso} key={curso.id} />
+            ))}
           </WrapperCursos>
         </div>
         <div className="w-full lg:w-2/5" id="progreso">
@@ -53,6 +55,4 @@ const Page: NextPage = () => {
       </div>
     </>
   );
-};
-
-export default Page;
+}
