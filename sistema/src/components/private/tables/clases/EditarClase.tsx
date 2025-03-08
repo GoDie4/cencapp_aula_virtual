@@ -1,13 +1,14 @@
 import { useFormik } from 'formik'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Global } from '../../../../helper/Global'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import { type SeccionValues } from '../../../shared/Interfaces'
 import { InputsBriefs } from '../../../shared/InputsBriefs'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
+import { Loading } from '../../../shared/Loading'
 
 export default function EditarClase (): JSX.Element {
   const navigate = useNavigate()
