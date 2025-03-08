@@ -35,6 +35,7 @@ model Curso {
   detalles       CursoDetalles?
   beneficios     Beneficio[]
   Seccion        Seccion[]
+  ventas_detalles VentasDetalles[]
 
   @@map("cursos")
 }
@@ -219,6 +220,7 @@ model VentasDetalles {
   cantidad      Int
   precio        Decimal
   venta         Ventas   @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  curso         Curso    @relation(fields: [productoId], references: [id], onDelete: Cascade)
 
   @@map("ventas_detalles")
 }
