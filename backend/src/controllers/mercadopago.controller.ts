@@ -9,11 +9,7 @@ import { PaymentResponse } from 'mercadopago/dist/clients/payment/commonTypes'
 import { PrismaClient } from '@prisma/client'
 
 const client = new MercadoPagoConfig({
-  accessToken: ENV.ACCESS_TOKEN,
-  options: {
-    timeout: 10000,
-    idempotencyKey: 'mercadopago'
-  }
+  accessToken: ENV.ACCESS_TOKEN
 })
 
 const prisma = new PrismaClient()
@@ -99,12 +95,12 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
         // HMAC verification passed
         
         const datos: PaymentResponse = await payment.get({ id: data.id })
-
+        console.log(datos)
         datos.additional_info?.items?.map(async (item) => {
           await prisma.cursoUsuario.create({
             data: {
               tipo: 'MATRICULADO',
-              cursoId: item.id,
+              cursoId: item.id as string,
               avance: "0",
               userId: datos.metadata.user_id_con
             }
