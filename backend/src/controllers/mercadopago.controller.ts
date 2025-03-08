@@ -96,6 +96,19 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
         
         const datos: PaymentResponse = await payment.get({ id: data.id })
         console.log(datos)
+        const ventaAprovada =await prisma.ventas.create({
+          data: {
+            pedidoMercadoId: data.id,
+            usuarioId: datos.metadata.user_id_con,
+            estado: datos.status ?? '',
+            estado_detalle: datos.status_detail ?? '',
+            total: datos.transaction_details?.total_paid_amount ?? 0,
+            total_neto: datos.transaction_details?.net_received_amount ?? 0,
+            ultimo_caracteres: datos.card?.last_four_digits ?? '',
+            fecha_aprobada: datos.date_approved ?? '',
+          }
+        })
+
         datos.additional_info?.items?.map(async (item) => {
           await prisma.cursoUsuario.create({
             data: {
@@ -103,6 +116,15 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
               cursoId: item.id as string,
               avance: "0",
               userId: datos.metadata.user_id_con
+            }
+          })
+
+          await prisma.ventasDetalles.create({
+            data: {
+              ventaId: ventaAprovada.id,
+              productoId: item.id as string,
+              cantidad: Number(item.quantity),
+              precio: item.unit_price,
             }
           })
         })
@@ -120,6 +142,32 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
   catch (error) {
     console.log(error)
     
+    res.status(500).json({
+      message: 'Ocurrió un error en el servidor'
+    })
+    return
+  }
+}
+
+export async function obtenerVentas(req: Request, res: Response): Promise<void> {
+  try {
+    const ventas = await prisma.ventas.findMany({
+      include: {
+        detalles: {
+          include: {
+            curso: true
+          }
+        },
+        usuario: true
+      }
+    })
+    res.status(200).json({
+      ventas
+    })
+    return
+  }
+  catch (error) {
+    console.log(error)
     res.status(500).json({
       message: 'Ocurrió un error en el servidor'
     })

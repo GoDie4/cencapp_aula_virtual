@@ -9,7 +9,7 @@ import { verifyAdmin, verifyAdminOrProfesor, verifyAlumno, verifyProfesor } from
 import { getDecodedUser } from "../controllers/user.controller";
 import { actualizarProfesor, crearProfesor, deleteProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
 import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
-import { enviarVenta, recibirVenta } from "../controllers/mercadopago.controller";
+import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercadopago.controller";
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
 import { actualizarClase, createClase, deleteClase, obtenerClasePorId, obtenerClases, showAllClases } from "../controllers/clase.controller";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
@@ -58,6 +58,7 @@ router.post('/borrarAlumno/:id', verifyAdmin, deleteAlumno)
 
 router.post('/mercado', enviarVenta)
 router.post('/mercado/webhook', recibirVenta)
+router.get('/mercado', verifyAdminOrProfesor, obtenerVentas)
 
 router.get('/secciones', verifyAdminOrProfesor, showAllSecciones)
 router.post('/secciones', verifyAdminOrProfesor, createSeccion)
