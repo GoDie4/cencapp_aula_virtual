@@ -41,10 +41,10 @@ export const CrearCategoria = (): JSX.Element => {
     const formData = new FormData()
     formData.append('nombre', values.nombre)
     if (imagen1.archivo != null && imagen1.archivo !== undefined) {
-      formData.append('url_icono', imagen1.archivo)
+      formData.append('url_imagen', imagen1.archivo)
     }
     if (imagen2.archivo != null && imagen2.archivo !== undefined) {
-      formData.append('url_imagen', imagen2.archivo)
+      formData.append('url_icono', imagen2.archivo)
     }
     try {
       const { status } = await axios.post(
@@ -108,7 +108,7 @@ export const CrearCategoria = (): JSX.Element => {
                 <div className="w-full lg:w-1/2">
                   <div className="w-full ">
                     <p>
-                      Icono<span className="text-red-500">*</span>
+                      Fondo<span className="text-red-500">*</span>
                     </p>
                   </div>
                   <div className="flex-1 flex  items-center gap-4">
@@ -125,7 +125,7 @@ export const CrearCategoria = (): JSX.Element => {
                 <div className="w-full lg:w-1/2">
                   <div className="w-full ">
                     <p>
-                      Fondo<span className="text-red-500">*</span>
+                      Icono<span className="text-red-500">*</span>
                     </p>
                   </div>
                   <div className="flex-1 flex  items-center gap-4">
