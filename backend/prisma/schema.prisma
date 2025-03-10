@@ -20,22 +20,23 @@ datasource db {
 }
 
 model Curso {
-  id             String            @id @default(cuid())
-  nombre         String            @db.VarChar(255)
-  imagen         String            @db.VarChar(255)
-  banner         String            @db.VarChar(255)
-  horas          Int
-  precio         Decimal
-  categoriaId    Int
-  categoria      Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  cursosUsuarios CursoUsuario[]
-  secciones      SeccionesCursos[]
-  detalles       CursoDetalles?
-  beneficios     Beneficio[]
-  Seccion        Seccion[]
-  ventas_detalles VentasDetalles[]
+  id                  String            @id @default(cuid())
+  nombre              String            @db.VarChar(255)
+  imagen              String            @db.VarChar(255)
+  banner              String            @db.VarChar(255)
+  horas               Int
+  precio              Decimal
+  categoriaId         Int
+  categoria           Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  cursosUsuarios      CursoUsuario[]
+  secciones           SeccionesCursos[]
+  detalles            CursoDetalles[]
+  beneficios          Beneficio[]
+  Seccion             Seccion[]
+  ventas_detalles     VentasDetalles[]
+  test                Test[]
 
   @@map("cursos")
 }
@@ -152,20 +153,21 @@ model Rol {
 }
 
 model Usuario {
-  id             String         @id @default(cuid()) @db.Char(36)
-  rolId          Int            @default(1)
-  nombres        String         @db.VarChar(255)
-  apellidos      String         @db.VarChar(255)
-  email          String         @unique
-  celular        String         @db.VarChar(15)
-  password       String
-  activo         Boolean        @default(false)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  rol            Rol            @relation(fields: [rolId], references: [id], onDelete: Cascade)
-  cursosUsuarios CursoUsuario[]
-  Comentarios    Comentarios[]
-  ventas         Ventas[]
+  id                        String         @id @default(cuid()) @db.Char(36)
+  rolId                     Int            @default(1)
+  nombres                   String         @db.VarChar(255)
+  apellidos                 String         @db.VarChar(255)
+  email                     String         @unique
+  celular                   String         @db.VarChar(15)
+  password                  String
+  activo                    Boolean        @default(false)
+  createdAt                 DateTime       @default(now())
+  updatedAt                 DateTime       @updatedAt
+  rol                       Rol            @relation(fields: [rolId], references: [id], onDelete: Cascade)
+  cursosUsuarios            CursoUsuario[]
+  Comentarios               Comentarios[]
+  ventas                    Ventas[]
+  examenesResueltos         TestResuelto[]
 
   @@map("usuarios")
 }
@@ -223,4 +225,56 @@ model VentasDetalles {
   curso         Curso    @relation(fields: [productoId], references: [id], onDelete: Cascade)
 
   @@map("ventas_detalles")
+}
+
+model Test {
+  id                      String            @id @default(cuid())
+  url_archivo             String
+  titulo                  String
+  descripcion             String            @db.Text
+  cursoId                 String
+  fecha_inicio            DateTime
+  fecha_fin               DateTime
+  tiempo_limite           Int?
+  tipo_prueba             TipoPrueba
+  puntaje_maxima          Decimal
+  activo                  Boolean
+  curso                   Curso             @relation(fields: [cursoId], references: [id], onDelete: Cascade) 
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+  examenesResueltos       TestResuelto[]
+
+  @@map("examenes")
+}
+
+model TestResuelto {
+  id                      String            @id @default(cuid())
+  examenId                String
+  userId                  String
+  url_archivo_resultado   String
+  puntuacion_total        String
+  examen                  Test              @relation(fields: [examenId], references: [id], onDelete: Cascade)
+  usuario                 Usuario           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("examen_resueltos")
+}
+/*
+model Ejercicios {
+  id                String            @id @default(cuid())
+  titulo            String
+  descripcion       String            @db.Text
+  url_archivo       String
+  activo            Boolean
+  cursoId           String
+  curso             Curso             @relation(fields: [cursoId], references: [id],  onDelete: Cascade)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@map("ejercicios")
+
+}
+*/
+enum TipoPrueba {
+  EXAMEN
+  EJERCICIOS
 }

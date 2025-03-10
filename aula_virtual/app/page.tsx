@@ -225,7 +225,7 @@ const Home = (): JSX.Element => {
                         <div className="absolute inset-0 m-auto rounded-xl w-[200px] h-[180px] group-hover:w-full group-hover:h-full flex items-center justify-center px-8 py-10 bg-black-main bg-opacity-70 transition-all duration-300">
                           <div className="text-center text-white">
                             <span className="flex justify-center p-4 mx-auto mb-2 text-3xl bg-transparent rounded-full w-fit h-fit text-secondary-main group-hover:bg-white-main">
-                              <Image
+                              <img
                                 src={`${config.imagesUrl}${cat.url_icono}`}
                                 width={30}
                                 height={30}

@@ -74,3 +74,8 @@
 2025-03-08T15:52:20.450Z [ERROR] POST /api/mercado/webhook?data.id=104115712131&type=payment | Status: 500 | Time: 6.809 ms | IP: ::ffff:127.0.0.1 | User-Agent: "MercadoPago WebHook v1.0 payment"
 2025-03-08T16:24:17.368Z [ERROR] GET /api/user | Status: 401 | Time: 139.030 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-08T16:25:19.141Z [ERROR] GET /api/user | Status: 401 | Time: 27.899 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+2025-03-10T16:08:13.745Z [ERROR] GET /api/test | Status: 404 | Time: 189.238 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
+2025-03-10T16:09:09.501Z [ERROR] GET /api/test | Status: 404 | Time: 14.403 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
+2025-03-10T16:09:21.591Z [ERROR] POST /api/tests | Status: 400 | Time: 0.943 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
+2025-03-10T16:09:47.913Z [ERROR] POST /api/tests | Status: 400 | Time: 2.882 ms | IP: ::1 | User-Agent: "PostmanRuntime/7.43.0"
+2025-03-10T16:23:17.711Z [ERROR] GET /api/user | Status: 401 | Time: 19.588 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
