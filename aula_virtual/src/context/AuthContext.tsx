@@ -18,46 +18,55 @@ interface AuthContextInterface {
   setUser: React.Dispatch<SetStateAction<UserInterface | null>>;
   token: string | null;
   setToken: React.Dispatch<SetStateAction<string | null>>;
+  cerrarSesion: () => void;
 }
 
 interface AuthProviderInterface {
   children: ReactNode;
+  userInitial: UserInterface | null;
 }
 
 export type AuthContextValue = AuthContextInterface;
 
-export const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
+export const AuthContext = createContext<AuthContextInterface | undefined>(
+  undefined
+);
 
-export async function getUser(setUser: React.Dispatch<SetStateAction<UserInterface | null>>, token: string | null) {
-  try {
-    const response = await axios.get(`${config.apiUrl}/user`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token") || token}`,
-      },
-    });
-
-    if (response.status === 200) {
-      setUser(response.data);
-    }
-  }
-  catch (error) {
-    console.log('No estas dentro de nuestra aula ' + error);
-    setUser(null);
-  }
-}
-
-export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderInterface> = ({
+  children,
+  userInitial,
+}) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<UserInterface | null>(null);
+  const [user, setUser] = useState<UserInterface | null>(userInitial);
   const [token, setToken] = useState<string | null>(null);
 
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, [])
+  const cerrarSesion = async () => {
+    try {
+      console.log("cerrar");
+      const response = await axios.post(`${config.apiUrl}/logout`, null, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setIsAuthenticated(false);
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("token");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   useEffect(() => {
-    getUser(setUser, token);
-  }, []);
+    const isClient = typeof window !== 'undefined';
+    const urlIncludesAula = isClient && window.location.pathname.includes('aula');
+
+    if (isClient && urlIncludesAula && token === null) {
+      window.location.href = '/';
+    }
+  }, [token]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -67,6 +76,7 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
         setUser,
         token,
         setToken,
+        cerrarSesion,
       }}
     >
       {children}

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { validateSchema } from "../middlewares/validatorSchemas.middleware";
 import { loginSchema, registerSchema } from "../schemas/auth.schema";
 import { crearAdmin, login, logout, register } from "../controllers/auth.controller";
-import { actualizarCategoria, createCategoriaMemory, deleteCategoria, obtenerCategoriaPorId, obtenerCategoriaPorNombre, showAllCategorias, upload } from "../controllers/categoria.controller";
+import { actualizarCategoria, createCategoriaMemory, deleteCategoria, obtenerCategoriaPorId, obtenerCategoriaPorSlug, showAllCategorias, upload } from "../controllers/categoria.controller";
 import { actualizarCurso, buscarPorNombre, createCurso, deleteCurso, obtenerCursoPorId, showAllCursos, uploadImageCurso } from "../controllers/curso.controller";
 // import { createCursoSchema } from "../schemas/curso.schema";
 import { verifyAdmin, verifyAdminOrProfesor, verifyAlumno, verifyProfesor } from "../middlewares/JWTMiddleware";
@@ -21,7 +21,6 @@ router.post('/crearAdmin', validateSchema(registerSchema), crearAdmin)
 router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/logout", logout);
-router.get('/user', verifyAdmin, getDecodedUser)
 router.get('/alumno', verifyAlumno, getDecodedUser)
 router.get('/profesor', verifyProfesor, getDecodedUser)
 
@@ -31,7 +30,7 @@ router.post('/alumnos', verifyAdmin)
 router.post('/categorias',  /*verifyAdmin,*/ upload.fields([{ name: 'url_imagen', maxCount: 1 }, { name: 'url_icono', maxCount: 1 }]) , createCategoriaMemory)
 router.get('/categorias', showAllCategorias)
 router.get('/categorias/:id', obtenerCategoriaPorId)
-router.get('/categoriasBuscar/:nombre', obtenerCategoriaPorNombre)
+router.get('/categoriasBuscar/:slug', obtenerCategoriaPorSlug)
 router.post('/categorias/:id', verifyAdmin , upload.fields([{ name: 'url_imagen', maxCount: 1 }, { name: 'url_icono', maxCount: 1 }]) ,actualizarCategoria)
 router.post('/borrarCategoria/:id', verifyAdmin, deleteCategoria)
 
