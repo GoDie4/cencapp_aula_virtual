@@ -27,7 +27,7 @@ const upload = multer({
   storage: storage,
   limits: {
     fileSize: 1024 * 1024 * 5, // Límite de tamaño de archivo: 5MB
-    files: 1, // Límite de número de archivos subidos por campo (por ejemplo, máximo 2 imágenes 'imagen')
+    files: 2, // Límite de número de archivos subidos por campo (por ejemplo, máximo 2 imágenes 'imagen')
     fields: 10, // Límite de campos no-archivo (campos de texto)
     fieldSize: 1024 * 100, // Tamaño máximo de un campo no-archivo (100KB)
     parts: 15, // Límite total de partes (archivos + campos) en la petición
@@ -187,10 +187,11 @@ export const actualizarCurso = async (
     dirigido,
     metodologia,
     certificacion,
-    objetivo
+    objetivo,
+    detalleId
   } = req.body; // Nuevo nombre de categoría desde req.body
 
-  if (!nombre && !precio && !categoriaId && !horas && !objetivo && !metodologia && !dirigido && !descripcion && !certificacion) {
+  if (!nombre && !precio && !horas && !descripcion) {
     res.status(400).json({
       message: "Faltan datos para actualizar el curso.",
     });
@@ -237,7 +238,8 @@ export const actualizarCurso = async (
         detalles: true
       }
     });
-    await prisma.cursoDetalles.create({
+    await prisma.cursoDetalles.update({
+      where: { id: detalleId },
       data: {
         cursoId: cursoActualizado.id,
         presentacion: descripcion,
@@ -295,13 +297,13 @@ export const actualizarCurso = async (
     }
 
     res.status(200).json({
-      message: "Categoría actualizada con éxito.",
+      message: "Curso actualizado con éxito.",
       categoria: cursoActualizado,
     });
   } catch (error: any) {
-    console.error("Error al actualizar categoría:", error);
+    console.error("Error al actualizar el curso:", error);
     res.status(500).json({
-      message: "Error al actualizar la categoría",
+      message: "Error al actualizar el curso",
       error: error.message,
     });
   } finally {

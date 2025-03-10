@@ -32,7 +32,7 @@ model Curso {
   updatedAt           DateTime          @updatedAt
   cursosUsuarios      CursoUsuario[]
   secciones           SeccionesCursos[]
-  detalles            CursoDetalles[]
+  detalles            CursoDetalles?
   beneficios          Beneficio[]
   Seccion             Seccion[]
   ventas_detalles     VentasDetalles[]
@@ -88,7 +88,7 @@ model CursoPagadoDetalles {
 
 model CursoDetalles {
   id            String   @id @default(cuid())
-  curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cursoId       String   @unique
   objetivo      String   @default("") @db.LongText
   presentacion  String?  @default("") @db.LongText
