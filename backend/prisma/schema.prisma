@@ -32,7 +32,7 @@ model Curso {
   updatedAt           DateTime          @updatedAt
   cursosUsuarios      CursoUsuario[]
   secciones           SeccionesCursos[]
-  detalles            CursoDetalles[]
+  detalles            CursoDetalles?
   beneficios          Beneficio[]
   Seccion             Seccion[]
   ventas_detalles     VentasDetalles[]
@@ -89,16 +89,16 @@ model CursoPagadoDetalles {
 }
 
 model CursoDetalles {
-    id            String   @id @default(cuid())
-    curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-    cursoId       String   @unique
-    objetivo      String   @default("") @db.LongText
-    presentacion  String?  @default("") @db.LongText
-    dirigido      String?  @default("") @db.LongText
-    metodologia   String?  @default("") @db.LongText
-    certificacion String?  @default("") @db.LongText
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
+  id            String   @id @default(cuid())
+  curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  cursoId       String   @unique
+  objetivo      String   @default("") @db.LongText
+  presentacion  String?  @default("") @db.LongText
+  dirigido      String?  @default("") @db.LongText
+  metodologia   String?  @default("") @db.LongText
+  certificacion String?  @default("") @db.LongText
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
     @@map("cursos_detalles")
 }
