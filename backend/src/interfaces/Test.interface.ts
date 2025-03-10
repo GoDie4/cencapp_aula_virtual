@@ -27,6 +27,7 @@ enum TipoPrueba {
 export interface TestBody {
   titulo: string
   descripcion: string
+<<<<<<< HEAD
   claseId?: string
   cursoId?: string
   fecha_inicio: string
@@ -34,5 +35,13 @@ export interface TestBody {
   tiempo_limite?: string
   tipo_prueba: TipoPrueba
   puntaje_maxima: string
+=======
+  cursoId: string
+  fecha_inicio: Date
+  fecha_fin: Date
+  tiempo_limite?: number
+  tipo_prueba: TipoPrueba
+  puntaje_maxima: number
+>>>>>>> 255dc57 (d)
   activo?: boolean
 }

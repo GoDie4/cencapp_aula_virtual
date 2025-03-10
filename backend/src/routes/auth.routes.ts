@@ -191,6 +191,7 @@ router.post(
 router.post("/borrarAlumno/:id", verifyAdmin, deleteAlumno);
 router.get("/matriculadoCurso/:id", verifyAdmin, obtenerCursosPorAlumno);
 
+{/** Mercado */  }
 router.post('/mercado', enviarVenta)
 router.post('/mercado/webhook', recibirVenta)
 router.get('/mercado', verifyAdminOrProfesor, obtenerVentas)
@@ -238,5 +239,9 @@ router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
 router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
 router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
 router.get('/materiales/documento/:id', verifyAdminOrProfesor, obtenerDocumentoPorId)
+
+{/** Test */  }
+router.post('/tests', uploadArchivoTest, createTest)
+router.get('/tests', showAllTests)
 
 export default router;
