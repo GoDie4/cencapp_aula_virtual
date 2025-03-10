@@ -150,7 +150,7 @@ export const EditarCategoria = (): JSX.Element => {
             <div className="w-full lg:w-1/2">
               <div className="w-full">
                 <p>
-                  Icono<span className="text-red-500">*</span>
+                  Fondo<span className="text-red-500">*</span>
                 </p>
               </div>
               <div className="flex-1 flex  items-center gap-4">
@@ -169,7 +169,7 @@ export const EditarCategoria = (): JSX.Element => {
             <div className="w-full lg:w-1/2">
               <div className="w-full">
                 <p>
-                  Fondo<span className="text-red-500">*</span>
+                  Icono<span className="text-red-500">*</span>
                 </p>
               </div>
               <div className="flex-1 flex  items-center gap-4">
