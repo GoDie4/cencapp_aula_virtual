@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { formatUrl } from "@/logic/formateador";
 import { useCarrito } from "@/store/useCarrito";
-import Image from "next/image";
 import Link from "next/link";
 import { JSX, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -91,7 +91,7 @@ const CardCurso = ({
         href={`/curso/${formatUrl(titulo)}`}
         className="relative overflow-hidden "
       >
-        <Image
+        <img
           src={img}
           alt=""
           width={700}
