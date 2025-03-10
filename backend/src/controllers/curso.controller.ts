@@ -28,7 +28,7 @@ const upload = multer({
   storage: storage,
   limits: {
     fileSize: 1024 * 1024 * 5, // Límite de tamaño de archivo: 5MB
-    files: 2, // Límite de número de archivos subidos por campo (por ejemplo, máximo 2 imágenes 'imagen')
+    files: 1, // Límite de número de archivos subidos por campo (por ejemplo, máximo 2 imágenes 'imagen')
     fields: 10, // Límite de campos no-archivo (campos de texto)
     fieldSize: 1024 * 100, // Tamaño máximo de un campo no-archivo (100KB)
     parts: 15, // Límite total de partes (archivos + campos) en la petición
