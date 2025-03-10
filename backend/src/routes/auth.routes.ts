@@ -12,12 +12,14 @@ import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAl
 import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercadopago.controller";
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
 import { actualizarClase, createClase, deleteClase, obtenerClasePorId, obtenerClases, showAllClases } from "../controllers/clase.controller";
+import { createTest, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
 
 router.post('/crearAdmin', validateSchema(registerSchema), crearAdmin)
 
+{/** Usuarios | Profesores | Administradores */  }
 router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/logout", logout);
@@ -56,10 +58,12 @@ router.get('/alumnos/:id', verifyAdmin, obtenerAlumnoPorId)
 router.post('/alumnos/:id', validateSchema(registerSchema), verifyAdmin, actualizarAlumno)
 router.post('/borrarAlumno/:id', verifyAdmin, deleteAlumno)
 
+{/** Mercado */  }
 router.post('/mercado', enviarVenta)
 router.post('/mercado/webhook', recibirVenta)
 router.get('/mercado', verifyAdminOrProfesor, obtenerVentas)
 
+{/** Secciones */  }
 router.get('/secciones', verifyAdminOrProfesor, showAllSecciones)
 router.post('/secciones', verifyAdminOrProfesor, createSeccion)
 router.get('/secciones/:id', verifyAdminOrProfesor, obtenerSeccionPorId)
@@ -68,11 +72,16 @@ router.post('/borrarSeccion/:id', verifyAdminOrProfesor, deleteSeccion)
 router.get('/seccionesBuscar/:nombre', verifyAdminOrProfesor, obtenerSecciones)
 router.get('/seccionesCurso/:id', verifyAdminOrProfesor, obtenerSeccionesCurso)
 
+{/** Clases */ }
 router.get('/clases', verifyAdminOrProfesor, showAllClases)
 router.post('/clases', verifyAdminOrProfesor, createClase)
 router.get('/clases/:id', verifyAdminOrProfesor, obtenerClasePorId)
 router.post('/clases/:id', verifyAdminOrProfesor, actualizarClase)
 router.post('/borrarClase/:id', verifyAdminOrProfesor, deleteClase)
 router.get('/clasesBuscar/:nombre', verifyAdminOrProfesor, obtenerClases)
+
+{/** Test */  }
+router.post('/tests', uploadArchivoTest, createTest)
+router.get('/tests', showAllTests)
 
 export default router;
