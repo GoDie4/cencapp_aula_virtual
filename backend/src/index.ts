@@ -5,6 +5,8 @@ import { ENV } from "./config/config";
 import cookieParser from "cookie-parser";
 
 import authRoutes from "../src/routes/auth.routes";
+import userRoutes from "../src/routes/user.routes";
+
 /*
 import userRoutes from "../src/routes/user.routes";
 import categoryRoutes from "../src/routes/category.routes"
@@ -27,6 +29,8 @@ prisma
   });
 
 app.use("/api", authRoutes);
+app.use("/api/user/", userRoutes);
+
 /*
 app.use("/api/usuarios", userRoutes);
 app.use("/api/categorias", categoryRoutes)

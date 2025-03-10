@@ -1,7 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
+import { config } from "@/config/config";
 import { formatUrl } from "@/logic/formateador";
 import { useCarrito } from "@/store/useCarrito";
-import Image from "next/image";
 import Link from "next/link";
 import { JSX, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -26,7 +27,6 @@ const CardCurso = ({
   const { carrito, agregarCarrito, removerCarrito } = useCarrito();
 
   useEffect(() => {
-    console.log("Cambio de estado")
     setPedido(carrito.some((c) => c.id === id));
     if (pedido1) {
       console.log(pedido1)
@@ -63,36 +63,16 @@ const CardCurso = ({
     }
   };
 
-  function eliminarTildes(texto: string): string {
-    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-  function formatearURL(nombre: string): string {
-    // Eliminar espacios al principio y al final del nombre
-    let url = nombre.trim();
 
-    // Convertir todo el string a minúsculas
-    url = url.toLowerCase();
 
-    // Reemplazar los espacios por guiones
-    url = url.replace(/ /g, "");
-
-    // Eliminar tildes
-    url = eliminarTildes(url);
-
-    // Reemplazar caracteres especiales por sus equivalentes URL seguros
-    url = url.replace(/[^a-zA-Z0-9-]/g, "");
-
-    // Retornar la URL formateada
-    return url;
-  }
   return (
     <div className="rounded-lg group  overflow-hidden relative transition-all duration-300 shadow-md hover:before:h-full hover:after:h-full hover:before:bg-green-500 hover:after:bg-green-500 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[1px] hover:before:z-20 hover:after:absolute hover:after:top-0 hover:after:right-0 hover:after:w-[1px] hover:after:z-20 hover:img:scale-110 hover:div.vermas:clip-path-[polygon(0_0,100%_0,100%_100%,0_100%)] hover:div.vermas:animate-show">
       <Link
         href={`/curso/${formatUrl(titulo)}`}
         className="relative overflow-hidden "
       >
-        <Image
-          src={img}
+        <img
+          src={`${config.imagesUrl}${img}`}
           alt=""
           width={700}
           height={400}
@@ -102,7 +82,7 @@ const CardCurso = ({
           {horas} horas
         </span>
         <span className="absolute top-4 right-4  px-4 py-2 text-white-main bg-secondary-main rounded-md block w-fit">
-          S/{precio}.00
+          S/{precio}
         </span>
       </Link>
       <div className="flex w-full justify-center items-center gap-2.5 p-4 relative">

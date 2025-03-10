@@ -5,9 +5,12 @@ import bcrypt from "bcrypt";
 import createAccessToken from "../utils/jwt";
 const prisma = new PrismaClient();
 
-export const crearAdmin = async (req: Request, res: Response): Promise<void> => {
+export const crearAdmin = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { nombres, apellidos, celular, email, password } = req.body;
-  
+
   try {
     const usuarioExiste = await prisma.usuario.findUnique({
       where: { email },
@@ -25,7 +28,7 @@ export const crearAdmin = async (req: Request, res: Response): Promise<void> => 
       res
         .status(500)
         .json({ message: "El rol por defecto no está configurado" });
-      return
+      return;
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -59,17 +62,17 @@ export const crearAdmin = async (req: Request, res: Response): Promise<void> => 
         email: nuevoUsuario.email,
         celular: nuevoUsuario.celular,
       },
-      token: token
+      token: token,
     });
-    return
+    return;
   } catch (error) {
     console.error("Error al registrar usuario", error);
     res.status(500).json({ message: "Error interno del servidor" });
-    return
+    return;
   } finally {
-    prisma.$disconnect
+    prisma.$disconnect;
   }
-}
+};
 
 export const register = async (
   req: Request<{}, {}, RegisterRequest>,
@@ -127,7 +130,7 @@ export const register = async (
         email: nuevoUsuario.email,
         celular: nuevoUsuario.celular,
       },
-      token: token
+      token: token,
     });
   } catch (error) {
     console.error("Error al registrar usuario", error);
@@ -185,7 +188,9 @@ export const login = async (
 export const logout = (req: any, res: any) => {
   res.cookie("token", "", {
     expires: new Date(0),
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
   });
-
   return res.sendStatus(200);
 };
