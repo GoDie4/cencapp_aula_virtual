@@ -83,8 +83,7 @@ export const Header = (): JSX.Element => {
               {/* Oculto en móviles */}
               <div>
                 <span>
-                  <Link
-                    href="/login"
+                  <div
                     className="flex items-center gap-2 text-sm text-white"
                   >
                     {user?.email ? (
@@ -92,7 +91,7 @@ export const Header = (): JSX.Element => {
                     ) : (
                       <InicioSesionBoton />
                     )}
-                  </Link>
+                  </div>
                 </span>
               </div>
             </div>

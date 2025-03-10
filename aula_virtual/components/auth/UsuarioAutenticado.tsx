@@ -1,13 +1,25 @@
-import useAuth from '@/hooks/useAuth'
-import React from 'react'
-import { FaUserGraduate, FaUserTie } from 'react-icons/fa'
+import useAuth from "@/hooks/useAuth";
+import React from "react";
+import { FaUserGraduate, FaUserTie } from "react-icons/fa";
+import { MenuProfile } from "../../app/(dashboard)/@components/profile/MenuProfile";
 
 export default function UsuarioAutenticado() {
-  const { user } = useAuth()	
+  const { user } = useAuth();
   return (
-    <div className='flex gap-2 items-center text-primary'>
-      <span>{ user?.rolId === 2 ? <FaUserGraduate color=' #00365f' /> : <FaUserTie color=' #00365f' /> }</span>
-      <h1>Hola {user?.nombres}</h1>
-    </div>
-  )
+    <button
+      type="button"
+      className={`flex gap-2 bg-primary-main btn--menuProfile  rounded-main px-4 py-3 items-center  relative`}
+    >
+      <span>
+        {user?.rolId === 2 ? (
+          <FaUserGraduate className={`text-2xl  text-white-main`} />
+        ) : (
+          <FaUserTie className={` text-2xl  text-white-main`} />
+        )}
+      </span>
+      <p className="text-white-main">Hola {user?.nombres.split(" ")[0]}</p>
+
+      <MenuProfile />
+    </button>
+  );
 }
