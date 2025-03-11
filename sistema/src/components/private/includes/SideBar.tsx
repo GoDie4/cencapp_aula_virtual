@@ -112,7 +112,11 @@ const SideBar = (): JSX.Element => {
                 />
               </button>
               <ul
+<<<<<<< HEAD
                 className={` ${showSubmenu ? 'h-[290px]' : 'h-0'
+=======
+                className={` ${showSubmenu ? 'h-[250px]' : 'h-0'
+>>>>>>> 3cd482d (d)
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -198,6 +202,7 @@ const SideBar = (): JSX.Element => {
                     Ejercicios
                   </Link>
                 </li>
+<<<<<<< HEAD
 
                 <li>
                   <Link
@@ -212,6 +217,8 @@ const SideBar = (): JSX.Element => {
                     Materiales
                   </Link>
                 </li>
+=======
+>>>>>>> 3cd482d (d)
               </ul>
             </li>
 

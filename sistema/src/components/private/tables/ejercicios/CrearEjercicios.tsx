@@ -102,7 +102,11 @@ export default function CrearEjercicios (): JSX.Element {
     formData.append('tiempo_limite', String(values.tiempo_limite))
     formData.append('puntaje_maxima', String(values.puntaje_maxima))
     formData.append('descripcion', content)
+<<<<<<< HEAD
     formData.append('tipo_prueba', 'EJERCICIOS')
+=======
+    formData.append('tipo_prueba', 'EJERCICIO')
+>>>>>>> 3cd482d (d)
     formData.append('claseId', claseSeleccionado)
     if (documento) {
       formData.append('archivo', documento)
@@ -169,7 +173,13 @@ export default function CrearEjercicios (): JSX.Element {
   return (
     <>
       {loadingComponents
+<<<<<<< HEAD
         ? (<Loading />)
+=======
+        ? (
+          <Loading />
+        )
+>>>>>>> 3cd482d (d)
         : (
           <form
             className="bg-secondary-100 p-8 rounded-xl mt-4"
@@ -241,7 +251,10 @@ export default function CrearEjercicios (): JSX.Element {
                   autoComplete="off"
                   onChange={handleChangeSeccion}
                   onBlur={handleBlur}
+<<<<<<< HEAD
                   disabled={secciones.length === 0}
+=======
+>>>>>>> 3cd482d (d)
                 >
                   <option value="">Seleccionar</option>
                   {secciones.map((seccion: SeccionInterface) => (
@@ -263,7 +276,10 @@ export default function CrearEjercicios (): JSX.Element {
                   autoComplete="off"
                   onChange={handleChangeClase}
                   onBlur={handleBlur}
+<<<<<<< HEAD
                   disabled={clases.length === 0}
+=======
+>>>>>>> 3cd482d (d)
                 >
                   <option value="">Seleccionar</option>
                   {clases.map((clase: ClasesInterface) => (
@@ -334,7 +350,11 @@ export default function CrearEjercicios (): JSX.Element {
               />
             </div>
           </form>
+<<<<<<< HEAD
           )}
+=======
+        )}
+>>>>>>> 3cd482d (d)
     </>
   )
 }

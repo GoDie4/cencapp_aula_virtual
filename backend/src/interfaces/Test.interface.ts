@@ -28,6 +28,7 @@ export interface TestBody {
   titulo: string
   descripcion: string
 <<<<<<< HEAD
+<<<<<<< HEAD
   claseId?: string
   cursoId?: string
   fecha_inicio: string
@@ -36,12 +37,19 @@ export interface TestBody {
   tipo_prueba: TipoPrueba
   puntaje_maxima: string
 =======
+=======
+  claseId: string
+>>>>>>> 3cd482d (d)
   cursoId: string
-  fecha_inicio: Date
-  fecha_fin: Date
-  tiempo_limite?: number
+  fecha_inicio: string
+  fecha_fin: string
+  tiempo_limite?: string
   tipo_prueba: TipoPrueba
+<<<<<<< HEAD
   puntaje_maxima: number
 >>>>>>> 255dc57 (d)
+=======
+  puntaje_maxima: string
+>>>>>>> 3cd482d (d)
   activo?: boolean
 }

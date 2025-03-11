@@ -4,7 +4,10 @@ import multer from "multer";
 import path from "node:path";
 import fs from "fs";
 import fsPromise from "fs/promises";
+<<<<<<< HEAD
 import { TestBody } from "interfaces/Test.interface";
+=======
+>>>>>>> 3cd482d (d)
 
 const prisma = new PrismaClient();
 
@@ -83,7 +86,11 @@ export async function showAllEjercicios(req: Request, res: Response) {
         tipo_prueba: "EJERCICIOS",
       },
       include: {
+<<<<<<< HEAD
         clase: true,
+=======
+        curso: true,
+>>>>>>> 3cd482d (d)
       },
     });
     res.status(200).json({ tests: ejercicios });
@@ -107,7 +114,11 @@ export async function createTest(req: Request, res: Response) {
     puntaje_maxima,
     tiempo_limite,
     tipo_prueba,
+<<<<<<< HEAD
   } = req.body as TestBody
+=======
+  } = req.body
+>>>>>>> 3cd482d (d)
   console.log(req.body['titulo'])
   if (
     !titulo ||
@@ -136,14 +147,22 @@ export async function createTest(req: Request, res: Response) {
         url_archivo: rutaArchivo ?? "",
         titulo: titulo,
         descripcion: descripcion,
+<<<<<<< HEAD
+=======
+        claseId: claseId ? claseId : null,
+        cursoId: cursoId ? cursoId : null,
+>>>>>>> 3cd482d (d)
         fecha_inicio: new Date(fecha_inicio).toISOString(),
         fecha_fin: new Date(fecha_fin).toISOString(),
         puntaje_maxima: parseFloat(puntaje_maxima),
         activo: true,
         tipo_prueba: tipo_prueba,
         tiempo_limite: Number(tiempo_limite),
+<<<<<<< HEAD
         claseId: claseId ? claseId : null,
         cursoId: cursoId ? cursoId : null,
+=======
+>>>>>>> 3cd482d (d)
       },
     });
 
@@ -208,6 +227,7 @@ export async function createEjercicio(req: Request, res: Response) {
         activo: true,
         tipo_prueba: "EJERCICIOS",
         tiempo_limite: Number(tiempo_limite),
+<<<<<<< HEAD
         curso: {
           connect: {
             id: cursoId
@@ -218,6 +238,8 @@ export async function createEjercicio(req: Request, res: Response) {
             id: claseId
           }
         }
+=======
+>>>>>>> 3cd482d (d)
       },
     });
 
@@ -390,4 +412,8 @@ export async function obtenerTestPorId(req: Request, res: Response) {
     res.status(500).json({ message: "Error interno al obtener el test" });
     return;
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3cd482d (d)
