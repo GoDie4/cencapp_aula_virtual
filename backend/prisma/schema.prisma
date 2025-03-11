@@ -27,7 +27,7 @@ model Curso {
   horas               Int
   precio              Decimal
   categoriaId         Int
-  categoria           Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  categoria           Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
   cursosUsuarios      CursoUsuario[]
@@ -42,15 +42,14 @@ model Curso {
 }
 
 model Seccion {
-    id        String   @id @default(cuid())
-    nombre    String
-    slug      String    @default("") @db.VarChar(255)
-    cursoId   String
-    curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-    posicion  Int
-    clases    Clases[]
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  nombre    String
+  cursoId   String
+  curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  posicion  Int
+  clases    Clases[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
     @@map("secciones")
 }
@@ -72,13 +71,13 @@ model Clases {
 }
 
 model CursoPagado {
-    id               String  @id @default(cuid())
-    mercadoPaymentId String
-    cursoId          String
-    userId           String
-    totalPagado      Decimal
+  id               String  @id @default(cuid())
+  mercadoPaymentId String
+  cursoId          String
+  userId           String
+  totalPagado      Decimal
 
-    @@map("venta")
+  @@map("venta")
 }
 
 model CursoPagadoDetalles {
@@ -90,7 +89,7 @@ model CursoPagadoDetalles {
 
 model CursoDetalles {
   id            String   @id @default(cuid())
-  curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cursoId       String   @unique
   objetivo      String   @default("") @db.LongText
   presentacion  String?  @default("") @db.LongText
@@ -104,25 +103,25 @@ model CursoDetalles {
 }
 
 model Beneficio {
-    id        Int      @id @default(autoincrement())
-    icono     String   @db.VarChar(255)
-    texto     String   @db.Text
-    curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-    cursoId   String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  icono     String   @db.VarChar(255)
+  texto     String   @db.Text
+  curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  cursoId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
     @@map("beneficios")
 }
 
 model CursoUsuario {
-    id      Int              @id @default(autoincrement())
-    cursoId String
-    userId  String
-    avance  String?
-    tipo    CursoUsuarioTipo
-    curso   Curso            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-    usuario Usuario          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id      Int              @id @default(autoincrement())
+  cursoId String
+  userId  String
+  avance  String?
+  tipo    CursoUsuarioTipo
+  curso   Curso            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  usuario Usuario          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@map("cursos_usuarios")
 }
@@ -134,12 +133,12 @@ enum CursoUsuarioTipo {
 
 
 model SeccionesCursos {
-    id        String   @id @default(cuid())
-    cursoId   String   @db.Char(36)
-    seccionId String   @db.Char(36)
-    curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  cursoId   String   @db.Char(36)
+  seccionId String   @db.Char(36)
+  curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
     @@map("secciones_cursos")
 }
@@ -188,14 +187,14 @@ model Categorias {
 }
 
 model Comentarios {
-    id         String   @id @default(cuid()) @db.Char(36)
-    userId     String
-    claseId    String
-    comentario String   @db.Text
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    usuario    Usuario  @relation(fields: [userId], references: [id])
-    clase      Clases   @relation(fields: [claseId], references: [id])
+  id         String   @id @default(cuid()) @db.Char(36)
+  userId     String
+  claseId    String
+  comentario String   @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  usuario    Usuario  @relation(fields: [userId], references: [id])
+  clase      Clases   @relation(fields: [claseId], references: [id])
 
     @@map("comentarios")
 }

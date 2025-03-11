@@ -1,3 +1,4 @@
+import { type CursosUsuarios } from './CursoInterface'
 import { type Rol } from './UserInterface'
 
 export interface ProfesorInterface {
@@ -11,4 +12,5 @@ export interface ProfesorInterface {
   rol?: Rol
   createdAt?: Date
   updatedAt?: Date
+  cursosUsuarios?: CursosUsuarios
 }
