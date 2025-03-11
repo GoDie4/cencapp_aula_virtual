@@ -7,7 +7,7 @@ import { actualizarCurso, buscarPorNombre, createCurso, deleteCurso, obtenerCurs
 // import { createCursoSchema } from "../schemas/curso.schema";
 import { verifyAdmin, verifyAdminOrProfesor, verifyAlumno, verifyProfesor } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
-import { actualizarProfesor, crearProfesor, deleteProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
+import { actualizarProfesor, crearProfesor, darleCargoCurso, deleteProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
 import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
 import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercadopago.controller";
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
@@ -51,6 +51,7 @@ router.get('/profesores', verifyAdmin, showAllProfesores)
 router.get('/profesores/:id', verifyAdmin, obtenerProfesorPorId)
 router.post('/profesores/:id', verifyAdmin, actualizarProfesor)
 router.post('/borrarProfesor/:id', verifyAdmin, deleteProfesor)
+router.post('/cargoCurso', verifyAdmin, darleCargoCurso)
 
 /** Alumnos */
 router.post('/alumnos', validateSchema(registerSchema) , verifyAdmin, crearAlumno)

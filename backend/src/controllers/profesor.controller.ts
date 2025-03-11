@@ -132,9 +132,9 @@ export const obtenerProfesorPorId = async (req: any, res: any): Promise<void> =>
 };
 
 export const darleCargoCurso = async (req: Request, res: Response): Promise<void> => {
-  const { cursoId, usuarioId } = req.body
-
-  if (!cursoId && !usuarioId) {
+  const { cursoId, profesorId } = req.body
+  console.log("cursoId: ", cursoId)
+  if (!cursoId && !profesorId) {
     res.status(404).json({
       message: 'Faltan datos'
     })
@@ -145,7 +145,7 @@ export const darleCargoCurso = async (req: Request, res: Response): Promise<void
     await prisma.cursoUsuario.create({
       data: {
         cursoId: cursoId,
-        userId: usuarioId,
+        userId: profesorId,
         tipo: 'CARGO',
       }
     })
