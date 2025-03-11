@@ -3,6 +3,7 @@ import { Categoria } from "./CategoriaInterface"
 export interface Curso {
   id?: string
   nombre: string
+  slug?: string
   precio: number
   horas: number
   imagen: string

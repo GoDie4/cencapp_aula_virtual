@@ -12,7 +12,7 @@ export async function getServerSideProps(url: string) {
       return
     }
     const data = await res.json();
-    console.log(data)
+    console.log("DATA: ", data)
     return data;
   } catch (error) {
     console.log(error);

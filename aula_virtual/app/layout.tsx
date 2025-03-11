@@ -37,12 +37,11 @@ async function getUser() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          withCredentials: true
         }
       );
-      console.log("Respuesta: ", response.data.usuario);
 
       return response.data.usuario;
-
     } catch (error) {
       console.log(error);
     }
