@@ -112,7 +112,7 @@ const SideBar = (): JSX.Element => {
                 />
               </button>
               <ul
-                className={` ${showSubmenu ? 'h-[170px]' : 'h-0'
+                className={` ${showSubmenu ? 'h-[250px]' : 'h-0'
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -168,6 +168,34 @@ const SideBar = (): JSX.Element => {
                     }}
                   >
                     Clases
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="examenes"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 94 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(94)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Examenes
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="ejercicios"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 93 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(93)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Ejercicios
                   </Link>
                 </li>
               </ul>
