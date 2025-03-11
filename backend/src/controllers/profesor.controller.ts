@@ -135,9 +135,13 @@ export const darleCargoCurso = async (req: Request, res: Response): Promise<void
   const { cursoId, profesorId } = req.body
   console.log("cursoId: ", cursoId)
 <<<<<<< HEAD
+<<<<<<< HEAD
   console.log("profesorId: ", profesorId)
 =======
 >>>>>>> dc2913c (d)
+=======
+  console.log("profesorId: ", profesorId)
+>>>>>>> 8c160fd (d)
   if (!cursoId && !profesorId) {
     res.status(404).json({
       message: 'Faltan datos'
