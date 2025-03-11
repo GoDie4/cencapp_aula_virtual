@@ -483,3 +483,4 @@
 2025-03-11T13:17:07.170Z [ERROR] POST /api/comentarios/save | Status: 400 | Time: 1.828 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-11T13:17:22.709Z [ERROR] POST /api/comentarios/save | Status: 400 | Time: 2.184 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-11T13:17:55.984Z [ERROR] POST /api/comentarios/save | Status: 400 | Time: 20.882 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+2025-03-11T14:35:18.413Z [ERROR] POST /api/recuperar | Status: 404 | Time: 74.414 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"

@@ -427,6 +427,11 @@ export const buscarPorNombre = async (req: Request, res: Response) => {
       },
       include: {
         detalles: true,
+        Seccion: {
+          include: {
+            clases: true,
+          },
+        },
       },
     });
 
@@ -449,10 +454,10 @@ export const cursoPorSlug = async (req: Request, res: Response) => {
       include: {
         detalles: true,
         Seccion: {
-            include: {
-                clases: true
-            }
-        }
+          include: {
+            clases: true,
+          },
+        },
       },
     });
 

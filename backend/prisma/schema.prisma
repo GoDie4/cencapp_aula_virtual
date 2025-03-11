@@ -55,17 +55,18 @@ model Seccion {
 }
 
 model Clases {
-    id          String        @id @default(cuid())
-    nombre      String
-    slug        String        @default("") @db.VarChar(255)
-    duracion    String
-    posicion    Int
-    url_video   String
-    seccionId   String
-    seccion     Seccion       @relation(fields: [seccionId], references: [id], onDelete: Cascade)
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime      @updatedAt
-    Comentarios Comentarios[]
+    id              String            @id @default(cuid())
+    nombre          String
+    slug            String            @default("") @db.VarChar(255)
+    duracion        String
+    posicion        Int
+    url_video       String
+    seccionId       String
+    seccion         Seccion           @relation(fields: [seccionId], references: [id], onDelete: Cascade)
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+    Comentarios     Comentarios[]
+    PorcentajeClase PorcentajeClase[]
 
     @@map("clases")
 }
@@ -167,6 +168,7 @@ model Usuario {
     cursosUsuarios     CursoUsuario[]
     Comentarios        Comentarios[]
     PasswordResetToken PasswordResetToken[]
+    PorcentajeClase    PorcentajeClase[]
 
     @@map("usuarios")
 }
@@ -207,4 +209,18 @@ model PasswordResetToken {
     createdAt DateTime @default(now())
 
     @@map("password_reset_tokens")
+}
+
+model PorcentajeClase {
+    id          String   @id @default(cuid())
+    userId      String
+    claseId     String
+    porcentaje  Int      @default(0) // porcentaje reproducido (0 - 100)
+    segundos    Float    @default(0) // segundo actual del video
+    actualizado DateTime @updatedAt
+
+    user  Usuario @relation(fields: [userId], references: [id])
+    clase Clases  @relation(fields: [claseId], references: [id])
+
+    @@unique([userId, claseId]) // para que un usuario tenga solo un registro por clase
 }
