@@ -1,7 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { type ClasesInterface } from './ClasesInterface'
 =======
 >>>>>>> 3cd482d (d)
+=======
+import { type ClasesInterface } from './ClasesInterface'
+>>>>>>> dc2913c (d)
 import { type Curso } from './CursoInterface'
 
 export interface TestInterface {
@@ -17,9 +21,13 @@ export interface TestInterface {
   activo: boolean
   curso?: Curso
 <<<<<<< HEAD
+<<<<<<< HEAD
   clase?: ClasesInterface
 =======
 >>>>>>> 3cd482d (d)
+=======
+  clase?: ClasesInterface
+>>>>>>> dc2913c (d)
   createdAt: Date
   updatedAt: Date
 }
