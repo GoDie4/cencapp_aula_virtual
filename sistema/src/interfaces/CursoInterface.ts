@@ -24,5 +24,8 @@ export interface CursosUsuarios {
   tipo: string
   userId: string
   usuario?: Usuario
+<<<<<<< HEAD
   curso?: Curso
+=======
+>>>>>>> 8c160fd (d)
 }

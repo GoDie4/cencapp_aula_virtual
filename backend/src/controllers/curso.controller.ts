@@ -207,7 +207,11 @@ export const actualizarCurso = async (
     certificacion,
     objetivo,
     detalleId,
+<<<<<<< HEAD
   } = req.body;
+=======
+  } = req.body; // Nuevo nombre de categoría desde req.body
+>>>>>>> 8c160fd (d)
 
   if (
     !nombre &&
@@ -295,6 +299,10 @@ export const actualizarCurso = async (
             unlinkError
           );
         }
+<<<<<<< HEAD
+=======
+        return;
+>>>>>>> 8c160fd (d)
       }
     }
 
@@ -305,7 +313,14 @@ export const actualizarCurso = async (
       files["url_banner"][0] &&
       cursoExistente?.banner
     ) {
+<<<<<<< HEAD
       const filePathToDelete = path.join(process.cwd(), cursoExistente.banner);
+=======
+      const filePathToDelete = path.join(process.cwd(), cursoExistente?.banner);
+      console.log(
+        `[ACTUALIZAR CATEGORIA] Intentando borrar imagen vieja: ${filePathToDelete}`
+      );
+>>>>>>> 8c160fd (d)
       try {
         await fs.unlink(filePathToDelete);
         console.log(`Archivo viejo de banner borrado: ${filePathToDelete}`);
@@ -394,8 +409,13 @@ export const deleteCurso = async (
 
     await prisma.test.deleteMany({
       where: { clase: { seccion: { curso: { id: cursoId } } } },
+<<<<<<< HEAD
     });
 
+=======
+    })
+    
+>>>>>>> 8c160fd (d)
     await prisma.clases.deleteMany({
       where: { seccion: { curso: { id: cursoId } } },
     });
@@ -486,9 +506,13 @@ export const deleteCurso = async (
           );
           try {
             await fs.unlink(rutaImagenCategoria);
+<<<<<<< HEAD
             console.log(
               `Imagen de categoría eliminada: ${rutaImagenCategoria}`
             );
+=======
+            console.log(`Imagen de categoría eliminada: ${rutaImagenCategoria}`);
+>>>>>>> 8c160fd (d)
           } catch (unlinkError) {
             console.error(
               `Error al eliminar imagen de categoría: ${rutaImagenCategoria}`,
@@ -521,17 +545,21 @@ export const buscarPorNombre = async (req: Request, res: Response) => {
       },
       include: {
         detalles: true,
+<<<<<<< HEAD
         Seccion: {
           include: {
             clases: true,
           },
         },
+=======
+>>>>>>> 8c160fd (d)
       },
     });
 
     res.status(200).json(curso);
   } catch (e) {
     console.error(e);
+<<<<<<< HEAD
     res.status(500).json({ message: "Error al buscar el curso por nombre" });
   }
 };
@@ -626,3 +654,28 @@ export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
     await prisma.$disconnect();
   }
 };
+=======
+    return;
+  }
+};
+
+export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const cursos = await prisma.cursoUsuario.findMany({
+      where: {
+        cursoId: id,
+        tipo: "MATRICULADO",
+      },
+      include: {
+        usuario: true,
+      },
+    });
+
+    res.status(200).json(cursos);
+  } catch (e) {
+    console.error(e);
+    return;
+  }
+};
+>>>>>>> 8c160fd (d)
