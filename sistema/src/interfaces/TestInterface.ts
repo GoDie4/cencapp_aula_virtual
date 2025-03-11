@@ -1,3 +1,4 @@
+import { type ClasesInterface } from './ClasesInterface'
 import { type Curso } from './CursoInterface'
 
 export interface TestInterface {
@@ -12,6 +13,7 @@ export interface TestInterface {
   puntaje_maxima: number
   activo: boolean
   curso?: Curso
+  clase?: ClasesInterface
   createdAt: Date
   updatedAt: Date
 }

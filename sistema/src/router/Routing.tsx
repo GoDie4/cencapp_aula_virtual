@@ -40,6 +40,7 @@ import EditarExamen from '../components/private/tables/examenes/EditarExamen'
 import ListaEjercicios from '../components/private/tables/ejercicios/ListaEjercicios'
 import CrearEjercicios from '../components/private/tables/ejercicios/CrearEjercicios'
 import EditarEjercicios from '../components/private/tables/ejercicios/EditarEjercicios'
+import CargoCurso from '../components/private/tables/productos/CargoCurso'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -70,6 +71,7 @@ export const Routing = (): JSX.Element => {
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
+              <Route path="cursos/cargo/:id" element={<CargoCurso />} />
 
               {/** Secciones */}
               <Route path="secciones" element={<ListaSecciones />} />

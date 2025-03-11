@@ -4,6 +4,7 @@ import multer from "multer";
 import path from "node:path";
 import fs from "fs";
 import fsPromise from "fs/promises";
+import { TestBody } from "interfaces/Test.interface";
 
 const prisma = new PrismaClient();
 
@@ -82,7 +83,7 @@ export async function showAllEjercicios(req: Request, res: Response) {
         tipo_prueba: "EJERCICIOS",
       },
       include: {
-        curso: true,
+        clase: true,
       },
     });
     res.status(200).json({ tests: ejercicios });
@@ -106,7 +107,7 @@ export async function createTest(req: Request, res: Response) {
     puntaje_maxima,
     tiempo_limite,
     tipo_prueba,
-  } = req.body
+  } = req.body as TestBody
   console.log(req.body['titulo'])
   if (
     !titulo ||
@@ -129,19 +130,20 @@ export async function createTest(req: Request, res: Response) {
   console.log(nombreArchivo);
   console.log(rutaArchivo);
   try {
+    
     const nuevoTest = await prisma.test.create({
       data: {
         url_archivo: rutaArchivo ?? "",
         titulo: titulo,
         descripcion: descripcion,
-        claseId: claseId ? claseId : null,
-        cursoId: cursoId ? cursoId : null,
         fecha_inicio: new Date(fecha_inicio).toISOString(),
         fecha_fin: new Date(fecha_fin).toISOString(),
         puntaje_maxima: parseFloat(puntaje_maxima),
         activo: true,
         tipo_prueba: tipo_prueba,
         tiempo_limite: Number(tiempo_limite),
+        claseId: claseId ? claseId : null,
+        cursoId: cursoId ? cursoId : null,
       },
     });
 
@@ -206,6 +208,16 @@ export async function createEjercicio(req: Request, res: Response) {
         activo: true,
         tipo_prueba: "EJERCICIOS",
         tiempo_limite: Number(tiempo_limite),
+        curso: {
+          connect: {
+            id: cursoId
+          }
+        },
+        clase: {
+          connect: {
+            id: claseId
+          }
+        }
       },
     });
 

@@ -59,7 +59,7 @@ export default function CrearExamen (): JSX.Element {
     formData.append('puntaje_maxima', String(values.puntaje_maxima))
     formData.append('descripcion', content)
     formData.append('tipo_prueba', 'EXAMEN')
-    formData.append('claseId', cursoSeleccionado)
+    formData.append('cursoId', cursoSeleccionado)
     if (documento) {
       formData.append('archivo', documento)
     }
