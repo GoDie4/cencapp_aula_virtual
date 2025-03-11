@@ -20,10 +20,14 @@ export default function VerEjercicio ({ ejer }: { ejer: TestInterface }): JSX.El
           <div className='w-full lg:w-1/2'>
             <h3 className='font-bold'>Nombre de Clase</h3>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <p className='font-medium'>{ejer.clase?.nombre}</p>
 =======
             <p className='font-medium'>{ejer.curso?.nombre}</p>
 >>>>>>> 3cd482d (d)
+=======
+            <p className='font-medium'>{ejer.clase?.nombre}</p>
+>>>>>>> dc2913c (d)
           </div>
         </div>
         <div className='flex max-lg:flex-col w-full gap-4'>

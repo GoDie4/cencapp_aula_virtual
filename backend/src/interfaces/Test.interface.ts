@@ -29,6 +29,9 @@ export interface TestBody {
   descripcion: string
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dc2913c (d)
   claseId?: string
   cursoId?: string
   fecha_inicio: string

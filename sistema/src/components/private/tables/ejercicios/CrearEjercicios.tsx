@@ -103,10 +103,14 @@ export default function CrearEjercicios (): JSX.Element {
     formData.append('puntaje_maxima', String(values.puntaje_maxima))
     formData.append('descripcion', content)
 <<<<<<< HEAD
+<<<<<<< HEAD
     formData.append('tipo_prueba', 'EJERCICIOS')
 =======
     formData.append('tipo_prueba', 'EJERCICIO')
 >>>>>>> 3cd482d (d)
+=======
+    formData.append('tipo_prueba', 'EJERCICIOS')
+>>>>>>> dc2913c (d)
     formData.append('claseId', claseSeleccionado)
     if (documento) {
       formData.append('archivo', documento)

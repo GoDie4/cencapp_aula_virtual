@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useEffect, useState } from 'react'
+=======
+import React, { useEffect, useState } from 'react'
+>>>>>>> dc2913c (d)
 import { Loading } from '../../../shared/Loading'
 import { useFormik } from 'formik'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -8,9 +12,12 @@ import { toast } from 'sonner'
 import { type ProfesorInterface } from '../../../../interfaces/ProfesoresInterface'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
+<<<<<<< HEAD
 import { Paginacion } from '../../../shared/Paginacion'
 import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
 import CargoCursoColumna from './CargoCursoColumna'
+=======
+>>>>>>> dc2913c (d)
 
 interface CursoCargoValues {
   profesorId: string
@@ -20,12 +27,17 @@ export default function CargoCurso (): JSX.Element {
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
   const [profesores, setProfesores] = useState([])
+<<<<<<< HEAD
   const [listaProfesores, setListaProfesores] = useState<CursosUsuarios[]>([])
   const { id } = useParams()
   const [loadingComponents, setLoadingComponents] = useState(true)
   const [totalRegistros, setTotalRegistros] = useState(0)
   const [paginaActual, setpaginaActual] = useState(1)
   const [cantidadRegistros] = useState(12)
+=======
+  const { id } = useParams()
+  const [loadingComponents, setLoadingComponents] = useState(true)
+>>>>>>> dc2913c (d)
 
   const getCurso = async (): Promise<void> => {
     try {
@@ -45,6 +57,7 @@ export default function CargoCurso (): JSX.Element {
     }
   }
 
+<<<<<<< HEAD
   const getListaProfesores = async (): Promise<void> => {
     try {
       const { data } = await axios.get(`${Global.url}/cargoCurso/${id ?? ''}`, {
@@ -61,6 +74,8 @@ export default function CargoCurso (): JSX.Element {
     }
   }
 
+=======
+>>>>>>> dc2913c (d)
   const cursoCargo = async (values: CursoCargoValues): Promise<void> => {
     try {
       const body = {
@@ -98,6 +113,7 @@ export default function CargoCurso (): JSX.Element {
 
   useEffect(() => {
     getCurso()
+<<<<<<< HEAD
     getListaProfesores()
   }, [])
   const indexOfLastPost = paginaActual * cantidadRegistros
@@ -106,10 +122,14 @@ export default function CargoCurso (): JSX.Element {
   const filterDate = (): CursosUsuarios[] => {
     return listaProfesores.slice(indexOfFirstPost, indexOfLastPost)
   }
+=======
+  }, [])
+>>>>>>> dc2913c (d)
 
   return (
     <>
       {loadingComponents
+<<<<<<< HEAD
         ? (<Loading />)
         : (
           <>
@@ -188,6 +208,58 @@ export default function CargoCurso (): JSX.Element {
             </div>
           </>
           )
+=======
+        ?
+        (<Loading />)
+        : (
+          <form
+            className="bg-secondary-100 p-8 rounded-xl mt-4"
+            onSubmit={handleSubmit}
+          >
+            <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">
+              <div className='w-full'>
+                <TitleBriefs titulo="Asignar profesor" />
+                <select
+                  title='Selecciona una profesor'
+                  className="border border-black  placeholder-gray-400 outline-none focus:outline-none
+                                                                      focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-secondary-900
+                                                                      rounded-md transition-all"
+                  name="profesorId"
+                  value={values.profesorId}
+                  autoComplete="off"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                >
+                  <option value="">Seleccionar</option>
+                  {profesores.map((profesor: ProfesorInterface) => (
+                    <option value={profesor.id} key={profesor.id}>
+                      {profesor.nombres}
+                    </option>
+                  ))}
+                </select>
+                <Errors
+                  errors={errors.profesorId}
+                  touched={touched.profesorId}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 w-full justify-end">
+              <input type="hidden" name="oculto" value="1" />
+              <Link
+                to="/admin/cursos"
+                className="bg-red-500 px-4 py-2 rounded-md text-white"
+              >
+                Cancelar
+              </Link>
+              <input
+                type="submit"
+                className="bg-green-500 text-black hover:bg-green-600 flex items-center gap-2 py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                value="Registrar"
+              />
+            </div>
+          </form>
+        )
+>>>>>>> dc2913c (d)
       }
     </>
   )
