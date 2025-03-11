@@ -34,6 +34,12 @@ import ListaClases from '../components/private/tables/clases/ListaClases'
 import CrearClase from '../components/private/tables/clases/CrearClase'
 import EditarClase from '../components/private/tables/clases/EditarClase'
 import ListaVentas from '../components/private/tables/ventas/ListaVentas'
+import ListaExamen from '../components/private/tables/examenes/ListaExamen'
+import CrearExamen from '../components/private/tables/examenes/CrearExamen'
+import EditarExamen from '../components/private/tables/examenes/EditarExamen'
+import ListaEjercicios from '../components/private/tables/ejercicios/ListaEjercicios'
+import CrearEjercicios from '../components/private/tables/ejercicios/CrearEjercicios'
+import EditarEjercicios from '../components/private/tables/ejercicios/EditarEjercicios'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -77,6 +83,16 @@ export const Routing = (): JSX.Element => {
 
               {/** Ventas */}
               <Route path="ventas" element={<ListaVentas />} />
+
+              {/** Examenes */}
+              <Route path='examenes' element={<ListaExamen />} />
+              <Route path='examenes/agregar' element={<CrearExamen />} />
+              <Route path='examenes/editar/:id' element={<EditarExamen />} />
+
+              {/** Ejercicios */ }
+              <Route path='ejercicios' element={<ListaEjercicios />} />
+              <Route path='ejercicios/agregar' element={<CrearEjercicios />} />
+              <Route path='ejercicios/editar/:id' element={<EditarEjercicios />} />
 
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />
