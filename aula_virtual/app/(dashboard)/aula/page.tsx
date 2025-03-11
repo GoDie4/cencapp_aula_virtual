@@ -6,7 +6,6 @@ import useAuth from "@/hooks/useAuth";
 /*
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { getUserData } from "@/libs/auth/getUserData";
 import { jwtDecode } from "jwt-decode";
 */
 export default function Aula() {

@@ -2,7 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { LoginRequest, RegisterRequest } from "../interfaces/auth.interface";
 import { Response, Request } from "express";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import createAccessToken from "../utils/jwt";
+import { sendEmail } from "./mail.controller";
 const prisma = new PrismaClient();
 
 export const crearAdmin = async (
@@ -142,7 +144,7 @@ export const login = async (
   req: Request<{}, {}, LoginRequest>,
   res: Response
 ): Promise<any | undefined> => {
-  const { email, password } = req.body;
+  const { email, password, mantenerConexion } = req.body;
 
   try {
     const usuarioExiste = await prisma.usuario.findFirst({
@@ -163,6 +165,7 @@ export const login = async (
       sameSite: "none",
       secure: true,
       httpOnly: true,
+      maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 
     const primerNombre = usuarioExiste.nombres.split(" ");
@@ -183,6 +186,58 @@ export const login = async (
     console.error("Error al iniciar sesión", error);
     return res.status(500).json({ message: "Error interno del servidor" });
   }
+};
+
+export const recuperarContrasena = async (req: any, res: any) => {
+  const { email } = req.body;
+
+  const user = await prisma.usuario.findUnique({ where: { email } });
+  if (!user) return res.status(404).json({ message: "Correo no registrado" });
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + 1000 * 60 * 30);
+
+  await prisma.passwordResetToken.create({
+    data: {
+      token,
+      expiresAt: expires,
+      userId: user.id,
+    },
+  });
+
+  const resetLink = `http://localhost:3000/restablecer?token=${token}`;
+
+  await sendEmail(email, "Recuperar contraseña", `RecuperarContrasena.html`, {
+    enlace: resetLink,
+    nombre: user.nombres.split(" ")[0],
+  });
+
+  res.json({
+    message: "Te hemos enviado un enlace para restablecer tu contraseña.",
+  });
+};
+
+export const cambiarContrasena = async (req: any, res: any) => {
+  const { token, newPassword } = req.body;
+
+  const registro = await prisma.passwordResetToken.findUnique({
+    where: { token },
+  });
+
+  if (!registro || registro.expiresAt < new Date()) {
+    return res.status(400).json({ message: "Token inválido o expirado" });
+  }
+
+  const hashed = await bcrypt.hash(newPassword, 10);
+
+  await prisma.usuario.update({
+    where: { id: registro.userId },
+    data: { password: hashed },
+  });
+
+  await prisma.passwordResetToken.delete({ where: { token } });
+
+  res.json({ message: "Contraseña actualizada con éxito" });
 };
 
 export const logout = (req: any, res: any) => {
