@@ -58,6 +58,7 @@ model Seccion {
 }
 
 model Clases {
+<<<<<<< HEAD
     id          String        @id @default(cuid())
     nombre      String
     duracion    String
@@ -70,6 +71,19 @@ model Clases {
     comentarios Comentarios[]
     test        Test[]
     materiales  Materiales[]
+=======
+  id          String        @id @default(cuid())
+  nombre      String
+  duracion    String
+  posicion    Int
+  url_video   String
+  seccionId   String
+  seccion     Seccion       @relation(fields: [seccionId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Comentarios Comentarios[]
+  test        Test[]
+>>>>>>> 3cd482d (d)
 
     @@map("clases")
 }
@@ -261,6 +275,7 @@ model VentasDetalles {
 }
 
 model Test {
+<<<<<<< HEAD
     id                String         @id @default(cuid())
     url_archivo       String
     titulo            String
@@ -278,6 +293,25 @@ model Test {
     createdAt         DateTime       @default(now())
     updatedAt         DateTime       @updatedAt
     examenesResueltos TestResuelto[]
+=======
+  id                      String            @id @default(cuid())
+  url_archivo             String
+  titulo                  String
+  descripcion             String            @db.Text
+  claseId                 String
+  cursoId                 String
+  fecha_inicio            DateTime
+  fecha_fin               DateTime
+  tiempo_limite           Int?
+  tipo_prueba             TipoPrueba
+  puntaje_maxima          Decimal
+  activo                  Boolean
+  curso                   Curso             @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  clase                   Clases            @relation(fields: [claseId], references: [id], onDelete: Cascade) 
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+  examenesResueltos       TestResuelto[]
+>>>>>>> 3cd482d (d)
 
     @@map("examenes")
 }

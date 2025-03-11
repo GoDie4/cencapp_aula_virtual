@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import { type ClasesInterface } from './ClasesInterface'
+=======
+>>>>>>> 3cd482d (d)
 import { type Curso } from './CursoInterface'
 
 export interface TestInterface {
@@ -13,7 +16,10 @@ export interface TestInterface {
   puntaje_maxima: number
   activo: boolean
   curso?: Curso
+<<<<<<< HEAD
   clase?: ClasesInterface
+=======
+>>>>>>> 3cd482d (d)
   createdAt: Date
   updatedAt: Date
 }
