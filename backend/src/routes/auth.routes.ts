@@ -11,8 +11,8 @@ import { actualizarProfesor, crearProfesor, deleteProfesor, obtenerProfesorPorId
 import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
 import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercadopago.controller";
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
-import { actualizarClase, createClase, deleteClase, obtenerClasePorId, obtenerClases, showAllClases } from "../controllers/clase.controller";
-import { createTest, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
+import { actualizarClase, createClase, deleteClase, obtenerClasePorId, obtenerClases, obtenerClasesPorSeccion, showAllClases } from "../controllers/clase.controller";
+import { actualizarTest, createTest, deleteTest, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
@@ -75,13 +75,20 @@ router.get('/seccionesCurso/:id', verifyAdminOrProfesor, obtenerSeccionesCurso)
 {/** Clases */ }
 router.get('/clases', verifyAdminOrProfesor, showAllClases)
 router.post('/clases', verifyAdminOrProfesor, createClase)
-router.get('/clases/:id', verifyAdminOrProfesor, obtenerClasePorId)
+router.get('/clases/:id', verifyAdminOrProfesor, obtenerClasePorId) 
 router.post('/clases/:id', verifyAdminOrProfesor, actualizarClase)
 router.post('/borrarClase/:id', verifyAdminOrProfesor, deleteClase)
 router.get('/clasesBuscar/:nombre', verifyAdminOrProfesor, obtenerClases)
+router.get('/clasesSeccion/:id', verifyAdminOrProfesor, obtenerClasesPorSeccion)
 
 {/** Test */  }
-router.post('/tests', uploadArchivoTest, createTest)
+router.post('/tests', verifyAdminOrProfesor ,uploadArchivoTest, createTest)
 router.get('/tests', showAllTests)
+router.get('/ejercicios', showAllEjercicios)
+router.get('/tests/:id', verifyAdminOrProfesor, obtenerTestPorId)
+router.post('/tests/:id', verifyAdminOrProfesor, uploadArchivoTest, actualizarTest)
+router.post('/borrarTest/:id', verifyAdminOrProfesor, deleteTest)
+
+{/** Ejercicios */}
 
 export default router;
