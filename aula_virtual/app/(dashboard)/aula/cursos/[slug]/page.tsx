@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
-import { NextPage } from "next";
 import Link from "next/link";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { IoPlay } from "react-icons/io5";
@@ -10,6 +10,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../../../../../public/components/shadcdn/Accordion";
+import { getServerSideProps } from "@/server/getServerSideProps";
+import { Clase, Seccion } from "../@interfaces/InterfacesCurso";
+import { config } from "@/config/config";
+
+import { IoCheckmark } from "react-icons/io5";
+
 export const clases = [
   {
     id: "item-1",
@@ -134,7 +140,18 @@ export const clases = [
   },
 ];
 
-const Page: NextPage = () => {
+export default async function page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const slug = (await params).slug;
+
+  const dataCurso = await getServerSideProps(`cursoPorSlug/${slug}`);
+  const clasesPlanas = dataCurso.Seccion.flatMap(
+    (seccion: Seccion) => seccion.clases
+  );
+  console.log(dataCurso?.PorcentajeCurso[0]?.porcentaje);
   return (
     <>
       <div className="w-full p-3 md:p-5 space-y-16">
@@ -147,52 +164,76 @@ const Page: NextPage = () => {
               <FaLongArrowAltLeft /> Regresar a mis cursos
             </Link>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black-900">
-              Topografía en obras civiles
+              {dataCurso.nombre}
             </h2>
             <p className="mt-6 text-lg ">Por Logos Perú</p>
-            <div className="w-full space-y-5 my-5 text-black-900">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Repellat explicabo quod nisi commodi ducimus vero repellendus
-                laboriosam dignissimos veniam, nihil qui consequuntur? Qui
-                obcaecati voluptate, natus, ab dignissimos magnam doloribus
-                voluptas odio aspernatur unde, iure iste architecto error
-                adipisci provident vero debitis.
-              </p>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iusto
-                cum sint cumque quo id sapiente eum expedita, accusamus maiores
-                omnis officiis molestias error vitae eligendi.
-              </p>
+            <div className="w-full space-y-5 my-5 text-black-900 line-clamp-5">
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: dataCurso.detalles.presentacion ?? "",
+                }}
+              ></p>
             </div>
             <div className="w-fit my-8 flex items-center gap-3">
               <span className="text-secondary-main text-2xl">
                 <IoPlay />
               </span>
-              <p className="text-lg underline text-primary-main">
-                Clase 1 - Sección 1
-              </p>
+              {dataCurso?.PorcentajeCurso[0]?.porcentaje > 0 ? (
+                <>
+                  {dataCurso?.PorcentajeCurso[0]?.ultimaClase.clase} -{" "}
+                  {dataCurso?.PorcentajeCurso[0]?.ultimaClase.seccion}
+                </>
+              ) : (
+                <p className="text-lg underline text-primary-main line-clamp-1">
+                  {dataCurso.Seccion[0].clases[0].nombre} -{" "}
+                  {dataCurso.Seccion[0].nombre}
+                </p>
+              )}
             </div>
             <div className="w-fit">
-              <Link
-                href={"/aula/cursos/topografia-en-obras-civiles/introduccion-a-la-topografia"}
-                className="bg-secondary-main hover:bg-secondary-700 transition-all duration-300 ease-out  rounded-main text-lg text-white-main font-bold px-5 py-3 flex w-fit items-center"
-              >
-                Empezar curso
-              </Link>
+              {dataCurso?.PorcentajeCurso[0]?.porcentaje > 0 &&
+                dataCurso?.PorcentajeCurso[0]?.porcentaje < 99 && (
+                  <Link
+                    href={`/aula/cursos/${dataCurso.slug}/${dataCurso?.PorcentajeCurso[0]?.ultimaClase.slugClase}`}
+                    className="bg-secondary-main hover:bg-secondary-700 transition-all duration-300 ease-out  rounded-main text-lg text-white-main font-bold px-5 py-3 flex w-fit items-center"
+                  >
+                    Continuar curso
+                  </Link>
+                )}
+
+              {dataCurso?.PorcentajeCurso[0]?.porcentaje > 99 && (
+                <Link
+                  href={`/aula/cursos/${dataCurso.slug}/${dataCurso.Seccion[0].clases[0].slug}`}
+                  className="bg-secondary-400 hover:bg-secondary-500 transition-all duration-300 ease-out  rounded-main text-lg text-black-900 font-bold px-5 py-3 flex w-fit items-center"
+                >
+                  Dar examen
+                </Link>
+              )}
+              {(dataCurso?.PorcentajeCurso[0]?.porcentaje === 0 ||
+                !dataCurso.PorcentajeCurso[0]?.porcentaje) && (
+                <Link
+                  href={`/aula/cursos/${dataCurso.slug}/${dataCurso.Seccion[0].clases[0].slug}`}
+                  className="bg-secondary-main hover:bg-secondary-700 transition-all duration-300 ease-out  rounded-main text-lg text-white-main font-bold px-5 py-3 flex w-fit items-center"
+                >
+                  Empezar curso
+                </Link>
+              )}
             </div>
           </div>
           <div className="w-full xl:w-2/5 pt-12">
             <div className="flex  flex-col-reverse lg:flex-col">
               <div className="w-fit mt-3 md:mt-0   md:mb-3">
                 <img
-                  src="/assets/images/cursos/1.webp"
+                  src={`${config.imagesUrl}${dataCurso.imagen}`}
                   alt=""
                   className="block rounded-main h-[345px] object-cover"
                 />
               </div>
               <div className="w-full">
-                <ProgressCurso progreso={35} version2 />
+                <ProgressCurso
+                  progreso={dataCurso.PorcentajeCurso[0]?.porcentaje}
+                  version2
+                />
               </div>
             </div>
           </div>
@@ -202,22 +243,42 @@ const Page: NextPage = () => {
             <h3 className="text-2xl text-primary-main mb-6">
               Contenidos de clases
             </h3>
+
             <Accordion type="single" collapsible className="w-full">
-              {clases.map((clase) => (
-                <AccordionItem key={clase.id} value={clase.id}>
+              {dataCurso.Seccion.map((seccion: Seccion) => (
+                <AccordionItem key={seccion.id} value={seccion.id}>
                   <AccordionTrigger className="bg-primary-900 justify-end mb-0.5 px-4 flex-row-reverse py-3 text-white-main rounded-t-main text-lg w-full">
-                    {clase.title}
+                    {seccion.nombre}
                   </AccordionTrigger>
                   <AccordionContent>
-                    <ul className="list-disc  space-y-2 py-3 px-5 pl-8  text-base">
-                      {clase.content.map((item, index) => (
-                        <li key={index} className="flex justify-between">
-                          <span>{item.topic}</span>
-                          <span className="text-sm text-gray-500">
-                            {item.duration} min
-                          </span>
-                        </li>
-                      ))}
+                    <ul className="list-disc space-y-2 py-3 px-5 pl-8 text-base">
+                      {seccion.clases.map((item: Clase) => {
+                        const totalClases = clasesPlanas.length;
+                        const indexGlobal = clasesPlanas.findIndex(
+                          (c: any) => c.id === item.id
+                        );
+                        const porcentajePorClase = 100 / totalClases;
+
+                        const claseVista =
+                          dataCurso.PorcentajeCurso[0]?.porcentaje >=
+                          Math.floor(porcentajePorClase * (indexGlobal + 1));
+
+                        return (
+                          <li key={item.id} className="flex justify-between">
+                            <p className="flex items-center gap-1">
+                              {claseVista && (
+                                <span className="flex-shrink-0 text-lg text-green-500">
+                                  <IoCheckmark />
+                                </span>
+                              )}
+                              <span>{item.nombre}</span>
+                            </p>
+                            <span className="text-sm text-gray-500">
+                              {item.duracion}
+                            </span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
@@ -228,6 +289,4 @@ const Page: NextPage = () => {
       </div>
     </>
   );
-};
-
-export default Page;
+}

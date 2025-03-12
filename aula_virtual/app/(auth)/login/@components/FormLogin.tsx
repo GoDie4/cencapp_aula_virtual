@@ -10,14 +10,17 @@ import { toast } from "sonner";
 import { Errors } from "../../../../components/form/Errors";
 import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { InputForm } from "../../../../components/form/InputForm";
 import { CheckInput } from "../../../../components/form/CheckInput";
 import { ButtonSubmit } from "../../../../components/form/ButtonSubmit";
+import { RecuperarContrasena } from "./RecuperarContrasena";
 
 const FormLogin = () => {
-  const { setIsAuthenticated, setUser, setToken } = useAuth();
+  const { setIsAuthenticated, setUser, setToken, openModal, setModalContent } =
+    useAuth();
   const [loading, setLoading] = useState<boolean>(false);
+  const [mantenerConexion, setMantenerConexion] = useState<boolean>(false);
+
   const router = useRouter();
 
   const login = async (values: LoginInterface): Promise<void> => {
@@ -26,6 +29,7 @@ const FormLogin = () => {
     const data = {
       email: values.email,
       password: values.password,
+      mantenerConexion: mantenerConexion,
     };
 
     try {
@@ -123,16 +127,23 @@ const FormLogin = () => {
       </div>
       <div className="flex items-center justify-between w-full mt-3 mb-10">
         <div className="flex items-center gap-2 w-fit">
-          <CheckInput />
+          <CheckInput
+            mantenerConexion={mantenerConexion}
+            setMantenerConexion={setMantenerConexion}
+          />
           <p className="text-xs text-white-main">Mantenerme conectado</p>
         </div>
 
-        <Link
-          href={"/micontrasena"}
+        <button
+          type="button"
+          onClick={() => {
+            openModal();
+            setModalContent(<RecuperarContrasena />);
+          }}
           className="text-xs underline text-white-main"
         >
           Olvidé mi contraseña
-        </Link>
+        </button>
       </div>
 
       <ButtonSubmit loading={loading} text="Ingresar" />

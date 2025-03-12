@@ -4,10 +4,10 @@ import { UserInterface } from "@/interfaces/AuthInteface";
 import axios from "axios";
 import React, {
   createContext,
+  Dispatch,
   ReactNode,
   SetStateAction,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -18,6 +18,11 @@ interface AuthContextInterface {
   setUser: React.Dispatch<SetStateAction<UserInterface | null>>;
   token: string | null;
   setToken: React.Dispatch<SetStateAction<string | null>>;
+  modalContent: ReactNode | null;
+  setModalContent: Dispatch<SetStateAction<ReactNode>>;
+  isModalOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
   cerrarSesion: () => void;
 }
 
@@ -42,11 +47,11 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({
 
   const cerrarSesion = async () => {
     try {
-      console.log("cerrar");
       const response = await axios.post(`${config.apiUrl}/logout`, null, {
         withCredentials: true,
       });
       if (response.status === 200) {
+        window.location.href = "/";
         setIsAuthenticated(false);
         setUser(null);
         setToken(null);
@@ -58,15 +63,18 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({
   };
 
 
-  useEffect(() => {
-    const isClient = typeof window !== 'undefined';
-    const urlIncludesAula = isClient && window.location.pathname.includes('aula');
 
-    if (isClient && urlIncludesAula && token === null) {
-      window.location.href = '/';
-    }
-  }, [token]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
+    null
+  );
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -77,6 +85,11 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({
         token,
         setToken,
         cerrarSesion,
+        openModal,
+        closeModal,
+        isModalOpen,
+        modalContent,
+        setModalContent,
       }}
     >
       {children}

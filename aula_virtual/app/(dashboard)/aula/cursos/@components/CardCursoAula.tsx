@@ -11,7 +11,7 @@ export const CardCursoAula = ({ curso }: { curso: Curso }) => {
         <div className="w-full z-10 xl:w-1/5 relative overflow-hidden  rounded-main">
           <div className="absolute flex items-center justify-center w-full h-full top-full group-hover:top-0 left-0 bg-secondary-main/70 transition-all duration-200">
             <Link
-              href={"/aula/cursos/topografia-en-obras-civiles"}
+              href={`/aula/cursos/${curso.slug}`}
               className="flex w-fit px-4 py-1 rounded-full bg-white-main text-black-900 transition-all duration-200 hover:bg-primary-main  hover:text-white-main"
             >
               Ingresar
@@ -27,14 +27,14 @@ export const CardCursoAula = ({ curso }: { curso: Curso }) => {
           <h5 className="text-xl font-bold text-primary-900 mb-1">
             {curso.nombre}
           </h5>
-          <p className="text-black-900  mb-4">
-            El presente curso de Topografía en obras Civiles te va permitir
-            adquirir los conocimientos necesarios para realizar estudios
-            topográficos para los distintos tipos de proyectos en la elaboracion
-            de estudios y ejecución de obras de ingeniería.
-          </p>
+          <p
+            className="text-black-900  mb-4 line-clamp-4 min-h-[80px]"
+            dangerouslySetInnerHTML={{
+              __html: curso.detalles?.presentacion ?? "",
+            }}
+          ></p>
           <span className="text-sm w-fit block rounded-full py-1 px-4  bg-secondary-200">
-            Topografía y Fotogametría
+            {curso.categoria?.nombre}
           </span>
         </div>
       </div>

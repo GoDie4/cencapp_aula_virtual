@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import fs from "fs/promises";
 import multer from "multer";
 import path from "node:path";
+import { generarSlug } from "../utils/generadorSlug";
 
 const prisma = new PrismaClient();
 
@@ -112,6 +113,7 @@ export const createCurso = async (
         data: {
           categoriaId: Number(categoriaId),
           nombre: nombre,
+          slug: generarSlug(nombre),
           imagen: urlImagenPath ?? "",
           banner: urlBannerPath ?? "",
           precio: parseFloat(precio).toFixed(2),
@@ -166,14 +168,20 @@ export const showAllCursos = async (
   try {
     // Utiliza prisma.curso.findMany() para obtener todas las categorías de la base de datos
     const cursos = await prisma.curso.findMany({
-      include: { categoria: true, detalles: true },
+      include: {
+        categoria: true,
+        detalles: true,
+        PorcentajeCurso: {
+          select: {
+            porcentaje: true,
+          },
+        },
+      },
     });
 
-    // Envía una respuesta exitosa con el código de estado 200 y las categorías en formato JSON
     res.status(200).json({ cursos });
   } catch (error) {
     console.error("Error al obtener los cursos:", error);
-    // En caso de error, envía una respuesta de error con código de estado 500 (Error interno del servidor)
     res.status(500).json({
       message: "Error al obtener la lista de cursos",
       error: error,
@@ -199,20 +207,31 @@ export const actualizarCurso = async (
     certificacion,
     objetivo,
     detalleId,
-  } = req.body; // Nuevo nombre de categoría desde req.body
+  } = req.body;
 
-  if (!nombre && !precio && !horas && !descripcion) {
+  if (
+    !nombre &&
+    !precio &&
+    !categoriaId &&
+    !horas &&
+    !objetivo &&
+    !metodologia &&
+    !dirigido &&
+    !descripcion &&
+    !certificacion
+  ) {
     res.status(400).json({
       message: "Faltan datos para actualizar el curso.",
     });
     return;
   }
+
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
   let urlImagenPath = null;
   let urlBannerPath = null;
 
   try {
-    // 1. Buscar la categoría existente en la base de datos, incluyendo la imagen actual
+    // Buscar curso existente
     const cursoExistente = await prisma.curso.findUnique({
       where: { id: cursoId },
     });
@@ -225,12 +244,10 @@ export const actualizarCurso = async (
     }
 
     if (files["url_imagen"] && files["url_imagen"][0]) {
-      urlImagenPath = files["url_imagen"][0].path;
       urlImagenPath = "/" + files["url_imagen"][0].path.replace(/\\/g, "/");
     }
 
     if (files["url_banner"] && files["url_banner"][0]) {
-      urlBannerPath = files["url_banner"][0].path;
       urlBannerPath = "/" + files["url_banner"][0].path.replace(/\\/g, "/");
     }
 
@@ -248,6 +265,7 @@ export const actualizarCurso = async (
         detalles: true,
       },
     });
+
     await prisma.cursoDetalles.update({
       where: { id: detalleId },
       data: {
@@ -260,6 +278,7 @@ export const actualizarCurso = async (
       },
     });
 
+    // Eliminar imagen anterior si hay nueva imagen
     if (
       files &&
       files["url_imagen"] &&
@@ -272,32 +291,31 @@ export const actualizarCurso = async (
         console.log(`Archivo viejo de imagen borrado: ${filePathToDelete}`);
       } catch (unlinkError: any) {
         if (unlinkError.code !== "ENOENT") {
-          // Ignorar error si el archivo no existe (ENOENT)
           console.error(
             "Error al borrar archivo viejo de imagen:",
             unlinkError
           );
         }
-        return;
       }
     }
+
+    // Eliminar banner anterior si hay nuevo banner
     if (
       files &&
       files["url_banner"] &&
       files["url_banner"][0] &&
       cursoExistente?.banner
     ) {
-      const filePathToDelete = path.join(process.cwd(), cursoExistente?.banner);
-      console.log(
-        `[ACTUALIZAR CATEGORIA] Intentando borrar imagen vieja: ${filePathToDelete}`
-      );
+      const filePathToDelete = path.join(process.cwd(), cursoExistente.banner);
       try {
         await fs.unlink(filePathToDelete);
-        console.log(`Archivo viejo de icono borrado: ${filePathToDelete}`);
+        console.log(`Archivo viejo de banner borrado: ${filePathToDelete}`);
       } catch (unlinkError: any) {
         if (unlinkError.code !== "ENOENT") {
-          // Ignorar error si el archivo no existe (ENOENT)
-          console.error("Error al borrar archivo viejo de icono:", unlinkError);
+          console.error(
+            "Error al borrar archivo viejo de banner:",
+            unlinkError
+          );
         }
       }
     }
@@ -377,8 +395,8 @@ export const deleteCurso = async (
 
     await prisma.test.deleteMany({
       where: { clase: { seccion: { curso: { id: cursoId } } } },
-    })
-    
+    });
+
     await prisma.clases.deleteMany({
       where: { seccion: { curso: { id: cursoId } } },
     });
@@ -469,7 +487,9 @@ export const deleteCurso = async (
           );
           try {
             await fs.unlink(rutaImagenCategoria);
-            console.log(`Imagen de categoría eliminada: ${rutaImagenCategoria}`);
+            console.log(
+              `Imagen de categoría eliminada: ${rutaImagenCategoria}`
+            );
           } catch (unlinkError) {
             console.error(
               `Error al eliminar imagen de categoría: ${rutaImagenCategoria}`,
@@ -502,13 +522,86 @@ export const buscarPorNombre = async (req: Request, res: Response) => {
       },
       include: {
         detalles: true,
+        Seccion: {
+          include: {
+            clases: true,
+          },
+        },
       },
     });
 
     res.status(200).json(curso);
   } catch (e) {
     console.error(e);
-    return;
+    res.status(500).json({ message: "Error al buscar el curso por nombre" });
+  }
+};
+export const cursoPorSlug = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+  try {
+    const curso = await prisma.curso.findFirst({
+      where: {
+        slug: {
+          contains: slug,
+        },
+      },
+      include: {
+        detalles: true,
+        PorcentajeCurso: true,
+        Seccion: {
+          include: {
+            clases: true,
+          },
+        },
+      },
+    });
+
+    res.status(200).json(curso);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error al buscar el curso por slug" });
+  }
+};
+
+export const registrarOActualizarPorcentajeCurso = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  const { userId, cursoId, porcentaje, ultimaClase } = req.body;
+
+  if (!userId || !cursoId) {
+    return res.status(400).json({ error: "userId y cursoId son requeridos." });
+  }
+
+  try {
+    const resultado = await prisma.porcentajeCurso.upsert({
+      where: {
+        userId_cursoId: {
+          userId,
+          cursoId,
+        },
+      },
+      update: {
+        porcentaje: porcentaje ?? 0,
+        ultimaClase: ultimaClase ?? 0,
+      },
+      create: {
+        userId,
+        cursoId,
+        porcentaje: porcentaje ?? 0,
+        ultimaClase: ultimaClase ?? 0,
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Porcentaje de curso actualizado", data: resultado });
+  } catch (error) {
+    console.error(
+      "Error al registrar o actualizar porcentaje de curso:",
+      error
+    );
+    return res.status(500).json({ error: "Error interno del servidor." });
   }
 };
 
@@ -526,15 +619,11 @@ export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(200).json({ alumnos: alumnos });
-    return
+    res.status(200).json({ alumnos });
   } catch (e) {
     console.error(e);
-    res.status(200).json({
-      message: 'Ocurrió un error en el servidor'
-    })
-    return;
+    res.status(500).json({ message: "Ocurrió un error en el servidor" });
   } finally {
-    prisma.$disconnect
+    await prisma.$disconnect();
   }
 };
