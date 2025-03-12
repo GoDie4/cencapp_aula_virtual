@@ -50,7 +50,7 @@ import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercado
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
 import { actualizarClase, clasesPorCurso, createClase, deleteClase, obtenerClasePorId, obtenerClasePorSlug, obtenerClases, obtenerClasesPorSeccion, showAllClases } from "../controllers/clase.controller";
 import { actualizarTest, createTest, deleteTest, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
-import { actualizarMaterial, createMaterial, deleteMaterial, obtenerDocumentoPorId, showAllMateriales, uploadArchivo } from "controllers/materiales.controller";
+import { actualizarMaterial, createMaterial, deleteMaterial, obtenerDocumentoPorId, obtenerMaterialPorId, showAllMateriales, uploadArchivo } from "../controllers/materiales.controller";
 
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
@@ -175,23 +175,10 @@ router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
 
 {/** Materiales */}
 router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
+router.get('/materiales/:id', verifyAdminOrProfesor, obtenerMaterialPorId)
 router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
 router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
 router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
 router.get('/materiales/documento/:id', verifyAdminOrProfesor, obtenerDocumentoPorId)
-
-{/** Test */  }
-router.post('/tests', verifyAdminOrProfesor ,uploadArchivoTest, createTest)
-router.get('/tests', showAllTests)
-router.get('/ejercicios', showAllEjercicios)
-router.get('/tests/:id', verifyAdminOrProfesor, obtenerTestPorId)
-router.post('/tests/:id', verifyAdminOrProfesor, uploadArchivoTest, actualizarTest)
-router.post('/borrarTest/:id', verifyAdminOrProfesor, deleteTest)
-
-{/** Materiales */}
-router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
-router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
-router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
-router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
 
 export default router;

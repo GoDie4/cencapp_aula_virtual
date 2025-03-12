@@ -66,16 +66,19 @@ export const Routing = (): JSX.Element => {
               <Route path="profesores" element={<ListaProfesor />} />
               <Route path="profesores/agregar" element={<CrearProfesor />} />
               <Route path="profesores/editar/:id" element={<EditarProfesor />} />
+
               {/* Ccategorias */}
               <Route index element={<ListaCategorias />} />
               <Route path="categorias" element={<ListaCategorias />} />
               <Route path="categorias/agregar" element={<CrearCategoria />} />
               <Route path="categorias/editar/:id" element={<EditarCategoria />} />
+
               {/* Cursos */}
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
               <Route path="cursos/cargo/:id" element={<CargoCurso />} />
+              <Route path="cursos/matriculados/:id" element={<MatriculaCurso />} />
 
               {/** Secciones */}
               <Route path="secciones" element={<ListaSecciones />} />

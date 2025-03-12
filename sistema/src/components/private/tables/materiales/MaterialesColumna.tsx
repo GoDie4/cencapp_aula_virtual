@@ -22,7 +22,7 @@ export default function MaterialesColumna ({ materiales, token, getMateriales, t
     setAnchorEl(null)
   }
   const handleEditar = (): void => {
-    navigate(`/admin/examenes/editar/${materiales.id ?? ''}`)
+    navigate(`/admin/materiales/editar/${materiales.id ?? ''}`)
   }
 
   const preguntar = (id: string): void => {
