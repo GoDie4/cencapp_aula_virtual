@@ -5,15 +5,27 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { ReproductorClase } from "./ReproductorClase";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
+import { useAuth } from "@/context/AuthContext";
 
 export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
   const [porcentaje, setPorcentaje] = useState<number>(0);
+  const { user } = useAuth();
   return (
     <>
       <div className="w-full rounded-main overflow-hidden">
         <ReproductorClase
+          key={dataClase.clase.seccion.id}
           id={dataClase.clase.url_video}
+          userId={user?.id ?? ""}
+          cursoId={dataClase?.clase?.seccion.cursoId}
           setProgreso={setPorcentaje}
+          totalClases={dataClase.totalClases}
+          porcentajeGuardado={
+            dataClase.clase.seccion.curso.PorcentajeCurso[0]?.porcentaje ?? 0
+          }
+          posicionClase={dataClase.clase.posicion}
+          seccionId={dataClase.clase.seccion.posicion}
+          dataClase={dataClase}
         />
       </div>
       <div className="w-full  px-1 md:px-3 py-5 lg:p-5">
@@ -40,7 +52,7 @@ export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
               Clase {dataClase.clase.posicion} de {dataClase.totalClases}
             </p>
 
-            {dataClase.ultimaClase && porcentaje >= 90 ?(
+            {dataClase.ultimaClase && porcentaje >= 90 ? (
               <a
                 href=""
                 className="flex bg-secondary-main rounded-main px-5 w-fit py-3 text-white-main font-bold text-center"

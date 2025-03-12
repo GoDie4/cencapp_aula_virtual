@@ -168,7 +168,15 @@ export const showAllCursos = async (
   try {
     // Utiliza prisma.curso.findMany() para obtener todas las categorías de la base de datos
     const cursos = await prisma.curso.findMany({
-      include: { categoria: true, detalles: true },
+      include: {
+        categoria: true,
+        detalles: true,
+        PorcentajeCurso: {
+          select: {
+            porcentaje: true,
+          },
+        },
+      },
     });
 
     res.status(200).json({ cursos });
@@ -453,6 +461,7 @@ export const cursoPorSlug = async (req: Request, res: Response) => {
       },
       include: {
         detalles: true,
+        PorcentajeCurso: true,
         Seccion: {
           include: {
             clases: true,
@@ -465,5 +474,47 @@ export const cursoPorSlug = async (req: Request, res: Response) => {
   } catch (e) {
     console.error(e);
     return;
+  }
+};
+
+export const registrarOActualizarPorcentajeCurso = async (
+  req: any,
+  res: any
+) => {
+  const { userId, cursoId, porcentaje, ultimaClase } = req.body;
+
+  if (!userId || !cursoId) {
+    return res.status(400).json({ error: "userId y cursoId son requeridos." });
+  }
+
+  try {
+    const resultado = await prisma.porcentajeCurso.upsert({
+      where: {
+        userId_cursoId: {
+          userId,
+          cursoId,
+        },
+      },
+      update: {
+        porcentaje: porcentaje ?? 0,
+        ultimaClase: ultimaClase ?? 0,
+      },
+      create: {
+        userId,
+        cursoId,
+        porcentaje: porcentaje ?? 0,
+        ultimaClase: ultimaClase ?? 0,
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Porcentaje de curso actualizado", data: resultado });
+  } catch (error) {
+    console.error(
+      "Error al registrar o actualizar porcentaje de curso:",
+      error
+    );
+    return res.status(500).json({ error: "Error interno del servidor." });
   }
 };

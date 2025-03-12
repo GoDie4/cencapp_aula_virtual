@@ -256,6 +256,11 @@ export const obtenerClasePorSlug = async (
           include: {
             curso: {
               select: {
+                PorcentajeCurso: {
+                  select: {
+                    porcentaje: true,
+                  },
+                },
                 nombre: true,
                 slug: true,
                 id: true,

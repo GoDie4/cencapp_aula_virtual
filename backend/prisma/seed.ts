@@ -17,11 +17,8 @@ async function main() {
     // Registrar Curso
     const curso = await registrarCurso();
 
-    // Registrar Seccion
-    const seccion = await registrarSeccion(curso.id);
-
-    // Registrar Clase
-    await registrarClase(seccion.id);
+    // Registrar Secciones y Clases
+    await registrarSeccionesYClases(curso.id);
 
     // Registrar CursoDetalles
     await registrarCursoDetalles(curso.id);
@@ -88,10 +85,11 @@ const generarSlug = (texto: string) =>
 async function registrarCategoria() {
   await prisma.categorias.create({
     data: {
-      nombre: "Desarrollo Web",
-      slug: generarSlug("Desarrollo Web"),
-      url_icono: "web-icon.png",
-      url_imagen: "web-image.jpg",
+      nombre: "Topografía",
+      slug: generarSlug("Topografía"),
+      url_icono:
+        "/public/categoriasIcono/url_icono-1741624940177-144144489.png",
+      url_imagen: "/public/categorias/url_imagen-1741624940177-371970580.webp",
     },
   });
   console.log("Categoría Creada");
@@ -105,12 +103,12 @@ async function registrarCurso() {
 
   const curso = await prisma.curso.create({
     data: {
-      nombre: "Curso de React",
-      slug: generarSlug("Curso de React"),
-      imagen: "react-course.jpg",
-      banner: "react-banner.jpg",
-      horas: 30,
-      precio: 149.99,
+      nombre: "TOPOGRAFÍA EN OBRAS CIVILES",
+      slug: generarSlug("TOPOGRAFÍA EN OBRAS CIVILES"),
+      imagen: "/public/cursos/url_imagen-1741102295185-255449320.webp",
+      banner: "topografia-banner.jpg",
+      horas: 40,
+      precio: 199.99,
       categoriaId: categoria.id,
     },
   });
@@ -118,42 +116,88 @@ async function registrarCurso() {
   return curso;
 }
 
-async function registrarSeccion(cursoId: string) {
-  const seccion = await prisma.seccion.create({
-    data: {
-      nombre: "Introducción a React",
-      slug: generarSlug("Introducción a React"),
-      cursoId: cursoId,
-      posicion: 1,
+async function registrarSeccionesYClases(cursoId: string) {
+  const secciones = [
+    {
+      nombre: "sesion 1",
+      clases: [
+        "Introducción a la topografía",
+        "Conceptos básicos",
+        "Materiales y recursos",
+        "Metodología",
+      ],
     },
-  });
-  console.log("Sección Creada");
-  return seccion;
-}
+    {
+      nombre: "sesion 2",
+      clases: [
+        "Conociendo los Equipos Topográficos",
+        "Manejo de Estación Total Topcon OS-105",
+        "Manejo de Nivel de Ingeniero",
+        "Manejo de GNSS (GPS DIFERENCIAL)",
+      ],
+    },
+  ];
 
-async function registrarClase(seccionId: string) {
-  await prisma.clases.create({
-    data: {
-      nombre: "Componentes en React",
-      slug: generarSlug("Componentes en React"),
-      duracion: "45 minutos",
-      posicion: 1,
-      url_video: "react-components.mp4",
-      seccionId: seccionId,
-    },
-  });
-  console.log("Clase Creada");
+  const videos = [
+    "ouPdZpziMbM",
+    "wZ80815v76M",
+    "UeSjUum3Y7M",
+    "Oe7_nLfUNfU",
+    "ULnhDPuxwMg",
+    "-fh2X88vY5s",
+    "JZcRPMnWESs",
+    "Ce5Uxj1_SsU"
+  ];
+
+  let videoIndex = 0;
+
+  for (let i = 0; i < secciones.length; i++) {
+    const seccion = await prisma.seccion.create({
+      data: {
+        nombre: secciones[i].nombre,
+        slug: generarSlug(secciones[i].nombre),
+        cursoId: cursoId,
+        posicion: i + 1,
+      },
+    });
+    console.log(`Sección '${secciones[i].nombre}' Creada`);
+
+    for (let j = 0; j < secciones[i].clases.length; j++) {
+      console.log({
+        nombre: secciones[i].clases[j],
+        slug: generarSlug(secciones[i].clases[j]),
+        duracion: "60 minutos",
+        posicion: j + 1,
+        url_video: videos[videoIndex],
+        seccionId: seccion.id,
+      });
+
+      await prisma.clases.create({
+        data: {
+          nombre: secciones[i].clases[j],
+          slug: generarSlug(secciones[i].clases[j]),
+          duracion: "60 minutos",
+          posicion: j + 1,
+          url_video: videos[videoIndex],
+          seccionId: seccion.id,
+        },
+      });
+      console.log(`Clase '${secciones[i].clases[j]}' Creada`);
+      videoIndex++;
+    }
+  }
 }
 
 async function registrarCursoDetalles(cursoId: string) {
   await prisma.cursoDetalles.create({
     data: {
       cursoId: cursoId,
-      objetivo: "Aprender a construir aplicaciones con React.",
-      presentacion: "Este curso te enseñará los fundamentos de React.",
-      dirigido: "Desarrolladores web.",
-      metodologia: "Clases prácticas y teóricas.",
-      certificacion: "Certificado de finalización.",
+      objetivo: "Dominar las técnicas de topografía en obras civiles.",
+      presentacion:
+        "Este curso te enseñará los fundamentos y aplicaciones de la topografía.",
+      dirigido: "Ingenieros civiles, técnicos y estudiantes.",
+      metodologia: "Clases teórico-prácticas con equipos especializados.",
+      certificacion: "Certificado de finalización del curso.",
     },
   });
   console.log("CursoDetalles Creado");
@@ -162,8 +206,8 @@ async function registrarCursoDetalles(cursoId: string) {
 async function registrarBeneficio(cursoId: string) {
   await prisma.beneficio.create({
     data: {
-      icono: "code-icon.png",
-      texto: "Acceso a código fuente.",
+      icono: "compass-icon.png",
+      texto: "Acceso a equipos topográficos durante las prácticas.",
       cursoId: cursoId,
     },
   });
@@ -198,12 +242,10 @@ async function registrarComentario() {
     data: {
       userId: usuario.id,
       claseId: clase.id,
-      comentario: "Excelente explicación.",
+      comentario: "Excelente curso y explicación.",
     },
   });
   console.log("Comentario Creado");
 }
-
-
 
 main();
