@@ -103,7 +103,7 @@ export default function CrearMateriales (): JSX.Element {
     }
     try {
       const { status } = await axios.postForm(
-        `${Global.url}/tests`,
+        `${Global.url}/materiales`,
         formData,
         {
           headers: {
@@ -166,7 +166,7 @@ export default function CrearMateriales (): JSX.Element {
               <div className="w-full lg:relative mb-5">
                 <TitleBriefs titulo="Titulo" />
                 <InputsBriefs
-                  name="titulo"
+                  name="nombre"
                   type="text"
                   value={values.nombre}
                   onChange={handleChange}

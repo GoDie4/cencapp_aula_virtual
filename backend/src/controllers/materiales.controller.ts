@@ -70,6 +70,7 @@ export const createMaterial = async (req: Request, res: Response) => {
         descripcion: descripcion,
         claseId: claseId,
         path_archivo: rutaArchivo,
+        mime_type: req.file.mimetype
       },
     });
     res.status(201).json({
@@ -190,3 +191,26 @@ export const deleteMaterial = async (req: Request, res: Response) => {
     return;
   }
 };
+
+export const obtenerDocumentoPorId = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const material = await prisma.materiales.findUnique({
+      where: { id: parseInt(id) },
+    });
+    if (!material) {
+      res.status(404).json({ message: "Material no encontrado" });
+      return;
+    }
+    res.status(200).sendFile(process.cwd() + material.path_archivo, {
+      headers: {
+        "Content-Type": material.mime_type,
+        "nombre": material.nombre,
+      }
+    });
+  } catch (error: any) {
+    console.error("Error al obtener el documento:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+    return;
+  }
+}
