@@ -2,13 +2,8 @@ import { Router } from "express";
 import { validateSchema } from "../middlewares/validatorSchemas.middleware";
 import { loginSchema, registerSchema } from "../schemas/auth.schema";
 import { crearAdmin, login, logout, register } from "../controllers/auth.controller";
-<<<<<<< HEAD
 import { actualizarCategoria, createCategoriaMemory, deleteCategoria, obtenerCategoriaPorId, obtenerCategoriaPorSlug, showAllCategorias, upload } from "../controllers/categoria.controller";
-import { actualizarCurso, buscarPorNombre, createCurso, deleteCurso, obtenerCursoPorId, showAllCursos, uploadImageCurso } from "../controllers/curso.controller";
-=======
-import { actualizarCategoria, createCategoriaMemory, deleteCategoria, obtenerCategoriaPorId, obtenerCategoriaPorNombre, showAllCategorias, upload } from "../controllers/categoria.controller";
 import { actualizarCurso, buscarPorNombre, createCurso, deleteCurso, obtenerCursoPorId, obtenerCursosPorAlumno, showAllCursos, uploadImageCurso } from "../controllers/curso.controller";
->>>>>>> 8c160fd (d)
 // import { createCursoSchema } from "../schemas/curso.schema";
 import { verifyAdmin, verifyAdminOrProfesor, verifyAlumno, verifyProfesor } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
@@ -18,7 +13,7 @@ import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercado
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
 import { actualizarClase, createClase, deleteClase, obtenerClasePorId, obtenerClases, obtenerClasesPorSeccion, showAllClases } from "../controllers/clase.controller";
 import { actualizarTest, createTest, deleteTest, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
-import { actualizarMaterial, createMaterial, deleteMaterial, showAllMateriales, uploadArchivo } from "../controllers/materiales.controller";
+import { actualizarMaterial, createMaterial, deleteMaterial, obtenerDocumentoPorId, showAllMateriales, uploadArchivo } from "../controllers/materiales.controller";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
@@ -31,6 +26,7 @@ router.post("/login", validateSchema(loginSchema), login);
 router.post("/logout", logout);
 router.get('/alumno', verifyAlumno, getDecodedUser)
 router.get('/profesor', verifyProfesor, getDecodedUser)
+router.get('/user', verifyAdmin, getDecodedUser)
 
 router.post('/alumnos', verifyAdmin)
 
@@ -104,5 +100,6 @@ router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
 router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
 router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
 router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
+router.get('/materiales/documento/:id', verifyAdminOrProfesor, obtenerDocumentoPorId)
 
 export default router;
