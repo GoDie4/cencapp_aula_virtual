@@ -1,21 +1,15 @@
-import Button from '@mui/material/Button'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import { type ProfesorInterface } from '../../../../interfaces/ProfesoresInterface'
-
 import React, { useContext } from 'react'
-import { IoMdSettings } from 'react-icons/io'
-import { useNavigate } from 'react-router-dom'
+import { type MaterialesInterface } from '../../../../interfaces/MaterialesInterface'
 import { DeleteItems } from '../../../shared/DeleteItems'
 import { ModalContext } from '../../../../context/ModalProvider'
-import VerProfesor from './VerProfesor'
+import { useNavigate } from 'react-router-dom'
+import { Global } from '../../../../helper/Global'
+import { Button, Menu, MenuItem } from '@mui/material'
+import { IoMdSettings } from 'react-icons/io'
+import VerMateriales from './VerMateriales'
+import { parseDate } from '../../../../logic/parseDate'
 
-function formatTitle (title: string): string {
-  if (!title) return title // Manejar cadenas vacías o nulas
-  return title.charAt(0).toUpperCase() + title.slice(1).toLowerCase()
-}
-
-export default function ProfesoresColumnas ({ pro, token, getProfesores, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { pro: ProfesorInterface, token: string, getProfesores: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
+export default function MaterialesColumna ({ materiales, token, getMateriales, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { materiales: MaterialesInterface, token: string, getMateriales: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
   const { setModalContent } = useContext(ModalContext)
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -27,15 +21,15 @@ export default function ProfesoresColumnas ({ pro, token, getProfesores, totalPo
     setAnchorEl(null)
   }
   const handleEditar = (): void => {
-    navigate(`/admin/profesores/editar/${pro.id ?? ''}`)
+    navigate(`/admin/examenes/editar/${materiales.id ?? ''}`)
   }
 
   const preguntar = (id: string): void => {
     DeleteItems({
-      ruta: 'borrarProfesor',
+      ruta: 'borrarMateriales',
       id,
       token,
-      getData: getProfesores,
+      getData: getMateriales,
       totalPosts,
       cantidadRegistros,
       paginaActual,
@@ -49,41 +43,41 @@ export default function ProfesoresColumnas ({ pro, token, getProfesores, totalPo
     >
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">Código</h5>
-        <span>{pro.id}</span>
+        <span>{materiales.id}</span>
       </div>
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">
-          Nombres
+          Titulo
         </h5>
         <span>
-          {pro.nombres}
+          {materiales.nombre}
         </span>
       </div>
 
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">
-          Apellidos
+          Material
         </h5>
-        <span>
-          {pro.apellidos}
+        <span className='text-main'>
+          <a href={`${Global.urlImages}${materiales.path_archivo}`}>Ver Ejercicio</a>
         </span>
       </div>
 
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">
-          Email
-        </h5>
-        <span>
-          {pro.email}
-        </span>
-      </div>
-
-      <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">
-          Rol
+          Creado en
         </h5>
         <span className=''>
-          {formatTitle(pro.rol?.nombre ?? '')}
+          {parseDate(materiales.createdAt)}
+        </span>
+      </div>
+
+      <div className="md:text-center">
+        <h5 className="md:hidden text-white font-bold mb-2">
+          Actualización en
+        </h5>
+        <span className=''>
+          {parseDate(materiales.updatedAt)}
         </span>
       </div>
 
@@ -123,9 +117,9 @@ export default function ProfesoresColumnas ({ pro, token, getProfesores, totalPo
             }
           }}
         >
-          <MenuItem onClick={() => { setModalContent({ title: 'Datos del Profesor', content: <VerProfesor pro={pro} /> }) }}>Ver</MenuItem>
+          <MenuItem onClick={() => { setModalContent({ title: 'Datos del Material', content: <VerMateriales materiales={materiales} /> }) }}>Ver</MenuItem>
           <MenuItem onClick={handleEditar}>Editar</MenuItem>
-          <MenuItem onClick={() => { preguntar(pro.id ?? '') }}>Eliminar</MenuItem>
+          <MenuItem onClick={() => { preguntar(materiales.id ?? '') }}>Eliminar</MenuItem>
         </Menu>
       </div>
 
