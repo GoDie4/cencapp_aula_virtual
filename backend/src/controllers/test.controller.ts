@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let folder = "public/";
+    let folder = "private/";
     if (file.fieldname === "archivo") {
       if (req.body.tipo_prueba === "EXAMEN") {
         folder = folder + "curso/examen";

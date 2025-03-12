@@ -515,19 +515,26 @@ export const buscarPorNombre = async (req: Request, res: Response) => {
 export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const cursos = await prisma.cursoUsuario.findMany({
+    const alumnos = await prisma.cursoUsuario.findMany({
       where: {
         cursoId: id,
         tipo: "MATRICULADO",
       },
       include: {
+        curso: true,
         usuario: true,
       },
     });
 
-    res.status(200).json(cursos);
+    res.status(200).json({ alumnos: alumnos });
+    return
   } catch (e) {
     console.error(e);
+    res.status(200).json({
+      message: 'Ocurrió un error en el servidor'
+    })
     return;
+  } finally {
+    prisma.$disconnect
   }
 };
