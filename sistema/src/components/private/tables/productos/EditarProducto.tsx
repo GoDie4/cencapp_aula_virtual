@@ -23,6 +23,7 @@ export const EditarProducto = (): JSX.Element => {
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
   const [categorias, setCategorias] = useState([])
+  const [detallesId, setDetallesId] = useState('')
   const [content, setContent] = useState('')
   const [dirigido, setDirigido] = useState('')
   const [objetivo, setObjetivo] = useState('')
@@ -87,18 +88,18 @@ export const EditarProducto = (): JSX.Element => {
         horas: data.curso.horas
       })
       if (data.curso.detalles) {
+        setDetallesId(data.curso.detalles.id)
         setContent(data.curso.detalles.presentacion)
         setDirigido(data.curso.detalles.dirigido)
         setObjetivo(data.curso.detalles.objetivo)
         setMetodologia(data.curso.detalles.metodologia)
         setCertificacion(data.curso.detalles.certificacion)
-      }
-      else {
-        setContent("")
-        setDirigido("")
-        setObjetivo("")
-        setMetodologia("")
-        setCertificacion("")
+      } else {
+        setContent('')
+        setDirigido('')
+        setObjetivo('')
+        setMetodologia('')
+        setCertificacion('')
       }
       setImagen1(data.curso.imagen)
       if (data.curso.banner) {
@@ -119,6 +120,7 @@ export const EditarProducto = (): JSX.Element => {
     formData.append('categoriaId', values.categoriaId)
     formData.append('nombre', values.nombre)
     formData.append('horas', String(values.horas))
+    formData.append('detalleId', detallesId)
     formData.append('descripcion', content)
     formData.append('dirigido', dirigido)
     formData.append('objetivo', objetivo)
@@ -195,9 +197,10 @@ export const EditarProducto = (): JSX.Element => {
 
   return (
     <>
-      {loadingComponents ? (
-        <Loading />
-      ) : (
+      {loadingComponents
+        ?
+          (<Loading />)
+        : (
         <form
           className="bg-secondary-100 p-8 rounded-xl mt-4"
           onSubmit={handleSubmit}

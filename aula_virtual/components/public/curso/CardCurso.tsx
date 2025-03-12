@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { config } from "@/config/config";
 import { formatUrl } from "@/logic/formateador";
 import { useCarrito } from "@/store/useCarrito";
 import Link from "next/link";
@@ -72,7 +71,7 @@ const CardCurso = ({
         className="relative overflow-hidden "
       >
         <img
-          src={`${config.imagesUrl}${img}`}
+          src={img}
           alt=""
           width={700}
           height={400}

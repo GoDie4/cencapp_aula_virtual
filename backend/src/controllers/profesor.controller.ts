@@ -132,9 +132,10 @@ export const obtenerProfesorPorId = async (req: any, res: any): Promise<void> =>
 };
 
 export const darleCargoCurso = async (req: Request, res: Response): Promise<void> => {
-  const { cursoId, usuarioId } = req.body
-
-  if (!cursoId && !usuarioId) {
+  const { cursoId, profesorId } = req.body
+  console.log("cursoId: ", cursoId)
+  console.log("profesorId: ", profesorId)
+  if (!cursoId && !profesorId) {
     res.status(404).json({
       message: 'Faltan datos'
     })
@@ -145,8 +146,73 @@ export const darleCargoCurso = async (req: Request, res: Response): Promise<void
     await prisma.cursoUsuario.create({
       data: {
         cursoId: cursoId,
-        userId: usuarioId,
+        userId: profesorId,
         tipo: 'CARGO',
+        avance: '0',
+      }
+    })
+    res.status(200).json({
+      message: 'El procedimiento se ha completado exitosamente'
+    })
+    return
+  } catch (error) {
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor'
+    })
+  } finally {
+    prisma.$disconnect
+  }
+
+};
+
+export const obtenerCargoCurso = async (req: Request, res: Response): Promise<void> => {
+  const cursoId = req.params.id
+  console.log("cursoId: ", cursoId)
+  if (!cursoId) {
+    res.status(404).json({
+      message: 'Faltan datos'
+    })
+    return
+  }
+
+  try {
+    const profesores = await prisma.cursoUsuario.findMany({
+      where: {
+        cursoId: cursoId,
+        tipo: 'CARGO'
+      },
+      include: {
+        usuario: true
+      }
+    })
+    res.status(200).json({
+      profesores: profesores
+    })
+    return
+  } catch (error) {
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor'
+    })
+  } finally {
+    prisma.$disconnect
+  }
+
+};
+
+export const eliminarCargoCurso = async (req: Request, res: Response): Promise<void> => {
+  const cursoUsuarioId = req.params.id
+  console.log("cursoUsuarioId: ", cursoUsuarioId)
+  if (!cursoUsuarioId) {
+    res.status(404).json({
+      message: 'Faltan datos'
+    })
+    return
+  }
+
+  try {
+    await prisma.cursoUsuario.deleteMany({
+      where: {
+        id: Number(cursoUsuarioId),
       }
     })
     res.status(200).json({

@@ -1,4 +1,5 @@
 import { type Categoria } from './CategoriaInterface'
+import { type Usuario } from './UserInterface'
 
 export interface Curso {
   id?: string
@@ -14,4 +15,14 @@ export interface Curso {
   categoria?: Categoria
   createdAt?: Date
   updatedAt?: Date
+}
+
+export interface CursosUsuarios {
+  id: number
+  avance: string
+  cursoId: string
+  tipo: string
+  userId: string
+  usuario?: Usuario
+  curso?: Curso
 }
