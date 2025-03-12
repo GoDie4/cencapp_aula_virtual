@@ -55,17 +55,18 @@ model Seccion {
 }
 
 model Clases {
-  id          String        @id @default(cuid())
-  nombre      String
-  duracion    String
-  posicion    Int
-  url_video   String
-  seccionId   String
-  seccion     Seccion       @relation(fields: [seccionId], references: [id], onDelete: Cascade)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  Comentarios Comentarios[]
-  test        Test[]
+  id                    String                    @id @default(cuid())
+  nombre                String
+  duracion              String
+  posicion              Int
+  url_video             String
+  seccionId             String
+  seccion               Seccion                   @relation(fields: [seccionId], references: [id], onDelete: Cascade)
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  comentarios           Comentarios[]
+  test                  Test[]
+  materiales            Materiales[]
 
   @@map("clases")
 }
@@ -274,9 +275,12 @@ enum TipoPrueba {
 }
 
 model Materiales {
-  id                                Int      @id @default(autoincrement())
-  nombre                            String   @db.VarChar(255)
-  path_archivo                      String   @db.VarChar(255) 
-  createdAt                         DateTime @default(now()) 
-  updatedAt                         DateTime @updatedAt
+  id                                Int             @id @default(autoincrement())
+  nombre                            String          @db.VarChar(255)
+  descripcion                       String          @db.Text
+  path_archivo                      String          @db.VarChar(255) 
+  claseId                           String
+  createdAt                         DateTime        @default(now())
+  updatedAt                         DateTime        @updatedAt
+  clase                             Clases          @relation(fields: [claseId], references: [id], onDelete: Cascade)
 }

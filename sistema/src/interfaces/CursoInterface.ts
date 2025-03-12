@@ -24,4 +24,5 @@ export interface CursosUsuarios {
   tipo: string
   userId: string
   usuario?: Usuario
+  curso?: Curso
 }
