@@ -8,18 +8,9 @@ import { toast } from 'sonner'
 import { type ProfesorInterface } from '../../../../interfaces/ProfesoresInterface'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { Paginacion } from '../../../shared/Paginacion'
 import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
 import CargoCursoColumna from './CargoCursoColumna'
-=======
->>>>>>> dc2913c (d)
-=======
-import { Paginacion } from '../../../shared/Paginacion'
-import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
-import CargoCursoColumna from './CargoCursoColumna'
->>>>>>> 8c160fd (d)
 
 interface CursoCargoValues {
   profesorId: string
@@ -29,23 +20,12 @@ export default function CargoCurso (): JSX.Element {
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
   const [profesores, setProfesores] = useState([])
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 8c160fd (d)
   const [listaProfesores, setListaProfesores] = useState<CursosUsuarios[]>([])
   const { id } = useParams()
   const [loadingComponents, setLoadingComponents] = useState(true)
   const [totalRegistros, setTotalRegistros] = useState(0)
   const [paginaActual, setpaginaActual] = useState(1)
   const [cantidadRegistros] = useState(12)
-<<<<<<< HEAD
-=======
-  const { id } = useParams()
-  const [loadingComponents, setLoadingComponents] = useState(true)
->>>>>>> dc2913c (d)
-=======
->>>>>>> 8c160fd (d)
 
   const getCurso = async (): Promise<void> => {
     try {
@@ -65,10 +45,6 @@ export default function CargoCurso (): JSX.Element {
     }
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 8c160fd (d)
   const getListaProfesores = async (): Promise<void> => {
     try {
       const { data } = await axios.get(`${Global.url}/cargoCurso/${id ?? ''}`, {
@@ -85,11 +61,6 @@ export default function CargoCurso (): JSX.Element {
     }
   }
 
-<<<<<<< HEAD
-=======
->>>>>>> dc2913c (d)
-=======
->>>>>>> 8c160fd (d)
   const cursoCargo = async (values: CursoCargoValues): Promise<void> => {
     try {
       const body = {
@@ -127,10 +98,6 @@ export default function CargoCurso (): JSX.Element {
 
   useEffect(() => {
     getCurso()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 8c160fd (d)
     getListaProfesores()
   }, [])
   const indexOfLastPost = paginaActual * cantidadRegistros
@@ -139,12 +106,6 @@ export default function CargoCurso (): JSX.Element {
   const filterDate = (): CursosUsuarios[] => {
     return listaProfesores.slice(indexOfFirstPost, indexOfLastPost)
   }
-<<<<<<< HEAD
-=======
-  }, [])
->>>>>>> dc2913c (d)
-=======
->>>>>>> 8c160fd (d)
 
   return (
     <>

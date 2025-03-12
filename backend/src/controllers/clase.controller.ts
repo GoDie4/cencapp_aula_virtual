@@ -243,7 +243,7 @@ export const obtenerClasePorSlug = async (
         },
       },
       include: {
-        Comentarios: {
+        comentarios: {
           include: {
             usuario: {
               select: {
@@ -397,17 +397,3 @@ export const obtenerClasesPorSeccion = async (req: Request, res: Response) => {
   }
 };
 
-export const obtenerClasesPorSeccion = async (req: Request, res: Response) => {
-  const seccionId = req.params.id;
-  try {
-    const clases = await prisma.clases.findMany({
-      where: {
-        seccionId: seccionId,
-      },
-    });
-    res.status(200).json(clases ? { clases } : { clases: [] });
-  } catch (error) {
-    console.error("Error al obtener clases:", error);
-    res.status(500).json({ error: "Error al obtener clases" });
-  }
-}

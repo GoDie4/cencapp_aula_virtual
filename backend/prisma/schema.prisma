@@ -58,12 +58,12 @@ model Seccion {
 }
 
 model Clases {
-<<<<<<< HEAD
     id          String        @id @default(cuid())
     nombre      String
     duracion    String
     posicion    Int
     url_video   String
+    slug        String        @unique
     seccionId   String
     seccion     Seccion       @relation(fields: [seccionId], references: [id], onDelete: Cascade)
     createdAt   DateTime      @default(now())
@@ -71,21 +71,6 @@ model Clases {
     comentarios Comentarios[]
     test        Test[]
     materiales  Materiales[]
-=======
-  id                    String                    @id @default(cuid())
-  nombre                String
-  duracion              String
-  posicion              Int
-  url_video             String
-  seccionId             String
-  slug                  String                    @unique
-  seccion               Seccion                   @relation(fields: [seccionId], references: [id], onDelete: Cascade)
-  createdAt             DateTime                  @default(now())
-  updatedAt             DateTime                  @updatedAt
-  comentarios           Comentarios[]
-  test                  Test[]
-  materiales            Materiales[]
->>>>>>> bce3dd3 (d)
 
     @@map("clases")
 }
@@ -321,6 +306,7 @@ model Materiales {
   descripcion                       String          @db.Text
   path_archivo                      String          @db.VarChar(255)
   mime_type                         String          @db.VarChar(255)
+  size                              Int
   claseId                           String
   createdAt                         DateTime        @default(now())
   updatedAt                         DateTime        @updatedAt

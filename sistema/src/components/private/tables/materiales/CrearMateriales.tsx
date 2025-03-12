@@ -115,7 +115,7 @@ export default function CrearMateriales (): JSX.Element {
       )
       if (status === 201) {
         toast.success('Registro exitoso')
-        navigate('/admin/examenes')
+        navigate('/admin/materiales')
       }
       if (status === 400) {
         toast.warning('Complete todos los datos')
