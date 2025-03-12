@@ -166,7 +166,11 @@ export default function CrearMateriales (): JSX.Element {
               <div className="w-full lg:relative mb-5">
                 <TitleBriefs titulo="Titulo" />
                 <InputsBriefs
+<<<<<<< HEAD
                   name="nombre"
+=======
+                  name="titulo"
+>>>>>>> cd7880420e4851159fd4fed12b6f38253b2a0bae
                   type="text"
                   value={values.nombre}
                   onChange={handleChange}
