@@ -40,18 +40,11 @@ import EditarExamen from '../components/private/tables/examenes/EditarExamen'
 import ListaEjercicios from '../components/private/tables/ejercicios/ListaEjercicios'
 import CrearEjercicios from '../components/private/tables/ejercicios/CrearEjercicios'
 import EditarEjercicios from '../components/private/tables/ejercicios/EditarEjercicios'
-<<<<<<< HEAD
-<<<<<<< HEAD
 import CargoCurso from '../components/private/tables/productos/CargoCurso'
 import MatriculaCurso from '../components/private/tables/productos/MatriculaCurso'
 import ListaMateriales from '../components/private/tables/materiales/ListaMateriales'
 import CrearMateriales from '../components/private/tables/materiales/CrearMateriales'
 import EditarMateriales from '../components/private/tables/materiales/EditarMateriales'
-=======
->>>>>>> 3cd482d (d)
-=======
-import CargoCurso from '../components/private/tables/productos/CargoCurso'
->>>>>>> dc2913c (d)
 
 export const Routing = (): JSX.Element => {
   return (
@@ -83,10 +76,6 @@ export const Routing = (): JSX.Element => {
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
               <Route path="cursos/cargo/:id" element={<CargoCurso />} />
-<<<<<<< HEAD
-              <Route path='cursos/matriculados/:id' element={ <MatriculaCurso /> } />
-=======
->>>>>>> dc2913c (d)
 
               {/** Secciones */}
               <Route path="secciones" element={<ListaSecciones />} />
@@ -111,14 +100,11 @@ export const Routing = (): JSX.Element => {
               <Route path='ejercicios/agregar' element={<CrearEjercicios />} />
               <Route path='ejercicios/editar/:id' element={<EditarEjercicios />} />
 
-<<<<<<< HEAD
               {/** Materiales */}
               <Route path='materiales' element={<ListaMateriales />} />
               <Route path='materiales/agregar' element={<CrearMateriales />} />
               <Route path='materiales/editar/:id' element={<EditarMateriales />} />
 
-=======
->>>>>>> 3cd482d (d)
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />
 
