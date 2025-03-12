@@ -20,7 +20,6 @@ datasource db {
 }
 
 model Curso {
-<<<<<<< HEAD
     id              String            @id @default(cuid())
     nombre          String            @db.VarChar(255)
     slug            String            @default("") @db.VarChar(255)
@@ -40,31 +39,11 @@ model Curso {
     PorcentajeCurso PorcentajeCurso[]
     ventas_detalles VentasDetalles[]
     test            Test[]
-=======
-  id                  String            @id @default(cuid())
-  nombre              String            @db.VarChar(255)
-  imagen              String            @db.VarChar(255)
-  banner              String            @db.VarChar(255)
-  horas               Int
-  precio              Decimal
-  categoriaId         Int
-  categoria           Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
-  cursosUsuarios      CursoUsuario[]
-  secciones           SeccionesCursos[]
-  detalles            CursoDetalles?
-  beneficios          Beneficio[]
-  Seccion             Seccion[]
-  ventas_detalles     VentasDetalles[]
-  test                Test[]
->>>>>>> 8c160fd (d)
 
     @@map("cursos")
 }
 
 model Seccion {
-<<<<<<< HEAD
     id        String   @id @default(cuid())
     nombre    String
     slug      String   @default("") @db.VarChar(255)
@@ -74,16 +53,6 @@ model Seccion {
     clases    Clases[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-=======
-  id        String   @id @default(cuid())
-  nombre    String
-  cursoId   String
-  curso     Curso?    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  posicion  Int
-  clases    Clases[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
->>>>>>> 8c160fd (d)
 
     @@map("secciones")
 }
@@ -105,7 +74,6 @@ model Clases {
     @@map("clases")
 }
 
-<<<<<<< HEAD
 model CursoPagado {
     id               String  @id @default(cuid())
     mercadoPaymentId String
@@ -115,8 +83,6 @@ model CursoPagado {
 
     @@map("venta")
 }
-=======
->>>>>>> 8c160fd (d)
 
 model CursoPagadoDetalles {
     id            String @id @default(cuid())
@@ -126,7 +92,6 @@ model CursoPagadoDetalles {
 }
 
 model CursoDetalles {
-<<<<<<< HEAD
     id            String   @id @default(cuid())
     curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     cursoId       String   @unique
@@ -137,24 +102,11 @@ model CursoDetalles {
     certificacion String?  @default("") @db.LongText
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
-=======
-  id            String   @id @default(cuid())
-  cursoId       String   @unique
-  curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  objetivo      String   @default("") @db.LongText
-  presentacion  String?  @default("") @db.LongText
-  dirigido      String?  @default("") @db.LongText
-  metodologia   String?  @default("") @db.LongText
-  certificacion String?  @default("") @db.LongText
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
->>>>>>> 8c160fd (d)
 
     @@map("cursos_detalles")
 }
 
 model Beneficio {
-<<<<<<< HEAD
     id        Int      @id @default(autoincrement())
     icono     String   @db.VarChar(255)
     texto     String   @db.Text
@@ -162,21 +114,11 @@ model Beneficio {
     cursoId   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-=======
-  id        Int      @id @default(autoincrement())
-  icono     String   @db.VarChar(255)
-  texto     String   @db.Text
-  curso     Curso?    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  cursoId   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
->>>>>>> 8c160fd (d)
 
     @@map("beneficios")
 }
 
 model CursoUsuario {
-<<<<<<< HEAD
     id      Int              @id @default(autoincrement())
     cursoId String
     userId  String
@@ -184,15 +126,6 @@ model CursoUsuario {
     tipo    CursoUsuarioTipo
     curso   Curso            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
     usuario Usuario          @relation(fields: [userId], references: [id], onDelete: Cascade)
-=======
-  id      Int              @id @default(autoincrement())
-  cursoId String
-  userId  String
-  avance  String?
-  tipo    CursoUsuarioTipo
-  curso   Curso?            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  usuario Usuario          @relation(fields: [userId], references: [id], onDelete: Cascade)
->>>>>>> 8c160fd (d)
 
     @@map("cursos_usuarios")
 }
@@ -204,21 +137,12 @@ enum CursoUsuarioTipo {
 
 
 model SeccionesCursos {
-<<<<<<< HEAD
     id        String   @id @default(cuid())
     cursoId   String   @db.Char(36)
     seccionId String   @db.Char(36)
     curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-=======
-  id        String   @id @default(cuid())
-  cursoId   String   @db.Char(36)
-  seccionId String   @db.Char(36)
-  curso     Curso?    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
->>>>>>> 8c160fd (d)
 
     @@map("secciones_cursos")
 }
@@ -269,7 +193,6 @@ model Categorias {
 }
 
 model Comentarios {
-<<<<<<< HEAD
     id         String   @id @default(cuid()) @db.Char(36)
     userId     String
     claseId    String
@@ -278,16 +201,6 @@ model Comentarios {
     updatedAt  DateTime @updatedAt
     usuario    Usuario  @relation(fields: [userId], references: [id])
     clase      Clases   @relation(fields: [claseId], references: [id])
-=======
-  id         String   @id @default(cuid()) @db.Char(36)
-  userId     String
-  claseId    String
-  comentario String   @db.Text
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  usuario    Usuario  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  clase      Clases   @relation(fields: [claseId], references: [id], onDelete: Cascade)
->>>>>>> 8c160fd (d)
 
     @@map("comentarios")
 }
