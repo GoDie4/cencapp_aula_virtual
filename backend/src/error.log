@@ -240,13 +240,3 @@
 2025-03-11T23:41:43.495Z [ERROR] POST /api/borrarClase/cm853wgka0007hy4ov6p0a8hl | Status: 500 | Time: 18.429 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-11T23:42:01.215Z [ERROR] POST /api/borrarClase/cm853wgka0007hy4ov6p0a8hl | Status: 500 | Time: 19.639 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-12T15:38:59.527Z [ERROR] GET /api/user | Status: 401 | Time: 7.069 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-<<<<<<< HEAD
-2025-03-12T19:44:54.627Z [ERROR] GET /api/user | Status: 404 | Time: 5.846 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-2025-03-12T19:45:11.176Z [ERROR] GET /api/user | Status: 404 | Time: 4.432 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-2025-03-12T20:38:43.353Z [ERROR] GET / | Status: 404 | Time: 2.159 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-2025-03-12T20:38:57.087Z [ERROR] GET /api/materiales/documento/1 | Status: 401 | Time: 0.931 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-2025-03-12T20:38:57.129Z [ERROR] GET /favicon.ico | Status: 404 | Time: 0.873 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-2025-03-12T20:44:09.024Z [ERROR] POST /api/borrarMateriales/2 | Status: 404 | Time: 18.980 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-2025-03-12T20:44:36.023Z [ERROR] GET /api/materiales/documento/2 | Status: 404 | Time: 8.900 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-=======
->>>>>>> cd7880420e4851159fd4fed12b6f38253b2a0bae
