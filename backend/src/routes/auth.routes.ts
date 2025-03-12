@@ -30,6 +30,7 @@ import {
   cursoPorSlug,
   deleteCurso,
   obtenerCursoPorId,
+  registrarOActualizarPorcentajeCurso,
   showAllCursos,
   uploadImageCurso,
 } from "../controllers/curso.controller";
@@ -129,6 +130,7 @@ router.get("/cursosBuscar/:nombre", buscarPorNombre);
 router.get("/cursoPorSlug/:slug", cursoPorSlug);
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
+router.post('/porcentajeCurso', registrarOActualizarPorcentajeCurso);
 
 /** Profesores */
 router.post("/profesores", verifyAdmin, crearProfesor);
