@@ -20,6 +20,7 @@ export const InputsBriefs = (props: inputs): JSX.Element => {
       autoComplete="off"
       disabled={props.disabled}
       onChange={props.onChange}
+      accept={props.type === 'file' ? '.doc,.docx,application/pdf' : ''}
       onBlur={props.onBlur}
       step={props.type === 'number' ? 1.00 : undefined}
     />

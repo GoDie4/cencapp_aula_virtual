@@ -33,6 +33,18 @@ import EditarSeccion from '../components/private/tables/secciones/EditarSeccion'
 import ListaClases from '../components/private/tables/clases/ListaClases'
 import CrearClase from '../components/private/tables/clases/CrearClase'
 import EditarClase from '../components/private/tables/clases/EditarClase'
+import ListaVentas from '../components/private/tables/ventas/ListaVentas'
+import ListaExamen from '../components/private/tables/examenes/ListaExamen'
+import CrearExamen from '../components/private/tables/examenes/CrearExamen'
+import EditarExamen from '../components/private/tables/examenes/EditarExamen'
+import ListaEjercicios from '../components/private/tables/ejercicios/ListaEjercicios'
+import CrearEjercicios from '../components/private/tables/ejercicios/CrearEjercicios'
+import EditarEjercicios from '../components/private/tables/ejercicios/EditarEjercicios'
+import CargoCurso from '../components/private/tables/productos/CargoCurso'
+import MatriculaCurso from '../components/private/tables/productos/MatriculaCurso'
+import ListaMateriales from '../components/private/tables/materiales/ListaMateriales'
+import CrearMateriales from '../components/private/tables/materiales/CrearMateriales'
+import EditarMateriales from '../components/private/tables/materiales/EditarMateriales'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -63,6 +75,8 @@ export const Routing = (): JSX.Element => {
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
+              <Route path="cursos/cargo/:id" element={<CargoCurso />} />
+              <Route path='cursos/matriculados/:id' element={ <MatriculaCurso /> } />
 
               {/** Secciones */}
               <Route path="secciones" element={<ListaSecciones />} />
@@ -73,6 +87,24 @@ export const Routing = (): JSX.Element => {
               <Route path="clases" element={<ListaClases />} />
               <Route path="clases/agregar" element={<CrearClase />} />
               <Route path="clases/editar/:id" element={<EditarClase />} />
+
+              {/** Ventas */}
+              <Route path="ventas" element={<ListaVentas />} />
+
+              {/** Examenes */}
+              <Route path='examenes' element={<ListaExamen />} />
+              <Route path='examenes/agregar' element={<CrearExamen />} />
+              <Route path='examenes/editar/:id' element={<EditarExamen />} />
+
+              {/** Ejercicios */ }
+              <Route path='ejercicios' element={<ListaEjercicios />} />
+              <Route path='ejercicios/agregar' element={<CrearEjercicios />} />
+              <Route path='ejercicios/editar/:id' element={<EditarEjercicios />} />
+
+              {/** Materiales */}
+              <Route path='materiales' element={<ListaMateriales />} />
+              <Route path='materiales/agregar' element={<CrearMateriales />} />
+              <Route path='materiales/editar/:id' element={<EditarMateriales />} />
 
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />
