@@ -1,21 +1,20 @@
-import { useFormik } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { Global } from '../../../../helper/Global'
 import axios from 'axios'
-import { type TestValues } from '../../../../interfaces/TestInterface'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Global } from '../../../../helper/Global'
+import { toast } from 'sonner'
+import { type MaterialValues } from '../../../../interfaces/MaterialesInterface'
+import { useFormik } from 'formik'
 import Editor from '../../../shared/Editar'
-import { Errors } from '../../../shared/Errors'
 import { InputsBriefs } from '../../../shared/InputsBriefs'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { type ClasesInterface } from '../../../../interfaces/ClasesInterface'
 import { type SeccionInterface } from '../../../../interfaces/SeccionInterface'
 import { type Curso } from '../../../../interfaces/CursoInterface'
-import { formatearFechaParaInputDate } from '../../../../logic/parseDate'
+import { Errors } from '../../../shared/Errors'
 import { Loading } from '../../../shared/Loading'
 
-export default function CrearEjercicios (): JSX.Element {
+export default function CrearMateriales (): JSX.Element {
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
   const [loadingComponents, setLoadingComponents] = useState(false)
@@ -90,19 +89,14 @@ export default function CrearEjercicios (): JSX.Element {
     }
   }
 
-  const saveExamen = async (
-    values: TestValues
+  const saveMaterial = async (
+    values: MaterialValues
   ): Promise<void> => {
     setLoadingComponents(true)
     const token = localStorage.getItem('token')
     const formData = new FormData()
-    formData.append('titulo', values.titulo)
-    formData.append('fecha_fin', String(values.fecha_fin))
-    formData.append('fecha_inicio', String(values.fecha_inicio))
-    formData.append('tiempo_limite', String(values.tiempo_limite))
-    formData.append('puntaje_maxima', String(values.puntaje_maxima))
     formData.append('descripcion', content)
-    formData.append('tipo_prueba', 'EJERCICIOS')
+    formData.append('nombre', values.nombre)
     formData.append('claseId', claseSeleccionado)
     if (documento) {
       formData.append('archivo', documento)
@@ -135,21 +129,14 @@ export default function CrearEjercicios (): JSX.Element {
     }
     setLoadingComponents(false)
   }
-
   const { handleSubmit, handleChange, errors, values, touched, handleBlur } =
     useFormik({
       initialValues: {
-        titulo: '',
-        descripcion: '',
-        fecha_fin: '',
-        fecha_inicio: '',
-        tiempo_limite: '',
-        puntaje_maxima: '',
-        activo: true
+        nombre: '',
+        descripcion: ''
       },
-      onSubmit: saveExamen
+      onSubmit: saveMaterial
     })
-
   useEffect(() => {
     getCursos()
   }, [])
@@ -181,31 +168,11 @@ export default function CrearEjercicios (): JSX.Element {
                 <InputsBriefs
                   name="titulo"
                   type="text"
-                  value={values.titulo}
+                  value={values.nombre}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                <Errors errors={errors.titulo} touched={touched.titulo} />
-              </div>
-              <div className="w-full lg:relative mb-5">
-                <TitleBriefs titulo="Fecha de inicio" />
-                <InputsBriefs
-                  name="fecha_inicio"
-                  type="date"
-                  value={formatearFechaParaInputDate(values.fecha_inicio)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div className="w-full lg:relative mb-5">
-                <TitleBriefs titulo="Fecha de fin" />
-                <InputsBriefs
-                  name="fecha_fin"
-                  type="date"
-                  value={formatearFechaParaInputDate(values.fecha_fin)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
+                <Errors errors={errors.nombre} touched={touched.nombre} />
               </div>
             </div>
             <div className='mb-5 flex max-lg:flex-col gap-4'>
@@ -274,40 +241,15 @@ export default function CrearEjercicios (): JSX.Element {
                 </select>
               </div>
             </div>
-            <div className="w-full flex flex-col gap-5 lg:flex-row">
-              <div className="w-full lg:relative mb-5">
-                <TitleBriefs titulo="Puntaje Máximo" />
-                <InputsBriefs
-                  name="puntaje_maxima"
-                  type="text"
-                  value={values.puntaje_maxima}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <Errors errors={errors.puntaje_maxima} touched={touched.puntaje_maxima} />
-              </div>
-              <div className="w-full lg:relative mb-5">
-                <TitleBriefs titulo="Tiempo Limite (minutos)" />
-                <InputsBriefs
-                  name="tiempo_limite"
-                  type="text"
-                  value={values.tiempo_limite}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <Errors errors={errors.tiempo_limite} touched={touched.tiempo_limite} />
-              </div>
-            </div>
             <div>
               <div className="w-full lg:relative">
                 <TitleBriefs titulo="Archivo" />
                 <InputsBriefs
-                  name="puntaje_maxima"
+                  name="archivo"
                   type="file"
                   onChange={handleDocumentoChange}
                   onBlur={handleBlur}
                 />
-                <Errors errors={errors.puntaje_maxima} touched={touched.puntaje_maxima} />
               </div>
               <div className="flex flex-col md:flex-row md:items-center gap-y-2 my-20 relative">
                 <p className="bg-transparent pt-0 pb-0 lg:pl-2  mr-0 mb-0 font-medium text-white text-md lg:absolute py-2 rounded-md top-[-25px]">
@@ -322,7 +264,7 @@ export default function CrearEjercicios (): JSX.Element {
             <div className="flex gap-2 w-full justify-end">
               <input type="hidden" name="oculto" value="1" />
               <Link
-                to="/admin/examenes"
+                to="/admin/materiales"
                 className="bg-red-500 px-4 py-2 rounded-md text-white"
               >
                 Cancelar

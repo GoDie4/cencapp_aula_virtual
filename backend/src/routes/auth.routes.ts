@@ -18,6 +18,7 @@ import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercado
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
 import { actualizarClase, createClase, deleteClase, obtenerClasePorId, obtenerClases, obtenerClasesPorSeccion, showAllClases } from "../controllers/clase.controller";
 import { actualizarTest, createTest, deleteTest, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
+import { actualizarMaterial, createMaterial, deleteMaterial, showAllMateriales, uploadArchivo } from "../controllers/materiales.controller";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
@@ -98,6 +99,10 @@ router.get('/tests/:id', verifyAdminOrProfesor, obtenerTestPorId)
 router.post('/tests/:id', verifyAdminOrProfesor, uploadArchivoTest, actualizarTest)
 router.post('/borrarTest/:id', verifyAdminOrProfesor, deleteTest)
 
-{/** Ejercicios */}
+{/** Materiales */}
+router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
+router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
+router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
+router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
 
 export default router;
