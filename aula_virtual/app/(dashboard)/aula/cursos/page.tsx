@@ -34,21 +34,14 @@ export default async function Page() {
               Progreso de aprendizaje
             </h3>
             <ul className="space-y-6">
-              <li>
-                <ProgressCurso progreso={35} />
-              </li>
-              <li>
-                <ProgressCurso progreso={60} />
-              </li>
-              <li>
-                <ProgressCurso progreso={90} />
-              </li>
-              <li>
-                <ProgressCurso progreso={40} />
-              </li>
-              <li>
-                <ProgressCurso progreso={5} />
-              </li>
+              {data.cursos.map((curso: Curso) => (
+                <li key={curso.id}>
+                  <ProgressCurso
+                    progreso={curso?.PorcentajeCurso?.[0]?.porcentaje ?? 0}
+                    curso={curso.nombre}
+                  />
+                </li>
+              ))}
             </ul>
           </div>
         </div>
