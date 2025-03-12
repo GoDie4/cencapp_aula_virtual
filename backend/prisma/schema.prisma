@@ -299,12 +299,13 @@ enum TipoPrueba {
 }
 
 model Materiales {
-    id           Int      @id @default(autoincrement())
-    nombre       String   @db.VarChar(255)
-    descripcion  String   @db.Text
-    path_archivo String   @db.VarChar(255)
-    claseId      String
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
-    clase        Clases   @relation(fields: [claseId], references: [id], onDelete: Cascade)
+  id                                Int             @id @default(autoincrement())
+  nombre                            String          @db.VarChar(255)
+  descripcion                       String          @db.Text
+  path_archivo                      String          @db.VarChar(255)
+  mime_type                         String          @db.VarChar(255)
+  claseId                           String
+  createdAt                         DateTime        @default(now())
+  updatedAt                         DateTime        @updatedAt
+  clase                             Clases          @relation(fields: [claseId], references: [id], onDelete: Cascade)
 }
