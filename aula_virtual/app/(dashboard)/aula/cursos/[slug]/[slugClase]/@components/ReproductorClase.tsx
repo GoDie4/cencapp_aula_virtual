@@ -91,16 +91,22 @@ export const ReproductorClase = ({
       try {
         const nuevoPorcentaje =
           porcentajeRegistradoRef.current.porcentaje + porcentajePorClase;
-        const { data } = await axios.post(`${config.apiUrl}/porcentajeCurso`, {
-          userId,
-          cursoId,
-          porcentaje: nuevoPorcentaje,
-          ultimaClase: {
-            seccion: dataClase.clase.seccion.nombre,
-            clase: dataClase.clase.nombre,
-            slugClase: dataClase.clase.slug,
+        const { data } = await axios.post(
+          `${config.apiUrl}/porcentajeCurso`,
+          {
+            userId,
+            cursoId,
+            porcentaje: nuevoPorcentaje,
+            ultimaClase: {
+              seccion: dataClase.clase.seccion.nombre,
+              clase: dataClase.clase.nombre,
+              slugClase: dataClase.clase.slug,
+            },
           },
-        });
+          {
+            withCredentials: true,
+          }
+        );
         porcentajeRegistradoRef.current.porcentaje = nuevoPorcentaje;
         claseRegistrada.current = true;
         console.log("Progreso guardado correctamente:", data);

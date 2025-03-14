@@ -10,11 +10,9 @@ import { Errors } from "../../../../components/form/Errors";
 import { config } from "@/config/config";
 import { InputForm } from "../../../../components/form/InputForm";
 import { ButtonSubmit } from "../../../../components/form/ButtonSubmit";
-import { useRouter } from "next/navigation";
 
-const FormCambiarContrasena = ({ token }: { token: string }) => {
+const FormCambiarContrasena = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
 
   const cambiarContrasena = async (
     values: CambiarContrasenaInterface
@@ -23,12 +21,12 @@ const FormCambiarContrasena = ({ token }: { token: string }) => {
 
     const data = {
       newPassword: values.password,
-      token: token,
+      confirmNewPassword: values.confirmPassword,
     };
 
     try {
-      const response = await axios.post(
-        `${config.apiUrl}/cambiarContrasena`,
+      const response = await axios.put(
+        `${config.apiUrl}/user/editarContrasenaPerfil`,
         data,
         {
           headers: { "Content-Type": "application/json" },
@@ -38,8 +36,6 @@ const FormCambiarContrasena = ({ token }: { token: string }) => {
 
       if (response.status === 200) {
         toast.success(response.data.message);
-        router.push("/login");
-
       }
     } catch (error: any) {
       console.log(error);
@@ -78,9 +74,9 @@ const FormCambiarContrasena = ({ token }: { token: string }) => {
   }, [touched, errors, isSubmitting]);
 
   return (
-    <form className="w-full max-w-xl p-3 sm:p-5" onSubmit={handleSubmit}>
-      <div className="w-full space-y-6 mb-8">
-        <div className="flex flex-col w-full gap-1 ">
+    <form className="w-full  p-3 sm:p-5" onSubmit={handleSubmit}>
+      <div className="w-full flex flex-col lg:flex-row items-center gap-6 mb-8 ">
+        <div className="flex flex-col w-full lg:w-1/2 gap-1 ">
           <InputForm
             label="Contraseña"
             name="password"
@@ -95,11 +91,11 @@ const FormCambiarContrasena = ({ token }: { token: string }) => {
                 : " focus:border-secondary-main"
             }`}
           />
-          {errors.password && errors.password !== 'undefined' && (
+          {errors.password && errors.password !== "undefined" && (
             <Errors errors={errors.password} touched={touched.password} />
           )}
         </div>
-        <div className="flex flex-col w-full gap-1 ">
+        <div className="flex flex-col w-full  lg:w-1/2 gap-1 ">
           <InputForm
             label="Confirmar contraseña"
             name="confirmPassword"

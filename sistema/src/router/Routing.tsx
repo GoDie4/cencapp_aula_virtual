@@ -45,6 +45,9 @@ import MatriculaCurso from '../components/private/tables/productos/MatriculaCurs
 import ListaMateriales from '../components/private/tables/materiales/ListaMateriales'
 import CrearMateriales from '../components/private/tables/materiales/CrearMateriales'
 import EditarMateriales from '../components/private/tables/materiales/EditarMateriales'
+import { ListaBeneficios } from '../components/private/tables/beneficios/ListarBeneficios'
+import { AgregarBeneficio } from '../components/private/tables/beneficios/AgregarBeneficio'
+import { EditarBeneficio } from '../components/private/tables/beneficios/EditarBeneficio'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -62,21 +65,35 @@ export const Routing = (): JSX.Element => {
               <Route path="alumnos/agregar" element={<CrearAlumno />} />
               <Route path="alumnos" element={<ListaAlumnos />} />
 
+              {/** Beneficios */}
+              <Route path="beneficios/editar/:id" element={<EditarBeneficio />} />
+              <Route path="beneficios/agregar" element={<AgregarBeneficio />} />
+              <Route path="beneficios" element={<ListaBeneficios />} />
+
               {/** Profesores */}
               <Route path="profesores" element={<ListaProfesor />} />
               <Route path="profesores/agregar" element={<CrearProfesor />} />
-              <Route path="profesores/editar/:id" element={<EditarProfesor />} />
+              <Route
+                path="profesores/editar/:id"
+                element={<EditarProfesor />}
+              />
               {/* Ccategorias */}
               <Route index element={<ListaCategorias />} />
               <Route path="categorias" element={<ListaCategorias />} />
               <Route path="categorias/agregar" element={<CrearCategoria />} />
-              <Route path="categorias/editar/:id" element={<EditarCategoria />} />
+              <Route
+                path="categorias/editar/:id"
+                element={<EditarCategoria />}
+              />
               {/* Cursos */}
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
               <Route path="cursos/cargo/:id" element={<CargoCurso />} />
-              <Route path='cursos/matriculados/:id' element={ <MatriculaCurso /> } />
+              <Route
+                path="cursos/matriculados/:id"
+                element={<MatriculaCurso />}
+              />
 
               {/** Secciones */}
               <Route path="secciones" element={<ListaSecciones />} />
@@ -92,19 +109,25 @@ export const Routing = (): JSX.Element => {
               <Route path="ventas" element={<ListaVentas />} />
 
               {/** Examenes */}
-              <Route path='examenes' element={<ListaExamen />} />
-              <Route path='examenes/agregar' element={<CrearExamen />} />
-              <Route path='examenes/editar/:id' element={<EditarExamen />} />
+              <Route path="examenes" element={<ListaExamen />} />
+              <Route path="examenes/agregar" element={<CrearExamen />} />
+              <Route path="examenes/editar/:id" element={<EditarExamen />} />
 
-              {/** Ejercicios */ }
-              <Route path='ejercicios' element={<ListaEjercicios />} />
-              <Route path='ejercicios/agregar' element={<CrearEjercicios />} />
-              <Route path='ejercicios/editar/:id' element={<EditarEjercicios />} />
+              {/** Ejercicios */}
+              <Route path="ejercicios" element={<ListaEjercicios />} />
+              <Route path="ejercicios/agregar" element={<CrearEjercicios />} />
+              <Route
+                path="ejercicios/editar/:id"
+                element={<EditarEjercicios />}
+              />
 
               {/** Materiales */}
-              <Route path='materiales' element={<ListaMateriales />} />
-              <Route path='materiales/agregar' element={<CrearMateriales />} />
-              <Route path='materiales/editar/:id' element={<EditarMateriales />} />
+              <Route path="materiales" element={<ListaMateriales />} />
+              <Route path="materiales/agregar" element={<CrearMateriales />} />
+              <Route
+                path="materiales/editar/:id"
+                element={<EditarMateriales />}
+              />
 
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />

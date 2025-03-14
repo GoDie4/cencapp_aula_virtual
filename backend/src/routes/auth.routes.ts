@@ -32,12 +32,12 @@ import {
   obtenerCursoPorId,
   registrarOActualizarPorcentajeCurso,
   obtenerCursosPorAlumno,
-
   showAllCursos,
   uploadImageCurso,
 } from "../controllers/curso.controller";
 
 import {
+  verificarCompraCurso,
   verifyAdmin,
   verifyAdminOrProfesor,
   verifyAlumno,
@@ -65,6 +65,7 @@ import {
 
 import {
   enviarVenta,
+  obtenerCursosComprados,
   obtenerVentas,
   recibirVenta,
 } from "../controllers/mercadopago.controller";
@@ -156,10 +157,20 @@ router.post("/cursos", verifyAdmin, uploadImageCurso, createCurso);
 router.get("/cursos", showAllCursos);
 router.get("/cursos/:id", obtenerCursoPorId);
 router.get("/cursosBuscar/:nombre", buscarPorNombre);
-router.get("/cursoPorSlug/:slug", cursoPorSlug);
+router.get(
+  "/cursoPorSlug/:slug",
+  verifyAlumno,
+  verificarCompraCurso,
+  cursoPorSlug
+);
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
-router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
+router.post(
+  "/porcentajeCurso",
+  verifyAlumno,
+  verificarCompraCurso,
+  registrarOActualizarPorcentajeCurso
+);
 
 /** Profesores */
 router.post("/profesores", verifyAdmin, crearProfesor);
@@ -193,6 +204,7 @@ router.get("/matriculadoCurso/:id", verifyAdmin, obtenerCursosPorAlumno);
 router.post("/mercado", enviarVenta);
 router.post("/mercado/webhook", recibirVenta);
 router.get("/mercado", verifyAdminOrProfesor, obtenerVentas);
+router.get("/cursosComprados", verifyAlumno, obtenerCursosComprados);
 
 /** Secciones */
 router.get("/secciones", verifyAdminOrProfesor, showAllSecciones);
@@ -211,7 +223,12 @@ router.get("/clases/:id", verifyAdminOrProfesor, obtenerClasePorId);
 router.post("/clases/:id", verifyAdminOrProfesor, actualizarClase);
 router.post("/borrarClase/:id", verifyAdminOrProfesor, deleteClase);
 router.get("/clasesBuscar/:nombre", verifyAdminOrProfesor, obtenerClases);
-router.get("/clasePorSlug/:slug", obtenerClasePorSlug);
+router.get(
+  "/clasePorSlug/:slug",
+  verifyAlumno,
+  verificarCompraCurso,
+  obtenerClasePorSlug
+);
 router.get(
   "/clasesSeccion/:id",
   verifyAdminOrProfesor,

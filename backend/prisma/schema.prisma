@@ -60,6 +60,7 @@ model Seccion {
 model Clases {
     id          String        @id @default(cuid())
     nombre      String
+    slug        String        @unique
     duracion    String
     posicion    Int
     url_video   String

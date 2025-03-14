@@ -134,7 +134,6 @@ export const actualizarCategoria = async (
     const categoriaExistente = await prisma.categorias.findUnique({
       where: { id: id },
     });
-    console.log(categoriaExistente);
     if (!categoriaExistente) {
       res
         .status(404)
@@ -148,8 +147,6 @@ export const actualizarCategoria = async (
     if (files && files["url_icono"] && files["url_icono"][0]) {
       urlIconoPath = "/" + files["url_icono"][0].path.replace(/\\/g, "/");
     }
-    console.log(urlIconoPath);
-    console.log(urlImagenPath);
     const categoriaActualizada = await prisma.categorias.update({
       where: { id: id },
       data: {
@@ -162,7 +159,6 @@ export const actualizarCategoria = async (
           urlIconoPath !== null ? urlIconoPath : categoriaExistente.url_icono,
       },
     });
-    console.log(categoriaActualizada);
     // Borrar archivos viejos DESPUÉS de actualizar la base de datos y SÓLO si se subieron nuevos archivos
     if (
       files &&

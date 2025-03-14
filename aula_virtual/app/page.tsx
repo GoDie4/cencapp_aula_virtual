@@ -17,7 +17,11 @@ import { Convenios } from "./(landing)/@components/Convenios";
 import { CardVideo } from "./(landing)/@components/CardVideo";
 import { Curso } from "@/interfaces/CursoInterface";
 import { Categoria } from "@/interfaces/CategoriaInterface";
-
+import { HomeMetadata } from "@/layouts/seo/HomeMetaData";
+export function generateMetadata() {
+  const metadata = HomeMetadata();
+  return metadata;
+}
 export default async function page() {
   const dataCursos = await getServerSideProps("cursos");
   const dataCategorias = await getServerSideProps("categorias");
@@ -51,7 +55,6 @@ export default async function page() {
                   </div>
                 );
               })}
-             
             </div>
           </ContentMain>
         </section>
