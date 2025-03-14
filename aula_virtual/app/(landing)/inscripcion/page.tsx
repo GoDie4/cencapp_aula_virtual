@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
 import { s2 } from "../../../components/shared/images";
 import Banner from "../../../components/public/Banner";
 import lg1 from "../../../assets/varios/lg_bcp.jpg";
@@ -11,11 +10,14 @@ import {
   FaEnvelope,
   FaUserLock,
 } from "react-icons/fa";
-import { JSX, useEffect } from "react";
-const Inscripcion = (): JSX.Element => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+import { InscripcionMetadata } from "@/layouts/seo/InscripcionMetaData";
+
+export function generateMetadata() {
+  const metadata = InscripcionMetadata();
+  return metadata;
+}
+
+const Inscripcion = () => {
   return (
     <>
       <Banner titulo="Inscripción" imagen={`${s2.src}`} />

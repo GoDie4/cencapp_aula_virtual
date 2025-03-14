@@ -7,7 +7,11 @@ import { config } from "@/config/config";
 import { ContentMain } from "../../../components/public/estructura/ContentMain";
 import { getServerSideProps } from "@/server/getServerSideProps";
 import { Categoria } from "@/interfaces/CategoriaInterface";
-
+import { CapacitacionesMetadata } from "@/layouts/seo/CapacitacionesMetaData";
+export function generateMetadata() {
+  const metadata = CapacitacionesMetadata();
+  return metadata;
+}
 export default async function page() {
   const dataCategorias = await getServerSideProps("categorias");
 
@@ -20,10 +24,7 @@ export default async function page() {
             {dataCategorias.categorias.map((cat: Categoria) => {
               return (
                 <div className="group" key={cat.id}>
-                  <Link
-                    href={`/cursos/${cat.slug}`}
-                    className="block"
-                  >
+                  <Link href={`/cursos/${cat.slug}`} className="block">
                     <div className="relative flex items-center justify-center overflow-hidden transition-transform duration-300 rounded-lg shadow-md">
                       <img
                         src={`${config.imagesUrl}${cat.url_imagen}`}
@@ -55,5 +56,4 @@ export default async function page() {
       </section>
     </>
   );
-};
-
+}

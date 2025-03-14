@@ -34,6 +34,12 @@ export type UserInterface = {
   updatedAt: Date;
 };
 
+export type UserInterfaceEdit = {
+  nombres: string;
+  apellidos: string;
+  celular: string;
+};
+
 export interface RolesInterface {
   id: number;
   nombre: string;

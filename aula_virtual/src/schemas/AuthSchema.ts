@@ -70,3 +70,23 @@ export const SchemaRegister = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Las contraseñas no coinciden")
     .required("Este campo es requerido"),
 });
+
+export const SchemaEditarPerfil = Yup.object().shape({
+  nombres: Yup.string()
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, "Solo se permiten letras")
+    .min(2, "Debe tener al menos 2 caracteres")
+    .max(50, "Debe tener máximo 50 caracteres")
+    .required("Este campo es requerido"),
+
+  apellidos: Yup.string()
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, "Solo se permiten letras")
+    .min(2, "Debe tener al menos 2 caracteres")
+    .max(50, "Debe tener máximo 50 caracteres")
+    .required("Este campo es requerido"),
+  celular: Yup.string()
+    .matches(/^[0-9]+$/, "Solo se permiten números")
+    .min(7, "Debe tener al menos 7 dígitos")
+    .max(15, "Debe tener máximo 15 dígitos")
+    .required("Este campo es requerido"),
+});
+
