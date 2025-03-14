@@ -8,24 +8,21 @@ import {
   RiMenu3Line,
   RiCloseLine,
   //   RiStackFill,
-  RiArrowRightSLine,
-  RiHomeWifiFill,
-  RiRadioButtonLine,
-  RiStackFill
+  RiRadioButtonLine
 } from 'react-icons/ri'
 
 import axios from 'axios'
 import { Global } from '../../../helper/Global'
 import { icono } from '../../shared/Images'
+import AdminSection from './section/AdminSection'
+import ProfesorSection from './section/ProfesorSection'
 
 const SideBar = (): JSX.Element => {
   const { auth, setAuth, setLoading, setShowNotificaciones } = useAuth()
   const token = localStorage.getItem('token')
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
-  const [showSubmenu, setShowSubmenu] = useState(false)
   //   const [showSubmenu2, setShowSubmenu2] = useState(false);
-  const [activeItem, setActiveItem] = useState(0)
 
   const cerrarSession = async (): Promise<void> => {
     setLoading(true)
@@ -47,10 +44,6 @@ const SideBar = (): JSX.Element => {
     })
     navigate('/login')
     setLoading(false)
-  }
-
-  const handleItemClick = (itemId: number): void => {
-    setActiveItem(itemId)
   }
 
   return (
@@ -82,7 +75,8 @@ const SideBar = (): JSX.Element => {
             <h2 className="text-xs text-center text-gray-400">{auth.email}</h2>
           </nav>
           <div className="mb-5 h-[1px] w-full bg-gray-500 text-gray-500 block" />
-          <ul className="p-0 ml-0">
+          {auth.rolId === 1 ? <AdminSection /> : <ProfesorSection />}
+          {/* <ul className="p-0 ml-0">
             <li>
               <Link
                 onClick={() => {
@@ -237,7 +231,7 @@ const SideBar = (): JSX.Element => {
               >
                 <RiStackFill className="text-main" /> Configuracion
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link
                 onClick={() => {
@@ -260,81 +254,7 @@ const SideBar = (): JSX.Element => {
                 <RiStackFill className="text-main" /> Ventas
               </Link>
             </li>
-            {/* <li>
-              <Link
-                onClick={() => {
-                  setShowMenu(false)
-                }}
-                to="clientes"
-                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
-              >
-                <RiStackFill className="text-main" /> Clientes
-              </Link>
-            </li> */}
-            {/* <li>
-              <Link
-                onClick={() => {
-                  setShowMenu(false)
-                }}
-                to="cupones"
-                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
-              >
-                <RiStackFill className="text-main" /> Cupones
-              </Link>
-            </li> */}
-            {/* <li>
-              <button
-                onClick={() => {
-                  setShowSubmenu2(!showSubmenu2);
-                }}
-                className="flex items-center justify-between w-full px-4 py-2 transition-colors rounded-lg hover:bg-secondary-900"
-              >
-                <span className="flex items-center gap-4">
-                  <RiHomeWifiFill className="text-main" /> Delivery
-                </span>
-                <RiArrowRightSLine
-                  className={`mt-1 ${
-                    showSubmenu2 ? 'rotate-90' : ''
-                  } transition-all`}
-                />
-              </button>
-              <ul
-                className={` ${
-                  showSubmenu2 ? 'h-[100px]' : 'h-0'
-                } overflow-y-hidden transition-all`}
-              >
-                <li>
-                  <Link
-                    to="departamentos"
-                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${
-                      activeItem == 99 ? 'before:bg-main' : 'before:bg-gray-500'
-                    } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
-                    onClick={() => {
-                      handleItemClick(99);
-                      setShowMenu(false);
-                    }}
-                  >
-                    Departamentos
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    to="distritos"
-                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${
-                      activeItem == 97 ? 'before:bg-main' : 'before:bg-gray-500'
-                    } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
-                    onClick={() => {
-                      handleItemClick(97);
-                      setShowMenu(false);
-                    }}
-                  >
-                    Distritos
-                  </Link>
-                </li>
-              </ul>
-            </li> */}
-          </ul>
+          </ul> */}
         </div>
         <nav>
           <Link

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Loading } from '../../../shared/Loading'
 import { useFormik } from 'formik'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -110,7 +110,8 @@ export default function CargoCurso (): JSX.Element {
   return (
     <>
       {loadingComponents
-        ? (<Loading />)
+        ?
+        (<Loading />)
         : (
           <>
             <form
@@ -187,7 +188,7 @@ export default function CargoCurso (): JSX.Element {
               </div>
             </div>
           </>
-          )
+        )
       }
     </>
   )

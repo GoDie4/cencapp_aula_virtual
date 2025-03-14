@@ -70,6 +70,8 @@ export const createMaterial = async (req: Request, res: Response) => {
         descripcion: descripcion,
         claseId: claseId,
         path_archivo: rutaArchivo,
+        mime_type: req.file.mimetype,
+        size: req.file.size
       },
     });
     res.status(201).json({
@@ -101,11 +103,11 @@ export const showAllMateriales = async (req: Request, res: Response) => {
 
 export const actualizarMaterial = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const { nombre, descripcion, claseId, path_archivo } = req.body;
+  const { nombre, descripcion, claseId, path_archivo, mime_type, size } = req.body;
   let rutaArchivo = "";
   let archivoExiste = false;
 
-  if (!nombre || !descripcion || !claseId) {
+  if (!nombre || !descripcion || !mime_type || !path_archivo || !size) {
     res
       .status(400)
       .json({ message: "Faltan datos para actualizar el material." });
@@ -133,6 +135,8 @@ export const actualizarMaterial = async (req: Request, res: Response) => {
         descripcion: descripcion,
         claseId: claseId,
         path_archivo: archivoExiste ? rutaArchivo : path_archivo,
+        mime_type: archivoExiste ? req.file?.mimetype : mime_type,
+        size: archivoExiste ? req.file?.size : size
       },
     });
 
@@ -190,3 +194,50 @@ export const deleteMaterial = async (req: Request, res: Response) => {
     return;
   }
 };
+
+export const obtenerMaterialPorId = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const material = await prisma.materiales.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (material) {
+      // Si se encuentra la material, enviarla en la respuesta
+      res.status(200).json({ material });
+    } else {
+      // Si no se encuentra la material, enviar un error 404
+      res.status(404).json({ message: "Material no encontrado." });
+    }
+  } catch (error: any) {
+    console.error("Error al obtener la material por ID:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+    return;
+  } finally {
+    await prisma.$disconnect();
+  } 
+}
+
+export const obtenerDocumentoPorId = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const material = await prisma.materiales.findUnique({
+      where: { id: parseInt(id) },
+    });
+    if (!material) {
+      res.status(404).json({ message: "Material no encontrado" });
+      return;
+    }
+    res.status(200).sendFile(process.cwd() + material.path_archivo, {
+      headers: {
+        "Content-Type": material.mime_type,
+        "nombre": material.nombre,
+      }
+    });
+  } catch (error: any) {
+    console.error("Error al obtener el documento:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+    return;
+  }
+}

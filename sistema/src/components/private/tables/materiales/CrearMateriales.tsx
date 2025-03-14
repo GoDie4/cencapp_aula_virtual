@@ -1,3 +1,4 @@
+
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -103,7 +104,7 @@ export default function CrearMateriales (): JSX.Element {
     }
     try {
       const { status } = await axios.postForm(
-        `${Global.url}/tests`,
+        `${Global.url}/materiales`,
         formData,
         {
           headers: {
@@ -114,7 +115,7 @@ export default function CrearMateriales (): JSX.Element {
       )
       if (status === 201) {
         toast.success('Registro exitoso')
-        navigate('/admin/examenes')
+        navigate('/admin/materiales')
       }
       if (status === 400) {
         toast.warning('Complete todos los datos')
@@ -166,7 +167,7 @@ export default function CrearMateriales (): JSX.Element {
               <div className="w-full lg:relative mb-5">
                 <TitleBriefs titulo="Titulo" />
                 <InputsBriefs
-                  name="titulo"
+                  name="nombre"
                   type="text"
                   value={values.nombre}
                   onChange={handleChange}

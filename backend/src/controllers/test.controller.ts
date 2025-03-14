@@ -4,7 +4,6 @@ import multer from "multer";
 import path from "node:path";
 import fs from "fs";
 import fsPromise from "fs/promises";
-import { TestBody } from "interfaces/Test.interface";
 
 const prisma = new PrismaClient();
 
@@ -83,7 +82,7 @@ export async function showAllEjercicios(req: Request, res: Response) {
         tipo_prueba: "EJERCICIOS",
       },
       include: {
-        clase: true,
+        curso: true,
       },
     });
     res.status(200).json({ tests: ejercicios });
@@ -107,7 +106,7 @@ export async function createTest(req: Request, res: Response) {
     puntaje_maxima,
     tiempo_limite,
     tipo_prueba,
-  } = req.body as TestBody
+  } = req.body
   console.log(req.body['titulo'])
   if (
     !titulo ||
@@ -136,14 +135,16 @@ export async function createTest(req: Request, res: Response) {
         url_archivo: rutaArchivo ?? "",
         titulo: titulo,
         descripcion: descripcion,
+        claseId: claseId ? claseId : null,
+        cursoId: cursoId ? cursoId : null,
         fecha_inicio: new Date(fecha_inicio).toISOString(),
         fecha_fin: new Date(fecha_fin).toISOString(),
         puntaje_maxima: parseFloat(puntaje_maxima),
         activo: true,
+        mime_type: req.file.mimetype,
+        size: req.file.size,
         tipo_prueba: tipo_prueba,
         tiempo_limite: Number(tiempo_limite),
-        claseId: claseId ? claseId : null,
-        cursoId: cursoId ? cursoId : null,
       },
     });
 
@@ -204,20 +205,12 @@ export async function createEjercicio(req: Request, res: Response) {
         cursoId: cursoId ? cursoId : null,
         fecha_inicio: fecha_inicio,
         fecha_fin: fecha_fin,
+        mime_type: req.file.mimetype,
+        size: req.file.size,
         puntaje_maxima: puntaje_maxima,
         activo: true,
         tipo_prueba: "EJERCICIOS",
         tiempo_limite: Number(tiempo_limite),
-        curso: {
-          connect: {
-            id: cursoId
-          }
-        },
-        clase: {
-          connect: {
-            id: claseId
-          }
-        }
       },
     });
 
@@ -288,6 +281,8 @@ export async function actualizarTest(req: Request, res: Response) {
           fecha_fin: fecha_fin,
           puntaje_maxima: puntaje_maxima,
           activo: Boolean(activo),
+          mime_type: req.file.mimetype ? req.file.mimetype : Test.mime_type,
+          size: req.file.size ? req.file.size : Test.size,
           tipo_prueba: tipo_prueba,
           tiempo_limite: Number(tiempo_limite),
         },
@@ -388,6 +383,29 @@ export async function obtenerTestPorId(req: Request, res: Response) {
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Error interno al obtener el test" });
+    return;
+  }
+}
+
+export async function obtenerDocumentoTestPorId(req: Request, res: Response) {
+  const { id } = req.params;
+  try {
+    const test = await prisma.test.findUnique({
+      where: { id: id }
+    });
+    if (!test) {
+      res.status(404).json({ message: "Test no encontrado" });
+      return;
+    }
+    res.status(200).sendFile(process.cwd() + test.url_archivo, {
+      headers: {
+        "Content-Type": test.mime_type,
+        "nombre": test.titulo,
+      }
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error interno al obtener el documento" });
     return;
   }
 }

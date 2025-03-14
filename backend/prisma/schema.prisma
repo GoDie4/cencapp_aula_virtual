@@ -8,12 +8,6 @@ generator client {
     provider = "prisma-client-js"
 }
 
-generator erd {
-    provider = "prisma-erd-generator"
-    output   = "./diagrama.png" // Guarda la imagen en la carpeta prisma
-    format   = "png" // Puedes cambiarlo a "png" o "dot"
-}
-
 datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
@@ -136,6 +130,7 @@ enum CursoUsuarioTipo {
     CARGO
 }
 
+
 model SeccionesCursos {
     id        String   @id @default(cuid())
     cursoId   String   @db.Char(36)
@@ -249,13 +244,13 @@ model Ventas {
 }
 
 model VentasDetalles {
-    id         String  @id @default(cuid())
-    ventaId    String
-    productoId String
-    cantidad   Int
-    precio     Decimal
-    venta      Ventas  @relation(fields: [ventaId], references: [id], onDelete: Cascade)
-    curso      Curso   @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  id            String   @id @default(cuid())
+  ventaId       String
+  productoId    String
+  cantidad      Int
+  precio        Decimal
+  venta         Ventas   @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  curso         Curso    @relation(fields: [productoId], references: [id], onDelete: Cascade)
 
     @@map("ventas_detalles")
 }
@@ -267,6 +262,8 @@ model Test {
     descripcion       String         @db.Text
     claseId           String?
     cursoId           String?
+    size              Int
+    mime_type         String
     fecha_inicio      DateTime
     fecha_fin         DateTime
     tiempo_limite     Int?
@@ -300,12 +297,14 @@ enum TipoPrueba {
 }
 
 model Materiales {
-    id           Int      @id @default(autoincrement())
-    nombre       String   @db.VarChar(255)
-    descripcion  String   @db.Text
-    path_archivo String   @db.VarChar(255)
-    claseId      String
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
-    clase        Clases   @relation(fields: [claseId], references: [id], onDelete: Cascade)
+  id                                Int             @id @default(autoincrement())
+  nombre                            String          @db.VarChar(255)
+  descripcion                       String          @db.Text
+  path_archivo                      String          @db.VarChar(255)
+  mime_type                         String          @db.VarChar(255)
+  size                              Int
+  claseId                           String
+  createdAt                         DateTime        @default(now())
+  updatedAt                         DateTime        @updatedAt
+  clase                             Clases          @relation(fields: [claseId], references: [id], onDelete: Cascade)
 }
