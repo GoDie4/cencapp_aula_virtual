@@ -8,12 +8,6 @@ generator client {
     provider = "prisma-client-js"
 }
 
-generator erd {
-    provider = "prisma-erd-generator"
-    output   = "./diagrama.png" // Guarda la imagen en la carpeta prisma
-    format   = "png" // Puedes cambiarlo a "png" o "dot"
-}
-
 datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
@@ -60,10 +54,10 @@ model Seccion {
 model Clases {
     id          String        @id @default(cuid())
     nombre      String
+    slug        String        @unique
     duracion    String
     posicion    Int
     url_video   String
-    slug        String        @unique
     seccionId   String
     seccion     Seccion       @relation(fields: [seccionId], references: [id], onDelete: Cascade)
     createdAt   DateTime      @default(now())

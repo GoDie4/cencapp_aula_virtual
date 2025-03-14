@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.scss";
 import { Toaster } from "sonner";
-import { jwtDecode } from "jwt-decode";
 import { Providers } from "./(landing)/@components/Providers";
 import { cookies } from "next/headers";
 import axios from "axios";
@@ -18,8 +16,6 @@ async function getUser() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value || "";
 
-  let userId = "";
-
   if (!token) {
     console.log("No hay token");
     return;
@@ -27,19 +23,13 @@ async function getUser() {
 
   if (token && token.split(".").length === 3) {
     try {
-      const decodedToken = jwtDecode<any>(token);
-
-      userId = decodedToken.id;
-
-      const response = await axios.get(
-        `${config.apiUrl}/user/perfil/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true
-        }
-      );
+      const response = await axios.get(`${config.apiUrl}/user/yo`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Cookie: `token=${token}`,
+        },
+        withCredentials: true,
+      });
 
       return response.data.usuario;
     } catch (error) {

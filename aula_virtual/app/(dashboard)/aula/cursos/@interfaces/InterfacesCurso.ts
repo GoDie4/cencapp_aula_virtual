@@ -1,5 +1,6 @@
 import { UserInterface } from "@/interfaces/AuthInteface";
 import { MaterialInterface } from "../../materiales/@interfaces/InterfacesMaterial";
+import { Curso } from "@/interfaces/CursoInterface";
 
 export interface CursoMaterial {
   id: string;
@@ -21,11 +22,11 @@ export interface Comentario {
 }
 
 export interface ComentarioListar {
-    id: string;
-    userId: string;
-    comentario: string;
-    createdAt: Date;
-    usuario: UserInterface;
+  id: string;
+  userId: string;
+  comentario: string;
+  createdAt: Date;
+  usuario: UserInterface;
 }
 
 // Clase
@@ -50,6 +51,7 @@ export interface Seccion {
   nombre: string;
   slug: string;
   cursoId: string;
+  curso: Curso;
   posicion: number;
   clases: Clase[];
   createdAt: Date;

@@ -3,6 +3,12 @@ import CardCurso from "../../../../components/public/curso/CardCurso";
 import Banner from "../../../../components/public/Banner";
 import { getServerSideProps } from "@/server/getServerSideProps";
 import { ContentMain } from "../../../../components/public/estructura/ContentMain";
+import { SeoCursos } from "@/layouts/seo/SeoCursos";
+
+export async function generateMetadata({ params }: { params: any }) {
+  const metadata = await SeoCursos({ params });
+  return metadata;
+}
 
 export default async function page({
   params,

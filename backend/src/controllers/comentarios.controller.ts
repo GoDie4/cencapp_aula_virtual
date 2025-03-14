@@ -26,11 +26,11 @@ export const registrarComentario = async (
 };
 
 export const eliminarComentario = async (
-  req: Request,
+  req: any,
   res: Response
 ): Promise<any> => {
-  const comentarioId = req.params.comentarioId;
-  const userId = req.params.userId;
+  const comentarioId = req.params.id;
+  const userId = req.user.id;
 
   if (!userId) {
     return res.status(401).json({ error: "No autenticado" });
@@ -58,6 +58,44 @@ export const eliminarComentario = async (
     res.status(200).json({ message: "Comentario eliminado correctamente" });
   } catch (error) {
     console.error("Error al eliminar comentario:", error);
+    res.status(500).json({ error: "Error del servidor" });
+  }
+};
+
+export const traerComentarioDeAlumno = async (
+  req: any,
+  res: Response
+): Promise<any> => {
+  const userId = req.user?.id;
+
+  try {
+    const comentarios = await prisma.comentarios.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        clase: {
+          select: {
+            nombre: true,
+            slug: true,
+            seccion: {
+              select: {
+                curso: {
+                  select: {
+                    nombre: true,
+                    slug: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    res.json({ comentarios: comentarios });
+  } catch (error) {
+    console.error("Error al obtener los comentarios del usuario:", error);
     res.status(500).json({ error: "Error del servidor" });
   }
 };

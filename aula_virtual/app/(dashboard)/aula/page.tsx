@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-
-import useAuth from "@/hooks/useAuth";
+import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
 import { FaBook, FaClipboardCheck, FaMedal } from "react-icons/fa";
+import { AulaMain } from "../@components/estructura/AulaMain";
 /*
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 */
-
+export function generateMetadata() {
+  const metadata = AulaMetadata({ title: "Aula Virtual" });
+  return metadata;
+}
 
 interface StatCard {
   title: string;
@@ -18,8 +20,6 @@ interface StatCard {
   color: string;
 }
 export default function Aula() {
-  const { user } = useAuth();
-
   const stats: StatCard[] = [
     {
       title: "Total de Cursos",
@@ -44,24 +44,11 @@ export default function Aula() {
     },
   ];
 
-
-  const currentDate = new Date().toLocaleDateString("es-ES", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
   return (
     <>
       <header className="bg-white rounded-lg shadow-lg p-6 mb-6">
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-blue-800">
-              {user?.nombres.split(" ")[0] ??
-                "" + user?.apellidos.split(" ")[0]}
-            </h1>
-            <p className="text-sm mt-1 text-gray-500">{currentDate}</p>
-          </div>
+          <AulaMain />
           <div className="mt-4 md:mt-0">
             <img
               src="/assets/images/logo/logo.png"
@@ -72,7 +59,6 @@ export default function Aula() {
         </div>
       </header>
 
-      {/* Tarjetas de estadísticas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {stats.map((stat, index) => (
           <div
