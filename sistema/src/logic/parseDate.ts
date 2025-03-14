@@ -13,5 +13,6 @@ export function formatearFechaParaInputDate (fechaISO: string): string {
   const año = fecha.getFullYear()
   const mes = String(fecha.getMonth() + 1).padStart(2, '0') // Los meses van de 0 a 11
   const dia = String(fecha.getDate()).padStart(2, '0')
-  return `${dia}-${mes}-${año}`
+  console.log(año, mes, dia)
+  return `${año}-${mes}-${dia}`
 }
