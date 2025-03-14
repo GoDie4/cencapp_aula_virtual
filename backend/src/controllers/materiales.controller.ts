@@ -221,6 +221,10 @@ export const obtenerMaterialPorId = async (req: Request, res: Response) => {
 
 export const obtenerDocumentoPorId = async (req: Request, res: Response) => {
   const id = req.params.id;
+  if (!id) {
+    res.status(400).json({ message: "Falta el ID del material" });
+    return;
+  }
   try {
     const material = await prisma.materiales.findUnique({
       where: { id: parseInt(id) },

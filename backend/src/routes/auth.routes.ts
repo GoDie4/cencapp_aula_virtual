@@ -36,6 +36,8 @@ import {
   showAllCursos,
   uploadImageCurso,
   obtenerCursoMateriales,
+  getAllCoursesDelProfesor,
+  obtenerCursosPorMatriculado,
 } from "../controllers/curso.controller";
 
 import {
@@ -45,7 +47,7 @@ import {
   verifyProfesor,
 } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
-import { actualizarProfesor, crearProfesor, darleCargoCurso, deleteProfesor, eliminarCargoCurso, obtenerCargoCurso, obtenerCursosPorProfesor, obtenerEjerciciosPorProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
+import { actualizarProfesor, crearProfesor, darleCargoCurso, deleteProfesor, eliminarCargoCurso, obtenerCargoCurso, obtenerCursosPorProfesor, obtenerEjerciciosPorProfesor, obtenerExamenesPorProfesor, obtenerMaterialesPorProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
 import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
 import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercadopago.controller";
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
@@ -107,6 +109,7 @@ router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
 router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
 router.get("/obtenerCursoMateriales/:id", verifyAdminOrProfesor, obtenerCursoMateriales)
+router.get("/cursosDelProfesor/:id", verifyAdminOrProfesor, getAllCoursesDelProfesor)
 
 /** Profesores */
 router.post('/profesores', verifyAdmin, crearProfesor)
@@ -136,6 +139,7 @@ router.post(
 );
 router.post("/borrarAlumno/:id", verifyAdmin, deleteAlumno);
 router.get("/matriculadoCurso/:id", verifyAdmin, obtenerCursosPorAlumno);
+router.get("/alumno/matriculado/:id", verifyProfesor, obtenerCursosPorMatriculado);
 
 {/** Mercado */  }
 router.post('/mercado', enviarVenta)
@@ -179,7 +183,8 @@ router.post(
 );
 router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
 router.get('/tests/documento/:id', verifyAdminOrProfesor, obtenerDocumentoTestPorId)
-router.get('/ejercicios/documento/:id', verifyAdminOrProfesor, obtenerEjerciciosPorProfesor)
+router.get('/ejercicios/cargo/:id', verifyAdminOrProfesor, obtenerEjerciciosPorProfesor)
+router.get('/examenes/cargo/:id', verifyAdminOrProfesor, obtenerExamenesPorProfesor)
 
 {/** Materiales */}
 router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
@@ -188,5 +193,6 @@ router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
 router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
 router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
 router.get('/materiales/documento/:id', verifyAdminOrProfesor, obtenerDocumentoPorId)
+router.get('/materiales/cargo/:id', verifyAdminOrProfesor, obtenerMaterialesPorProfesor)
 
 export default router;
