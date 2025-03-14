@@ -53,10 +53,10 @@ import MaterialesCargo from '../components/private/tables/profesores/MaterialesC
 import EjerciciosCargoCrear from '../components/private/tables/profesores/EjerciciosCargoCrear'
 import ExamenesCargoCrear from '../components/private/tables/profesores/ExamenesCargoCrear'
 import MaterialesCargoCrear from '../components/private/tables/profesores/MaterialesCargoCrear'
-
 import { ListaBeneficios } from '../components/private/tables/beneficios/ListarBeneficios'
 import { AgregarBeneficio } from '../components/private/tables/beneficios/AgregarBeneficio'
 import { EditarBeneficio } from '../components/private/tables/beneficios/EditarBeneficio'
+
 export const Routing = (): JSX.Element => {
   return (
     <BrowserRouter>
