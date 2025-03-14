@@ -50,6 +50,10 @@ import AlumnosMatriculados from '../components/private/tables/alumnos/AlumnosMat
 import ExamenesCargo from '../components/private/tables/profesores/ExamenesCargo'
 import EjerciciosCargo from '../components/private/tables/profesores/EjerciciosCargo'
 import MaterialesCargo from '../components/private/tables/profesores/MaterialesCargo'
+import EjerciciosCargoCrear from '../components/private/tables/profesores/EjerciciosCargoCrear'
+import ExamenesCargoCrear from '../components/private/tables/profesores/ExamenesCargoCrear'
+import MaterialesCargoCrear from '../components/private/tables/profesores/MaterialesCargoCrear'
+
 import { ListaBeneficios } from '../components/private/tables/beneficios/ListarBeneficios'
 import { AgregarBeneficio } from '../components/private/tables/beneficios/AgregarBeneficio'
 import { EditarBeneficio } from '../components/private/tables/beneficios/EditarBeneficio'
@@ -108,18 +112,21 @@ export const Routing = (): JSX.Element => {
               <Route path='examenes/agregar' element={<CrearExamen />} />
               <Route path='examenes/editar/:id' element={<EditarExamen />} />
               <Route path='examenes/cargo/:id' element={<ExamenesCargo />} />
+              <Route path='examenes/cargo/crear' element={<ExamenesCargoCrear />} />
 
               {/** Ejercicios */ }
               <Route path='ejercicios' element={<ListaEjercicios />} />
               <Route path='ejercicios/agregar' element={<CrearEjercicios />} />
               <Route path='ejercicios/editar/:id' element={<EditarEjercicios />} />
               <Route path='ejercicios/cargo/:id' element={<EjerciciosCargo />} />
+              <Route path='ejercicios/cargo/crear' element={<EjerciciosCargoCrear />} />
 
               {/** Materiales */}
               <Route path='materiales' element={<ListaMateriales />} />
               <Route path='materiales/agregar' element={<CrearMateriales />} />
               <Route path='materiales/editar/:id' element={<EditarMateriales />} />
               <Route path='materiales/cargo/:id' element={<MaterialesCargo />} />
+              <Route path='materiales/cargo/crear' element={<MaterialesCargoCrear />} />
 
               <Route path='cargos/:id' element={<VerCursosCargo />} />
 

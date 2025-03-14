@@ -1,49 +1,78 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { type TestValues } from '../../../../interfaces/TestInterface'
-import { useEffect, useState } from 'react'
-import { TitleBriefs } from '../../../shared/TitleBriefs'
-import { InputsBriefs } from '../../../shared/InputsBriefs'
-import { Errors } from '../../../shared/Errors'
-import { Loading } from '../../../shared/Loading'
 import { useFormik } from 'formik'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Global } from '../../../../helper/Global'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { type TestValues } from '../../../../interfaces/TestInterface'
+import { Errors } from '../../../shared/Errors'
+import { InputsBriefs } from '../../../shared/InputsBriefs'
+import { TitleBriefs } from '../../../shared/TitleBriefs'
+import { Loading } from '../../../shared/Loading'
+import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
 import Editor from '../../../shared/Editar'
-import { formatearFechaParaInputDate } from '../../../../logic/parseDate'
 import useAuth from '../../../../hooks/useAuth'
+import { formatearFechaParaInputDate } from '../../../../logic/parseDate'
 
-export default function EditarExamen(): JSX.Element {
-  const { id } = useParams()
-  const { auth } = useAuth()
+interface Root {
+  cursos: CursosUsuarios[]
+}
+
+export default function ExamenesCargoCrear (): JSX.Element {
   const token = localStorage.getItem('token')
+  const { auth } = useAuth()
   const navigate = useNavigate()
   const [loadingComponents, setLoadingComponents] = useState(false)
-  const [documento, setDocumento] = useState<File | null>(null)
+  const [cursos, setCursos] = useState<CursosUsuarios[]>([])
+  const [cursoSeleccionado, setCursoSeleccionado] = useState('')
   const [content, setContent] = useState('')
+  const [documento, setDocumento] = useState<File | null>(null)
 
   const handleDocumentoChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setDocumento(event.target.files ? event.target.files[0] : null)
   }
+
+  const handleChangeCurso = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    setCursoSeleccionado(e.target.value)
+  }
+
+  const getCursos = async (): Promise<void> => {
+    try {
+      const { data } = await axios.get<Root>(`${Global.url}/cursosDelProfesor/${auth.id ?? ''}`, {
+        headers: {
+          Authorization: `Bearer ${token !== null && token !== '' ? token : ''
+            }`
+        }
+      })
+      setCursos(data.cursos)
+      console.log(data)
+      setLoadingComponents(false)
+    } catch (error) {
+      toast.error('Error al traer los datos de las cursos')
+      console.log(error)
+    }
+  }
+
   const saveExamen = async (
     values: TestValues
   ): Promise<void> => {
     setLoadingComponents(true)
+    const token = localStorage.getItem('token')
     const formData = new FormData()
     formData.append('titulo', values.titulo)
     formData.append('fecha_fin', String(values.fecha_fin))
     formData.append('fecha_inicio', String(values.fecha_inicio))
     formData.append('tiempo_limite', String(values.tiempo_limite))
     formData.append('puntaje_maxima', String(values.puntaje_maxima))
-    formData.append('activo', String(values.activo))
     formData.append('descripcion', content)
     formData.append('tipo_prueba', 'EXAMEN')
+    formData.append('cursoId', cursoSeleccionado)
     if (documento) {
       formData.append('archivo', documento)
     }
     try {
       const { status } = await axios.postForm(
-        `${Global.url}/tests/${id ?? ''}`,
+        `${Global.url}/tests`,
         formData,
         {
           headers: {
@@ -52,7 +81,7 @@ export default function EditarExamen(): JSX.Element {
           }
         }
       )
-      if (status === 200) {
+      if (status === 201) {
         toast.success('Registro exitoso')
         navigate('/admin/examenes')
       }
@@ -70,7 +99,7 @@ export default function EditarExamen(): JSX.Element {
     setLoadingComponents(false)
   }
 
-  const { handleSubmit, handleChange, errors, values, touched, handleBlur, setValues } =
+  const { handleSubmit, handleChange, errors, values, touched, handleBlur } =
     useFormik({
       initialValues: {
         titulo: '',
@@ -79,37 +108,13 @@ export default function EditarExamen(): JSX.Element {
         fecha_inicio: '',
         tiempo_limite: '',
         puntaje_maxima: '',
-        activo: false
+        activo: true
       },
       onSubmit: saveExamen
     })
-  const getExamen = async (): Promise<void> => {
-    try {
-      const { data } = await axios.get(`${Global.url}/tests/${id ?? ''}`, {
-        headers: {
-          Authorization: `Bearer ${token !== null && token !== '' ? token : ''
-            }`
-        }
-      })
-      setValues({
-        descripcion: data.test.descripcion,
-        fecha_fin: data.test.fecha_fin,
-        fecha_inicio: data.test.fecha_inicio,
-        puntaje_maxima: data.test.puntaje_maxima,
-        tiempo_limite: data.test.tiempo_limite,
-        titulo: data.test.titulo,
-        activo: data.test.activo
-      })
-      setContent(data.test.descripcion)
-      setLoadingComponents(false)
-    } catch (error) {
-      toast.error('Error al traer los datos de las cursos')
-      console.log(error)
-    }
-  }
 
   useEffect(() => {
-    getExamen()
+    getCursos()
   }, [])
 
   return (
@@ -117,7 +122,7 @@ export default function EditarExamen(): JSX.Element {
       {loadingComponents
         ? (
           <Loading />
-        )
+          )
         : (
           <form
             className="bg-secondary-100 p-8 rounded-xl mt-4"
@@ -140,7 +145,6 @@ export default function EditarExamen(): JSX.Element {
                 <InputsBriefs
                   name="fecha_inicio"
                   type="date"
-                  value={formatearFechaParaInputDate(values.fecha_inicio)}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -149,15 +153,36 @@ export default function EditarExamen(): JSX.Element {
                 <TitleBriefs titulo="Fecha de fin" />
                 <InputsBriefs
                   name="fecha_fin"
-                  type="date"
                   value={formatearFechaParaInputDate(values.fecha_fin)}
+                  type="date"
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
               </div>
             </div>
-            <div className="w-full flex flex-col gap-5 lg:flex-row">
-              <div className="w-full lg:relative mb-5">
+            <div className='mb-5 flex max-lg:flex-col gap-4'>
+              <div className="w-full lg:w-1/3">
+                <TitleBriefs titulo="Asignar cursos" />
+                <select
+                  title='Selecciona un curso'
+                  className="border border-black  placeholder-gray-400 outline-none focus:outline-none
+                                                                    focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-secondary-900
+                                                                    rounded-md transition-all"
+                  name="cursoId"
+                  value={cursoSeleccionado}
+                  autoComplete="off"
+                  onChange={handleChangeCurso}
+                  onBlur={handleBlur}
+                >
+                  <option value="">Seleccionar</option>
+                  {cursos.map((curso: CursosUsuarios) => (
+                    <option value={curso.curso?.id} key={curso.curso?.id}>
+                      {curso.curso?.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full lg:w-1/3 lg:relative mb-5">
                 <TitleBriefs titulo="Puntaje Máximo" />
                 <InputsBriefs
                   name="puntaje_maxima"
@@ -168,7 +193,7 @@ export default function EditarExamen(): JSX.Element {
                 />
                 <Errors errors={errors.puntaje_maxima} touched={touched.puntaje_maxima} />
               </div>
-              <div className="w-full lg:relative mb-5">
+              <div className="w-full lg:w-1/3 lg:relative mb-5">
                 <TitleBriefs titulo="Tiempo Limite (minutos)" />
                 <InputsBriefs
                   name="tiempo_limite"
@@ -180,8 +205,8 @@ export default function EditarExamen(): JSX.Element {
                 <Errors errors={errors.tiempo_limite} touched={touched.tiempo_limite} />
               </div>
             </div>
-            <div className='w-full flex max-lg:flex-col gap-5'>
-              <div className="w-full lg:w-1/2 lg:relative">
+            <div>
+              <div className="w-full lg:relative">
                 <TitleBriefs titulo="Archivo" />
                 <InputsBriefs
                   name="puntaje_maxima"
@@ -191,24 +216,20 @@ export default function EditarExamen(): JSX.Element {
                 />
                 <Errors errors={errors.puntaje_maxima} touched={touched.puntaje_maxima} />
               </div>
-              <div className='w-full lg:w-1/2 flex gap-4 items-center'>
-                <input type="checkbox" name="activo" id="activo" className='w-5 h-5' checked={values.activo} onChange={handleChange} onBlur={handleBlur}/>
-                <label htmlFor="activo">Activo</label>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-center gap-y-2 my-20 relative">
-              <p className="bg-transparent pt-0 pb-0 lg:pl-2  mr-0 mb-0 font-medium text-white text-md lg:absolute py-2 rounded-md top-[-25px]">
-                Descripción<span className="text-red-500">*</span>
-              </p>
-              <div className="flex-1 w-full md:w-3/4">
-                <Editor content={content} setContent={setContent} />
+              <div className="flex flex-col md:flex-row md:items-center gap-y-2 my-20 relative">
+                <p className="bg-transparent pt-0 pb-0 lg:pl-2  mr-0 mb-0 font-medium text-white text-md lg:absolute py-2 rounded-md top-[-25px]">
+                  Descripción<span className="text-red-500">*</span>
+                </p>
+                <div className="flex-1 w-full md:w-3/4">
+                  <Editor content={content} setContent={setContent} />
+                </div>
               </div>
             </div>
 
             <div className="flex gap-2 w-full justify-end">
               <input type="hidden" name="oculto" value="1" />
               <Link
-                to={auth.rolId === 1 ? '/admin/examenes' : `/admin/examenes/cargo/${auth.id}`}
+                to={`/admin/examenes/cargo/${auth.id}`}
                 className="bg-red-500 px-4 py-2 rounded-md text-white"
               >
                 Cancelar
