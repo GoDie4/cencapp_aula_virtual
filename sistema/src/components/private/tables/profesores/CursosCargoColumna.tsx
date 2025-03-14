@@ -1,16 +1,10 @@
 import { Button, Menu, MenuItem } from '@mui/material'
-import VerEjercicio from './VerEjercicio'
+import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
 import { IoMdSettings } from 'react-icons/io'
-import { Global } from '../../../../helper/Global'
-import { DeleteItems } from '../../../shared/DeleteItems'
-import React, { useContext } from 'react'
-import { ModalContext } from '../../../../context/ModalProvider'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { type TestInterface } from '../../../../interfaces/TestInterface'
-import axios from 'axios'
 
-export default function EjercicioColumna ({ ejer, token, getExamenes, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { ejer: TestInterface, token: string, getExamenes: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
-  const { setModalContent } = useContext(ModalContext)
+export default function CursosCargoColumna ({ cur }: { cur: CursosUsuarios }): JSX.Element {
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -20,43 +14,8 @@ export default function EjercicioColumna ({ ejer, token, getExamenes, totalPosts
   const handleClose = (): void => {
     setAnchorEl(null)
   }
-  const handleEditar = (): void => {
-    navigate(`/admin/examenes/editar/${ejer.id ?? ''}`)
-  }
-
-  const preguntar = (id: string): void => {
-    DeleteItems({
-      ruta: 'borrarTest',
-      id,
-      token,
-      getData: getExamenes,
-      totalPosts,
-      cantidadRegistros,
-      paginaActual,
-      setpaginaActual
-    })
-  }
-
-  const handleClickArchivo = async (): Promise<void> => {
-    const token = localStorage.getItem('token')
-    try {
-      const respuesta = await axios.get(`${Global.url}/tests/documento/${ejer.id ?? ''}`, {
-        headers: {
-          Authorization: `Bearer ${token ?? ''}`
-        },
-        responseType: 'blob'
-      })
-
-      const url = window.URL.createObjectURL(respuesta.data)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${ejer.titulo}`
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error(error)
-    }
+  const verAlumnos = (): void => {
+    navigate(`/admin/cursos/cargos/alumnos/${cur.cursoId}`)
   }
 
   return (
@@ -65,41 +24,41 @@ export default function EjercicioColumna ({ ejer, token, getExamenes, totalPosts
     >
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">Código</h5>
-        <span>{ejer.id}</span>
+        <span>{cur.id}</span>
       </div>
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">
-          Titulo
+          Nombres del Curso
         </h5>
         <span>
-          {ejer.titulo}
+          {cur.curso?.nombre}
         </span>
       </div>
 
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">
-          Examen
-        </h5>
-        <span className='text-main'>
-          <button type='button' onClick={() => { handleClickArchivo() }}>Ver Ejercicio</button>
-        </span>
-      </div>
-
-      <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">
-          Activo
+          Nombre del Profesor
         </h5>
         <span>
-          {ejer.activo ? 'Si' : 'No'}
+          {cur.usuario?.nombres}
         </span>
       </div>
 
       <div className="md:text-center">
         <h5 className="md:hidden text-white font-bold mb-2">
-          Tipo
+          Email
+        </h5>
+        <span>
+          {cur.usuario?.email}
+        </span>
+      </div>
+
+      <div className="md:text-center">
+        <h5 className="md:hidden text-white font-bold mb-2">
+          Rol
         </h5>
         <span className=''>
-          {ejer.tipo_prueba}
+          {cur.tipo}
         </span>
       </div>
 
@@ -139,9 +98,7 @@ export default function EjercicioColumna ({ ejer, token, getExamenes, totalPosts
             }
           }}
         >
-          <MenuItem onClick={() => { setModalContent({ title: 'Datos del Examen', content: <VerEjercicio ejer={ejer} /> }) }}>Ver</MenuItem>
-          <MenuItem onClick={handleEditar}>Editar</MenuItem>
-          <MenuItem onClick={() => { preguntar(ejer.id ?? '') }}>Eliminar</MenuItem>
+          <MenuItem onClick={verAlumnos}>Ver Alumnos</MenuItem>
         </Menu>
       </div>
 

@@ -94,8 +94,14 @@ export const AuthProvider = ({
           Authorization: `Bearer ${token ?? ''}`
         }
       })
-      setAuth(data)
-      setLoading(false)
+      if (data.rolId === 1 || data.rolId === 3) {
+        setAuth(data)
+        setLoading(false)
+      } else {
+        setLoading(false)
+        window.location.href = '/login'
+        localStorage.removeItem('token')
+      }
     } catch (error) {
       //   console.log(error)
       setLoading(false)
@@ -152,7 +158,7 @@ export const AuthProvider = ({
     }
   }, [])
   */
-  const getNotificaciones = (): void => {}
+  const getNotificaciones = (): void => { }
   return (
     <AuthContext.Provider
       value={{
