@@ -41,11 +41,16 @@ const Auth = (): JSX.Element | undefined => {
             'Content-Type': 'application/json' // Incluye cualquier encabezado necesario
           }
         })
-        if (data.status === 200) {
+        if (data.usuario.rolId === 1 || data.usuario.rolId === 3) {
           console.log(data)
           toast.success('Usuario identificado correctamente')
           localStorage.setItem('token', data.token)
           window.location.href = '/admin'
+        } else {
+          toast.error('Usuario no autorizado')
+          setLoading(false)
+          console.log(data)
+          return
         }
       } catch (error: any) {
         console.log(error)

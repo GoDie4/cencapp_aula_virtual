@@ -7,6 +7,7 @@ import { Global } from '../../../../helper/Global'
 import { Button, Menu, MenuItem } from '@mui/material'
 import { IoMdSettings } from 'react-icons/io'
 import VerExamen from './VerExamen'
+import axios from 'axios'
 
 export default function ExamenColumna ({ exam, token, getExamenes, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { exam: TestInterface, token: string, getExamenes: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
   const { setModalContent } = useContext(ModalContext)
@@ -36,6 +37,28 @@ export default function ExamenColumna ({ exam, token, getExamenes, totalPosts, c
     })
   }
 
+  const handleClickArchivo = async (): Promise<void> => {
+    const token = localStorage.getItem('token')
+    try {
+      const respuesta = await axios.get(`${Global.url}/tests/documento/${exam.id ?? ''}`, {
+        headers: {
+          Authorization: `Bearer ${token ?? ''}`
+        },
+        responseType: 'blob'
+      })
+
+      const url = window.URL.createObjectURL(respuesta.data)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${exam.titulo}`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div
       className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
@@ -58,7 +81,7 @@ export default function ExamenColumna ({ exam, token, getExamenes, totalPosts, c
           Examen
         </h5>
         <span className='text-main'>
-          <a href={`${Global.urlImages}${exam.url_archivo}`}>Ver Examen</a>
+          <button type='button' onClick={() => { handleClickArchivo() }}>Ver Examen</button>
         </span>
       </div>
 

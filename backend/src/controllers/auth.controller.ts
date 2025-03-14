@@ -178,6 +178,7 @@ export const login = async (
         apellidos: usuarioExiste.apellidos,
         celular: usuarioExiste.celular,
         email: usuarioExiste.email,
+        rolId: usuarioExiste.rolId
       },
       status: 200,
       token: token,
