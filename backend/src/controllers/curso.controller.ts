@@ -265,7 +265,6 @@ export const actualizarCurso = async (
         detalles: true,
       },
     });
-
     await prisma.cursoDetalles.update({
       where: { id: detalleId },
       data: {
@@ -625,5 +624,86 @@ export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Ocurrió un error en el servidor" });
   } finally {
     await prisma.$disconnect();
+  }
+};
+
+export const obtenerCursoMateriales = async (req: Request, res: Response) => {
+  const userId = req.params.id;
+
+  try {
+    const cursos = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: userId,
+        tipo: "MATRICULADO",
+      },
+      include: {
+        curso: {
+          omit: {
+            horas: true,
+            slug: true,
+            imagen: true,
+            banner: true,
+            precio: true,
+            categoriaId: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          include: {
+            cursosUsuarios: {
+              where: {
+                tipo: "CARGO",
+              },
+              include: {
+                usuario: true,
+              },
+              omit: {
+                id: true,
+                cursoId: true,
+                tipo: true,
+                avance: true,
+              },
+            },
+            Seccion: {
+              omit: {
+                id: true,
+                nombre: true,
+                slug: true,
+                cursoId: true,
+                posicion: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+              orderBy: {
+                posicion: "asc"
+              },
+              include: {
+                clases: {
+                  omit: {
+                    id: true,
+                    slug: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    duracion: true,
+                    posicion: true,
+                    seccionId: true,
+                    url_video: true,
+                  },
+                  include: { materiales: true },
+                  orderBy: {
+                    posicion: "asc"
+                  }
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    res.status(200).json({ cursos });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Ocurrió un error en el servidor" });
+    return;
   }
 };

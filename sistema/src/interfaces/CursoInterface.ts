@@ -1,4 +1,5 @@
 import { type Categoria } from './CategoriaInterface'
+import { type SeccionInterface } from './SeccionInterface'
 import { type Usuario } from './UserInterface'
 
 export interface Curso {
@@ -7,6 +8,7 @@ export interface Curso {
   precio: number
   horas: number
   imagen: string
+  banner: string
   categoriaId: number
   presentacion: string
   dirigido: string
@@ -15,6 +17,7 @@ export interface Curso {
   categoria?: Categoria
   createdAt?: Date
   updatedAt?: Date
+  Seccion: SeccionInterface[]
 }
 
 export interface CursosUsuarios {

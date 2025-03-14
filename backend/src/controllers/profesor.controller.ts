@@ -228,3 +228,178 @@ export const eliminarCargoCurso = async (req: Request, res: Response): Promise<v
   }
 
 };
+
+export const obtenerCursosPorProfesor = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = (req as any).user;
+  if (user.id !== id) {
+    res.status(401).json({
+      message: 'No tienes permiso para acceder a esta información'
+    })
+    return
+  }
+  try {
+    const profesor = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: id,
+        tipo: 'CARGO',
+      },
+      include: {
+        curso: true,
+        usuario: true
+      }
+    })
+    res.status(200).json({
+      profesor: profesor
+    })
+    return
+  } catch (error) {
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor'
+    })
+  } finally {
+    prisma.$disconnect
+  }
+}
+
+export const obtenerMaterialesPorProfesor = async (req: Request, res: Response) => {
+  const user = (req as any).user;
+  const { id } = req.body
+  if (user.id !== id) {
+    res.status(401).json({
+      message: 'No tienes permiso para acceder a esta información'
+    })
+    return
+  }
+
+  try {
+    const materiales = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: id,
+        tipo: 'CARGO'
+      },
+      include: {
+        curso: {
+          include: {
+            Seccion: {
+              orderBy: {
+                posicion: 'asc'
+              },
+              include: {
+                clases: {
+                  orderBy: {
+                    posicion: 'asc'
+                  },
+                  include: {
+                    materiales: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+    res.status(200).json({
+      materiales: materiales
+    })
+  } catch (error) {
+    console.error('Error al obtener materiales:', error)
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor'
+    })
+    return
+  } finally {
+    prisma.$disconnect
+  }
+}
+
+export const obtenerExamenesPorProfesor = async (req: Request, res: Response) => {
+  const { id } = req.body
+  const user = (req as any).user;
+  if (user.id !== id) {
+    res.status(401).json({
+      message: 'No tienes permiso para acceder a esta información'
+    })
+    return
+  }
+
+  try {
+    //const examenes = await prisma.
+    const profesor = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: id,
+        tipo: 'CARGO'
+      },
+      include: {
+        curso: {
+          include: {
+            test: true
+          }
+        }
+      }
+    })
+
+    res.status(200).json({
+      profesor: profesor
+    })
+    return
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Error al obtener los examenes de un profesor" })
+    return
+  } finally {
+    prisma.$disconnect
+  }
+}
+
+export const obtenerEjerciciosPorProfesor = async (req: Request, res: Response) => {
+  const { id } = req.params
+  const user = (req as any).user;
+  if (user.id !== id) {
+    res.status(401).json({
+      message: 'No tienes permiso para acceder a esta información'
+    })
+    return
+  }
+
+  try {
+    const ejercicios = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: id,
+        tipo: 'CARGO',
+      },
+      include: {
+        curso: {
+          include: {
+            Seccion: {
+              orderBy: {
+                posicion: 'asc'
+              },
+              include: {
+                clases: {
+                  orderBy: {
+                    posicion: 'asc'
+                  },
+                  include: {
+                    test: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+    res.status(200).json({
+      profesor: ejercicios
+    })
+    return
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Error al obtener los ejercicios de un profesor" })
+    return
+  } finally {
+    prisma.$disconnect
+  }
+}

@@ -45,10 +45,14 @@ import MatriculaCurso from '../components/private/tables/productos/MatriculaCurs
 import ListaMateriales from '../components/private/tables/materiales/ListaMateriales'
 import CrearMateriales from '../components/private/tables/materiales/CrearMateriales'
 import EditarMateriales from '../components/private/tables/materiales/EditarMateriales'
+import VerCursosCargo from '../components/private/tables/profesores/VerCursosCargo'
+import AlumnosMatriculados from '../components/private/tables/alumnos/AlumnosMatriculados'
+import ExamenesCargo from '../components/private/tables/profesores/ExamenesCargo'
+import EjerciciosCargo from '../components/private/tables/profesores/EjerciciosCargo'
+import MaterialesCargo from '../components/private/tables/profesores/MaterialesCargo'
 import { ListaBeneficios } from '../components/private/tables/beneficios/ListarBeneficios'
 import { AgregarBeneficio } from '../components/private/tables/beneficios/AgregarBeneficio'
 import { EditarBeneficio } from '../components/private/tables/beneficios/EditarBeneficio'
-
 export const Routing = (): JSX.Element => {
   return (
     <BrowserRouter>
@@ -73,28 +77,19 @@ export const Routing = (): JSX.Element => {
               {/** Profesores */}
               <Route path="profesores" element={<ListaProfesor />} />
               <Route path="profesores/agregar" element={<CrearProfesor />} />
-              <Route
-                path="profesores/editar/:id"
-                element={<EditarProfesor />}
-              />
+              <Route path="profesores/editar/:id" element={<EditarProfesor />} />
               {/* Ccategorias */}
               <Route index element={<ListaCategorias />} />
               <Route path="categorias" element={<ListaCategorias />} />
               <Route path="categorias/agregar" element={<CrearCategoria />} />
-              <Route
-                path="categorias/editar/:id"
-                element={<EditarCategoria />}
-              />
+              <Route path="categorias/editar/:id" element={<EditarCategoria />} />
               {/* Cursos */}
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
               <Route path="cursos/cargo/:id" element={<CargoCurso />} />
-              <Route
-                path="cursos/matriculados/:id"
-                element={<MatriculaCurso />}
-              />
-
+              <Route path='cursos/cargos/alumnos/:id' element={<AlumnosMatriculados />} />
+              <Route path="cursos/matriculados/:id" element={<MatriculaCurso />} />
               {/** Secciones */}
               <Route path="secciones" element={<ListaSecciones />} />
               <Route path="secciones/agregar" element={<CrearSeccion />} />
@@ -109,25 +104,24 @@ export const Routing = (): JSX.Element => {
               <Route path="ventas" element={<ListaVentas />} />
 
               {/** Examenes */}
-              <Route path="examenes" element={<ListaExamen />} />
-              <Route path="examenes/agregar" element={<CrearExamen />} />
-              <Route path="examenes/editar/:id" element={<EditarExamen />} />
+              <Route path='examenes' element={<ListaExamen />} />
+              <Route path='examenes/agregar' element={<CrearExamen />} />
+              <Route path='examenes/editar/:id' element={<EditarExamen />} />
+              <Route path='examenes/cargo/:id' element={<ExamenesCargo />} />
 
-              {/** Ejercicios */}
-              <Route path="ejercicios" element={<ListaEjercicios />} />
-              <Route path="ejercicios/agregar" element={<CrearEjercicios />} />
-              <Route
-                path="ejercicios/editar/:id"
-                element={<EditarEjercicios />}
-              />
+              {/** Ejercicios */ }
+              <Route path='ejercicios' element={<ListaEjercicios />} />
+              <Route path='ejercicios/agregar' element={<CrearEjercicios />} />
+              <Route path='ejercicios/editar/:id' element={<EditarEjercicios />} />
+              <Route path='ejercicios/cargo/:id' element={<EjerciciosCargo />} />
 
               {/** Materiales */}
-              <Route path="materiales" element={<ListaMateriales />} />
-              <Route path="materiales/agregar" element={<CrearMateriales />} />
-              <Route
-                path="materiales/editar/:id"
-                element={<EditarMateriales />}
-              />
+              <Route path='materiales' element={<ListaMateriales />} />
+              <Route path='materiales/agregar' element={<CrearMateriales />} />
+              <Route path='materiales/editar/:id' element={<EditarMateriales />} />
+              <Route path='materiales/cargo/:id' element={<MaterialesCargo />} />
+
+              <Route path='cargos/:id' element={<VerCursosCargo />} />
 
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />

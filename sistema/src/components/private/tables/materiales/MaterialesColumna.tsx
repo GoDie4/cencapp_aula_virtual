@@ -8,6 +8,7 @@ import { Button, Menu, MenuItem } from '@mui/material'
 import { IoMdSettings } from 'react-icons/io'
 import VerMateriales from './VerMateriales'
 import { parseDate } from '../../../../logic/parseDate'
+import axios from 'axios'
 
 export default function MaterialesColumna ({ materiales, token, getMateriales, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { materiales: MaterialesInterface, token: string, getMateriales: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
   const { setModalContent } = useContext(ModalContext)
@@ -21,12 +22,12 @@ export default function MaterialesColumna ({ materiales, token, getMateriales, t
     setAnchorEl(null)
   }
   const handleEditar = (): void => {
-    navigate(`/admin/examenes/editar/${materiales.id ?? ''}`)
+    navigate(`/admin/materiales/editar/${materiales.id ?? ''}`)
   }
 
   const preguntar = (id: string): void => {
     DeleteItems({
-      ruta: 'borrarMateriales',
+      ruta: 'borrarMaterial',
       id,
       token,
       getData: getMateriales,
@@ -35,6 +36,28 @@ export default function MaterialesColumna ({ materiales, token, getMateriales, t
       paginaActual,
       setpaginaActual
     })
+  }
+
+  const handleClickArchivo = async (): Promise<void> => {
+    const token = localStorage.getItem('token')
+    try {
+      const respuesta = await axios.get(`${Global.url}/materiales/documento/${materiales.id ?? ''}`, {
+        headers: {
+          Authorization: `Bearer ${token ?? ''}`
+        },
+        responseType: 'blob'
+      })
+
+      const url = window.URL.createObjectURL(respuesta.data)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${materiales.nombre}`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -59,7 +82,7 @@ export default function MaterialesColumna ({ materiales, token, getMateriales, t
           Material
         </h5>
         <span className='text-main'>
-          <a href={`${Global.urlImages}${materiales.path_archivo}`}>Ver Ejercicio</a>
+          <button type='button' onClick={() => { handleClickArchivo() }}>Ver Material</button>
         </span>
       </div>
 

@@ -34,6 +34,7 @@ import {
   obtenerCursosPorAlumno,
   showAllCursos,
   uploadImageCurso,
+  obtenerCursoMateriales,
 } from "../controllers/curso.controller";
 
 import {
@@ -53,6 +54,8 @@ import {
   darleCargoCurso,
   eliminarCargoCurso,
   obtenerCargoCurso,
+  obtenerCursosPorProfesor,
+  obtenerEjerciciosPorProfesor,
 } from "../controllers/profesor.controller";
 
 import {
@@ -96,6 +99,7 @@ import {
   actualizarTest,
   createTest,
   deleteTest,
+  obtenerDocumentoTestPorId,
   obtenerTestPorId,
   showAllEjercicios,
   showAllTests,
@@ -106,6 +110,8 @@ import {
   actualizarMaterial,
   createMaterial,
   deleteMaterial,
+  obtenerDocumentoPorId,
+  obtenerMaterialPorId,
   showAllMateriales,
   uploadArchivo,
 } from "../controllers/materiales.controller";
@@ -114,7 +120,7 @@ import {
 const router = Router();
 
 router.post("/crearAdmin", validateSchema(registerSchema), crearAdmin);
-router.get("/user", verifyAdmin, getDecodedUser);
+router.get("/user", verifyAdminOrProfesor, getDecodedUser);
 router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/recuperar", validateSchema(recuperarSchema), recuperarContrasena);
@@ -126,6 +132,7 @@ router.post(
 router.post("/logout", logout);
 router.get("/alumno", verifyAlumno, getDecodedUser);
 router.get("/profesor", verifyProfesor, getDecodedUser);
+// router.get('/user', verifyAdminOrProfesor, getDecodedUser)
 
 router.post("/alumnos", verifyAdmin);
 
@@ -165,11 +172,21 @@ router.get(
 );
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
+router.get(
+  "/obtenerCursoMateriales/:id",
+  verifyAdminOrProfesor,
+  obtenerCursoMateriales
+);
 router.post(
   "/porcentajeCurso",
   verifyAlumno,
   verificarCompraCurso,
   registrarOActualizarPorcentajeCurso
+);
+router.get(
+  "/obtenerCursoMateriales/:id",
+  verifyAdminOrProfesor,
+  obtenerCursoMateriales
 );
 
 /** Profesores */
@@ -178,8 +195,9 @@ router.get("/profesores", verifyAdmin, showAllProfesores);
 router.get("/profesores/:id", verifyAdmin, obtenerProfesorPorId);
 router.post("/profesores/:id", verifyAdmin, actualizarProfesor);
 router.post("/borrarProfesor/:id", verifyAdmin, deleteProfesor);
-router.post("/cargoCurso", verifyAdmin, darleCargoCurso);
+router.get("/cargosCurso/:id", verifyProfesor, obtenerCursosPorProfesor);
 router.get("/cargoCurso/:id", verifyAdmin, obtenerCargoCurso);
+router.post("/cargoCurso", verifyAdmin, darleCargoCurso);
 router.post("/eliminarCargoCurso/:id", verifyAdmin, eliminarCargoCurso);
 
 /** Alumnos */
@@ -247,9 +265,22 @@ router.post(
   actualizarTest
 );
 router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
+router.get(
+  "/tests/documento/:id",
+  verifyAdminOrProfesor,
+  obtenerDocumentoTestPorId
+);
+router.get(
+  "/ejercicios/documento/:id",
+  verifyAdminOrProfesor,
+  obtenerEjerciciosPorProfesor
+);
 
-/** Materiales */
+{
+  /** Materiales */
+}
 router.get("/materiales", verifyAdminOrProfesor, showAllMateriales);
+router.get("/materiales/:id", verifyAdminOrProfesor, obtenerMaterialPorId);
 router.post(
   "/materiales",
   verifyAdminOrProfesor,
@@ -263,5 +294,10 @@ router.post(
   actualizarMaterial
 );
 router.post("/borrarMaterial/:id", verifyAdminOrProfesor, deleteMaterial);
+router.get(
+  "/materiales/documento/:id",
+  verifyAdminOrProfesor,
+  obtenerDocumentoPorId
+);
 
 export default router;

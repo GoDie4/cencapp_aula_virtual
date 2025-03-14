@@ -169,7 +169,9 @@ export default function CrearEjercicios (): JSX.Element {
   return (
     <>
       {loadingComponents
-        ? (<Loading />)
+        ? (
+          <Loading />
+        )
         : (
           <form
             className="bg-secondary-100 p-8 rounded-xl mt-4"
@@ -241,7 +243,6 @@ export default function CrearEjercicios (): JSX.Element {
                   autoComplete="off"
                   onChange={handleChangeSeccion}
                   onBlur={handleBlur}
-                  disabled={secciones.length === 0}
                 >
                   <option value="">Seleccionar</option>
                   {secciones.map((seccion: SeccionInterface) => (
@@ -263,7 +264,6 @@ export default function CrearEjercicios (): JSX.Element {
                   autoComplete="off"
                   onChange={handleChangeClase}
                   onBlur={handleBlur}
-                  disabled={clases.length === 0}
                 >
                   <option value="">Seleccionar</option>
                   {clases.map((clase: ClasesInterface) => (
@@ -334,7 +334,7 @@ export default function CrearEjercicios (): JSX.Element {
               />
             </div>
           </form>
-          )}
+        )}
     </>
   )
 }
