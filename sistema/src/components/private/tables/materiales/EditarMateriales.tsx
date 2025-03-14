@@ -36,7 +36,6 @@ export default function EditarMateriales (): JSX.Element {
     formData.append('nombre', values.nombre)
     formData.append('path_archivo', pathArchivo)
     formData.append('mime_type', mimeType)
-    formData.append('size', documento?.size)
     if (documento) {
       formData.append('archivo', documento)
     }

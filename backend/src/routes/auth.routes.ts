@@ -35,6 +35,7 @@ import {
 
   showAllCursos,
   uploadImageCurso,
+  obtenerCursoMateriales,
 } from "../controllers/curso.controller";
 
 import {
@@ -44,12 +45,12 @@ import {
   verifyProfesor,
 } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
-import { actualizarProfesor, crearProfesor, deleteProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
+import { actualizarProfesor, crearProfesor, darleCargoCurso, deleteProfesor, eliminarCargoCurso, obtenerCargoCurso, obtenerCursosPorProfesor, obtenerEjerciciosPorProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
 import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
 import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercadopago.controller";
 import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
 import { actualizarClase, clasesPorCurso, createClase, deleteClase, obtenerClasePorId, obtenerClasePorSlug, obtenerClases, obtenerClasesPorSeccion, showAllClases } from "../controllers/clase.controller";
-import { actualizarTest, createTest, deleteTest, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
+import { actualizarTest, createTest, deleteTest, obtenerDocumentoTestPorId, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
 import { actualizarMaterial, createMaterial, deleteMaterial, obtenerDocumentoPorId, obtenerMaterialPorId, showAllMateriales, uploadArchivo } from "../controllers/materiales.controller";
 
 // import { CategoriaSchema } from "../schemas/categoria.schema";
@@ -57,7 +58,7 @@ import { actualizarMaterial, createMaterial, deleteMaterial, obtenerDocumentoPor
 const router = Router();
 
 router.post("/crearAdmin", validateSchema(registerSchema), crearAdmin);
-router.get("/user", verifyAdmin, getDecodedUser);
+router.get("/user", verifyAdminOrProfesor, getDecodedUser);
 router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/recuperar", validateSchema(recuperarSchema), recuperarContrasena);
@@ -69,7 +70,7 @@ router.post(
 router.post("/logout", logout);
 router.get('/alumno', verifyAlumno, getDecodedUser)
 router.get('/profesor', verifyProfesor, getDecodedUser)
-router.get('/user', verifyAdmin, getDecodedUser)
+// router.get('/user', verifyAdminOrProfesor, getDecodedUser)
 
 router.post("/alumnos", verifyAdmin);
 
@@ -105,6 +106,7 @@ router.get("/cursoPorSlug/:slug", cursoPorSlug);
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
 router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
+router.get("/obtenerCursoMateriales/:id", verifyAdminOrProfesor, obtenerCursoMateriales)
 
 /** Profesores */
 router.post('/profesores', verifyAdmin, crearProfesor)
@@ -112,6 +114,10 @@ router.get('/profesores', verifyAdmin, showAllProfesores)
 router.get('/profesores/:id', verifyAdmin, obtenerProfesorPorId)
 router.post('/profesores/:id', verifyAdmin, actualizarProfesor)
 router.post('/borrarProfesor/:id', verifyAdmin, deleteProfesor)
+router.get('/cargosCurso/:id', verifyProfesor, obtenerCursosPorProfesor)
+router.get('/cargoCurso/:id', verifyAdmin, obtenerCargoCurso)
+router.post('/cargoCurso', verifyAdmin, darleCargoCurso)
+router.post('/eliminarCargoCurso/:id', verifyAdmin, eliminarCargoCurso)
 
 /** Alumnos */
 router.post(
@@ -172,6 +178,8 @@ router.post(
   actualizarTest
 );
 router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
+router.get('/tests/documento/:id', verifyAdminOrProfesor, obtenerDocumentoTestPorId)
+router.get('/ejercicios/documento/:id', verifyAdminOrProfesor, obtenerEjerciciosPorProfesor)
 
 {/** Materiales */}
 router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
