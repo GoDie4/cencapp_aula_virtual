@@ -42,7 +42,6 @@ export const RenderTemarioItem = ({ curso }: { curso: any }) => {
       setExpanded(newExpanded ? panel : false);
     };
 
-  console.log("curso: ", curso);
   return (
     <>
       {curso.Seccion && (

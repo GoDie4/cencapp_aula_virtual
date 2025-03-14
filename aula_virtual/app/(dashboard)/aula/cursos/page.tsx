@@ -4,9 +4,15 @@ import { ProgressCurso } from "./@components/ProgressCurso";
 import { TitleAula } from "../../@components/estructura/TitleAula";
 import { getServerSideProps } from "@/server/getServerSideProps";
 import { Curso } from "@/interfaces/CursoInterface";
+import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
+
+export function generateMetadata() {
+  const metadata = AulaMetadata({ title: "Cursos " });
+    return metadata;
+  }
 
 export default async function Page() {
-  const data = await getServerSideProps("cursos");
+  const data = await getServerSideProps("cursosComprados");
 
   return (
     <>

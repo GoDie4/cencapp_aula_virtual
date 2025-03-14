@@ -12,6 +12,7 @@ export const InputForm = ({
   onChange,
   value,
   className,
+  disabled
 }: {
   label: string;
   placeholder: string;
@@ -21,6 +22,7 @@ export const InputForm = ({
   onChange?: any;
   value: string;
   className?: string;
+  disabled?: boolean
 }) => {
   const [verContrasena, setVerContrasena] = useState<boolean>(false);
 
@@ -36,6 +38,7 @@ export const InputForm = ({
           onBlur={onBlur}
           onChange={onChange}
           value={value}
+          disabled={disabled}
           className={`border w-full placeholder:text-sm outline-none  rounded-md p-2 ${className ?? ""}`}
           placeholder={placeholder}
         />

@@ -33,13 +33,18 @@ const CommentComponent = ({ claseId, comentarios }: Props) => {
       throw new Error("Usuario inválido");
     }
     try {
-      const res = await axios.post(`${config.apiUrl}/comentarios/save`, {
-        claseId,
-        userId,
-        comentario: input,
-      });
+      const res = await axios.post(
+        `${config.apiUrl}/comentarios/save`,
+        {
+          claseId,
+          userId,
+          comentario: input,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
-      toast.success("Comentario enviado");
       const nuevoComentario = res.data;
 
       const formattedComment: ComentarioListar = {
@@ -65,11 +70,20 @@ const CommentComponent = ({ claseId, comentarios }: Props) => {
 
   const handleDelete = async (commentId: string) => {
     try {
-      await axios.delete(`http://localhost:3000/api/comentarios/${commentId}`);
+      const response = await axios.delete(
+        `${config.apiUrl}/comentarios/delete/${commentId}`,
+        {
+          data: { claseId },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Comentario eliminado");
+      }
       setComments((prev) => prev.filter((c) => c.id !== commentId));
     } catch (error) {
       console.error("Error al eliminar el comentario", error);
-      // podrías mostrar un mensaje al usuario
     }
   };
 

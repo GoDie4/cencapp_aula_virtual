@@ -19,11 +19,19 @@ export const DeleteItems = ({
   }).then(async (result: SweetAlertResult) => {
     if (result.isConfirmed) {
       try {
-        const { data } = await axios.post(`${Global.url}/${ruta}/${id}`, {}, {
-          headers: {
-            Authorization: `Bearer ${token !== null && token !== '' ? token : ''}`
+        const { data } = await axios.post(
+          `${Global.url}/${ruta}/${id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${
+                token !== null && token !== '' ? token : ''
+              }`
+            }
           }
-        })
+        )
+
+        console.log(data)
         if (data) {
           toast.success('Registro eliminado correctamente')
           getData()
@@ -32,6 +40,7 @@ export const DeleteItems = ({
           toast.error('Error al eliminar el registro')
         }
       } catch (error: any) {
+        console.log(error)
         let dataError = error.request.response
         if (dataError) {
           dataError = JSON.parse(dataError)

@@ -4,7 +4,11 @@ import Tabs, {
   TabTitle,
 } from "../../../../components/navigation/Tabs";
 import { TitleAula } from "../../@components/estructura/TitleAula";
-
+import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
+export function generateMetadata() {
+  const metadata = AulaMetadata({ title: "Tareas " });
+  return metadata;
+}
 const Page: NextPage = () => {
   const tareasPendientes = [
     {
