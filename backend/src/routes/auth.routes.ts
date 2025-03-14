@@ -35,6 +35,8 @@ import {
   showAllCursos,
   uploadImageCurso,
   obtenerCursoMateriales,
+  getAllCoursesDelProfesor,
+  obtenerCursosPorMatriculado,
 } from "../controllers/curso.controller";
 
 import {
@@ -45,76 +47,17 @@ import {
   verifyProfesor,
 } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
+import { actualizarProfesor, crearProfesor, darleCargoCurso, deleteProfesor, eliminarCargoCurso, obtenerCargoCurso, obtenerCursosPorProfesor, obtenerEjerciciosPorProfesor, obtenerExamenesPorProfesor, obtenerMaterialesPorProfesor, obtenerProfesorPorId, showAllProfesores } from "../controllers/profesor.controller";
+import { actualizarAlumno, crearAlumno, deleteAlumno, obtenerAlumnoPorId, showAllAlumnos } from "../controllers/alumno.controller";
+import { enviarVenta, obtenerVentas, recibirVenta } from "../controllers/mercadopago.controller";
+import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obtenerSeccionesCurso, obtenerSeccionPorId, showAllSecciones } from "../controllers/seccion.controller";
+import { actualizarClase, clasesPorCurso, createClase, deleteClase, obtenerClasePorId, obtenerClasePorSlug, obtenerClases, obtenerClasesPorSeccion, showAllClases } from "../controllers/clase.controller";
+import { actualizarTest, createTest, deleteTest, obtenerDocumentoTestPorId, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
+import { actualizarMaterial, createMaterial, deleteMaterial, obtenerDocumentoPorId, obtenerMaterialPorId, showAllMateriales, uploadArchivo } from "../controllers/materiales.controller";
 import {
-  actualizarProfesor,
-  crearProfesor,
-  deleteProfesor,
-  obtenerProfesorPorId,
-  showAllProfesores,
-  darleCargoCurso,
-  eliminarCargoCurso,
-  obtenerCargoCurso,
-  obtenerCursosPorProfesor,
-  obtenerEjerciciosPorProfesor,
-} from "../controllers/profesor.controller";
-
-import {
-  actualizarAlumno,
-  crearAlumno,
-  deleteAlumno,
-  obtenerAlumnoPorId,
-  showAllAlumnos,
-} from "../controllers/alumno.controller";
-
-import {
-  enviarVenta,
   obtenerCursosComprados,
-  obtenerVentas,
-  recibirVenta,
 } from "../controllers/mercadopago.controller";
 
-import {
-  actualizarSeccion,
-  createSeccion,
-  deleteSeccion,
-  obtenerSecciones,
-  obtenerSeccionesCurso,
-  obtenerSeccionPorId,
-  showAllSecciones,
-} from "../controllers/seccion.controller";
-
-import {
-  actualizarClase,
-  clasesPorCurso,
-  createClase,
-  deleteClase,
-  obtenerClasePorId,
-  obtenerClasePorSlug,
-  obtenerClases,
-  obtenerClasesPorSeccion,
-  showAllClases,
-} from "../controllers/clase.controller";
-
-import {
-  actualizarTest,
-  createTest,
-  deleteTest,
-  obtenerDocumentoTestPorId,
-  obtenerTestPorId,
-  showAllEjercicios,
-  showAllTests,
-  uploadArchivoTest,
-} from "../controllers/test.controller";
-
-import {
-  actualizarMaterial,
-  createMaterial,
-  deleteMaterial,
-  obtenerDocumentoPorId,
-  obtenerMaterialPorId,
-  showAllMateriales,
-  uploadArchivo,
-} from "../controllers/materiales.controller";
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
@@ -172,6 +115,9 @@ router.get(
 );
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
+router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
+router.get("/obtenerCursoMateriales/:id", verifyAdminOrProfesor, obtenerCursoMateriales)
+router.get("/cursosDelProfesor/:id", verifyAdminOrProfesor, getAllCoursesDelProfesor)
 router.get(
   "/obtenerCursoMateriales/:id",
   verifyAdminOrProfesor,
@@ -217,6 +163,7 @@ router.post(
 );
 router.post("/borrarAlumno/:id", verifyAdmin, deleteAlumno);
 router.get("/matriculadoCurso/:id", verifyAdmin, obtenerCursosPorAlumno);
+router.get("/alumno/matriculado/:id", verifyProfesor, obtenerCursosPorMatriculado);
 
 /** Mercado */
 router.post("/mercado", enviarVenta);
@@ -265,6 +212,9 @@ router.post(
   actualizarTest
 );
 router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
+router.get('/tests/documento/:id', verifyAdminOrProfesor, obtenerDocumentoTestPorId)
+router.get('/ejercicios/cargo/:id', verifyAdminOrProfesor, obtenerEjerciciosPorProfesor)
+router.get('/examenes/cargo/:id', verifyAdminOrProfesor, obtenerExamenesPorProfesor)
 router.get(
   "/tests/documento/:id",
   verifyAdminOrProfesor,
@@ -276,6 +226,14 @@ router.get(
   obtenerEjerciciosPorProfesor
 );
 
+{/** Materiales */}
+router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
+router.get('/materiales/:id', verifyAdminOrProfesor, obtenerMaterialPorId)
+router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
+router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
+router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
+router.get('/materiales/documento/:id', verifyAdminOrProfesor, obtenerDocumentoPorId)
+router.get('/materiales/cargo/:id', verifyAdminOrProfesor, obtenerMaterialesPorProfesor)
 {
   /** Materiales */
 }

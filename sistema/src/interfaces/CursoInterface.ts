@@ -1,5 +1,6 @@
 import { type Categoria } from './CategoriaInterface'
 import { type SeccionInterface } from './SeccionInterface'
+import { type TestInterface } from './TestInterface'
 import { type Usuario } from './UserInterface'
 
 export interface Curso {
@@ -18,6 +19,8 @@ export interface Curso {
   createdAt?: Date
   updatedAt?: Date
   Seccion: SeccionInterface[]
+  test: TestInterface[]
+  cursosUsuarios: CursosUsuarios[]
 }
 
 export interface CursosUsuarios {
