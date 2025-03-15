@@ -10,6 +10,7 @@ import {
 import { Global } from '../helper/Global'
 import axios from 'axios'
 import { type UserSchema } from './UserSchema'
+import { toast } from 'sonner'
 /*
 import io from 'socket.io-client'
 import { toast } from 'sonner'
@@ -97,6 +98,7 @@ export const AuthProvider = ({
       if (data.rolId === 1 || data.rolId === 3) {
         setAuth(data)
         setLoading(false)
+        toast.success('Validado Correctamente. Bienvenido!')
       } else {
         setLoading(false)
         window.location.href = '/login'

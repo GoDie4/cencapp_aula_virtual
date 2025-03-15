@@ -1,3 +1,4 @@
+import { type MaterialesInterface } from './MaterialesInterface'
 import { type SeccionInterface } from './SeccionInterface'
 import { type TestInterface } from './TestInterface'
 
@@ -12,4 +13,5 @@ export interface ClasesInterface {
   updatedAt?: Date
   seccion?: SeccionInterface
   test?: TestInterface[]
+  materiales?: MaterialesInterface[]
 }
