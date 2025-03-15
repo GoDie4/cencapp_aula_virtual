@@ -22,7 +22,7 @@ import { Curso } from "@/interfaces/CursoInterface";
 import axios from "axios";
 import { config } from "@/config/config";
 import { revertUrl } from "@/logic/formateador";
-import { SeoCurso } from "@/layouts/seo/SeoCurso";
+import { SeoCurso } from "@/seo/SeoCurso";
 
 export async function generateMetadata({ params }: { params: any }) {
   const metadata = await SeoCurso({ params });
@@ -159,7 +159,7 @@ const ViewCurso = async ({
                     >
                       {renderIcon(beneficio.icono)}
                       <p className="text-center mt-2">
-                        {beneficio.descripcion}
+                        {beneficio.texto}
                       </p>
                     </div>
                   ))}

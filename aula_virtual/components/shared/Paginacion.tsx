@@ -7,7 +7,7 @@ export const Paginacion = ({
   cantidadRegistros,
   paginaActual,
   setpaginaActual
-}: paginacionValues): JSX.Element => {
+}: paginacionValues) => {
   const [numPaginas, setNumPaginas] = useState(0)
 
   useEffect(() => {

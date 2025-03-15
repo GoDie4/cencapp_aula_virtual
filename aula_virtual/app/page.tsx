@@ -17,7 +17,7 @@ import { Convenios } from "./(landing)/@components/Convenios";
 import { CardVideo } from "./(landing)/@components/CardVideo";
 import { Curso } from "@/interfaces/CursoInterface";
 import { Categoria } from "@/interfaces/CategoriaInterface";
-import { HomeMetadata } from "@/layouts/seo/HomeMetaData";
+import { HomeMetadata } from "@/seo/HomeMetaData";
 export function generateMetadata() {
   const metadata = HomeMetadata();
   return metadata;

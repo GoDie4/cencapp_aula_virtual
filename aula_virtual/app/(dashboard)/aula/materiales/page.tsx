@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import Materiales from "./@components/Materiales";
 import { TitleAula } from "../../@components/estructura/TitleAula";
-import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
+import { MaterialesMetadata } from "@/seo/aula/MaterialesMetaData";
 export function generateMetadata() {
-  const metadata = AulaMetadata({ title: "Materiales" });
+  const metadata = MaterialesMetadata;
   return metadata;
 }
 const Page: NextPage = () => {

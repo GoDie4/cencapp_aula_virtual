@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
+import { Prisma, PrismaClient } from "@prisma/client";
+import * as bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -16,7 +16,7 @@ async function main() {
 
     // Registrar Curso
     const curso = await registrarCurso();
-
+    await registrarVentaYDetalles(curso.id);
     // Registrar Secciones y Clases
     await registrarSeccionesYClases(curso.id);
 
@@ -146,7 +146,7 @@ async function registrarSeccionesYClases(cursoId: string) {
     "ULnhDPuxwMg",
     "-fh2X88vY5s",
     "JZcRPMnWESs",
-    "Ce5Uxj1_SsU"
+    "Ce5Uxj1_SsU",
   ];
 
   let videoIndex = 0;
@@ -248,4 +248,34 @@ async function registrarComentario() {
   console.log("Comentario Creado");
 }
 
+async function registrarVentaYDetalles(cursoId: string) {
+  const usuario = await prisma.usuario.findFirst();
+  if (!usuario) {
+    throw new Error("No se encontró un usuario para registrar la venta.");
+  }
+
+  const venta = await prisma.ventas.create({
+    data: {
+      usuarioId: usuario.id,
+      pedidoMercadoId: "PED123456789",
+      fecha_aprobada: new Date(),
+      estado: "aprobado",
+      estado_detalle: "pagado",
+      total_neto: new Prisma.Decimal(150),
+      total: new Prisma.Decimal(199.99),
+      ultimo_caracteres: "1234",
+    },
+  });
+
+  await prisma.ventasDetalles.create({
+    data: {
+      ventaId: venta.id,
+      productoId: cursoId,
+      cantidad: 1,
+      precio: new Prisma.Decimal(199.99),
+    },
+  });
+
+  console.log("Venta y Detalle registrados correctamente");
+}
 main();
