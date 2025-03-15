@@ -1,7 +1,7 @@
 import s2 from "../../../assets/varios/c_banner.webp";
 import Banner from "../../../components/public/Banner";
 import { ValidarDatos } from "./@components/ValidarDatos";
-import { CarritoMetadata } from "@/layouts/seo/CarritoMetaData";
+import { CarritoMetadata } from "@/seo/CarritoMetaData";
 import { GridCarrito } from "./@components/GridCarrito";
 export function generateMetadata() {
   const metadata = CarritoMetadata();

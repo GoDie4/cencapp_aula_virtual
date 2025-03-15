@@ -243,6 +243,7 @@ export const obtenerClasePorSlug = async (
         },
       },
       include: {
+        materiales: true,
         comentarios: {
           include: {
             usuario: {

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
+import { AulaMetadata } from "@/seo/aula/AulaMetaData";
 import { FaBook, FaClipboardCheck, FaMedal } from "react-icons/fa";
 import { AulaMain } from "../@components/estructura/AulaMain";
 /*
@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 */
 export function generateMetadata() {
-  const metadata = AulaMetadata({ title: "Aula Virtual" });
+  const metadata = AulaMetadata();
   return metadata;
 }
 

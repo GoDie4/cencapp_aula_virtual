@@ -237,11 +237,14 @@ export const verificarCompraCurso = async (
   res: Response,
   next: NextFunction
 ): Promise<any> => {
+  console.log("params: ", req.params);
+  console.log("first:: ", req.body.claseId || req.params.claseId)
   const userId = req.user?.id;
+  const cursoId = req.params.cursoId || req.body.cursoId;
+  const claseId = req.params.claseId || req.body.claseId;
   const slug = req.params.slug;
-  const cursoId = req.body.cursoId;
-  const claseId = req.body.claseId;
-
+  
+  console.log({ userId, cursoId, claseId, slug });
   if (!userId || (!cursoId && !claseId && !slug)) {
     return res.status(400).json({
       message: "Faltan datos para verificar la compra del curso",

@@ -31,7 +31,7 @@ const CardCurso = ({
       console.log(pedido1)
       setPedido(true)
     }
-  }, [carrito.length]);
+  }, [carrito, carrito.length, id, pedido1]);
 
   const handleClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

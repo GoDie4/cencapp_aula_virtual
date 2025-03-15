@@ -627,8 +627,8 @@ export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
   }
 };
 
-export const obtenerCursoMateriales = async (req: Request, res: Response) => {
-  const userId = req.params.id;
+export const obtenerCursoMateriales = async (req: any, res: Response) => {
+  const userId = req.user?.id;
 
   try {
     const cursos = await prisma.cursoUsuario.findMany({
@@ -674,7 +674,7 @@ export const obtenerCursoMateriales = async (req: Request, res: Response) => {
                 updatedAt: true,
               },
               orderBy: {
-                posicion: "asc"
+                posicion: "asc",
               },
               include: {
                 clases: {
@@ -690,8 +690,8 @@ export const obtenerCursoMateriales = async (req: Request, res: Response) => {
                   },
                   include: { materiales: true },
                   orderBy: {
-                    posicion: "asc"
-                  }
+                    posicion: "asc",
+                  },
                 },
               },
             },

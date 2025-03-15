@@ -2,9 +2,9 @@ import { getServerSideProps } from "@/server/getServerSideProps";
 import { TitleAula } from "../../@components/estructura/TitleAula";
 import { Comentario } from "../cursos/@interfaces/InterfacesCurso";
 import Link from "next/link";
-import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
+import { ComentariosMetadata } from "@/seo/aula/ComentariosMetaData";
 export function generateMetadata() {
-  const metadata = AulaMetadata({ title: "Comentarios " });
+  const metadata = ComentariosMetadata();
   return metadata;
 }
 export default async function page() {

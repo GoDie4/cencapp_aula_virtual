@@ -2,7 +2,7 @@ import { FaLightbulb, FaBalanceScale, FaMedal, FaStar } from "react-icons/fa";
 import Banner from "../../../components/public/Banner";
 import { slide1 } from "../../../components/shared/images";
 
-import { NosotrosMetadata } from "@/layouts/seo/NosotrosMetaData";
+import { NosotrosMetadata } from "@/seo/NosotrosMetaData";
 
 export function generateMetadata() {
   const metadata = NosotrosMetadata();

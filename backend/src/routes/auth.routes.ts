@@ -123,6 +123,12 @@ router.get(
   verifyAdminOrProfesor,
   obtenerCursoMateriales
 );
+
+router.get(
+  "/obtenerCursoMaterialesPorAlumno",
+  verifyAlumno,
+  obtenerCursoMateriales
+);
 router.post(
   "/porcentajeCurso",
   verifyAlumno,
@@ -255,6 +261,13 @@ router.post("/borrarMaterial/:id", verifyAdminOrProfesor, deleteMaterial);
 router.get(
   "/materiales/documento/:id",
   verifyAdminOrProfesor,
+  obtenerDocumentoPorId
+);
+
+router.get(
+  "/materiales/descargaAlumno/:id/:claseId",
+  verifyAlumno,
+  verificarCompraCurso,
   obtenerDocumentoPorId
 );
 

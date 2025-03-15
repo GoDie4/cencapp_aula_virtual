@@ -3,7 +3,7 @@ interface Errores {
   touched: boolean | undefined;
 }
 
-export const Errors = (props: Errores): JSX.Element => {
+export const Errors = (props: Errores)=> {
   return (
     <p
       style={{ fontSize: '14px', margin: '8px 0' }}

@@ -2,7 +2,7 @@ import Banner from "../../../components/public/Banner";
 import { st1 } from "../../../components/shared/images";
 import { ContentMain } from "../../../components/public/estructura/ContentMain";
 import { FormContacto } from "./@components/FormContacto";
-import { ContactoMetadata } from "@/layouts/seo/ContactoMetaData";
+import { ContactoMetadata } from "@/seo/ContactoMetaData";
 
 export function generateMetadata() {
   const metadata = ContactoMetadata();

@@ -13,7 +13,17 @@ import {
 import { Clase, Seccion } from "../../../@interfaces/InterfacesCurso";
 import axios from "axios";
 import { config } from "@/config/config";
-
+import {
+  FaFilePdf,
+  FaFileWord,
+  FaFilePowerpoint,
+  FaFileVideo,
+  FaFileArchive,
+  FaFileAlt,
+} from "react-icons/fa";
+import { formatearFechaParaInputDate } from "../../../../materiales/@logic/parseDate";
+import { convertirBytesAMb } from "../../../../materiales/@logic/parseToMb";
+import { MaterialDataBase } from "@/interfaces/MaterialInterface";
 export const TabsClases = ({ dataClase }: { dataClase: Clase }) => {
   const [clases, setClases] = useState<Clase[]>([]);
 
@@ -30,14 +40,99 @@ export const TabsClases = ({ dataClase }: { dataClase: Clase }) => {
       console.log(error);
     }
   };
+
+  const getIconForMaterialType = (tipo: string) => {
+    switch (tipo.toLowerCase()) {
+      case "application/pdf":
+        return <FaFilePdf className="text-red-500" size={20} />;
+      case "doc":
+      case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        return <FaFileWord className="text-blue-500" size={20} />;
+      case "ppt":
+      case "pptx":
+        return <FaFilePowerpoint className="text-orange-500" size={20} />;
+      case "video":
+        return <FaFileVideo className="text-purple-500" size={20} />;
+      case "zip":
+        return <FaFileArchive className="text-yellow-500" size={20} />;
+      default:
+        return <FaFileAlt className="text-gray-500" size={20} />;
+    }
+  };
+
+  const handleClickArchivo = async (
+    id: number,
+    nombre: string
+  ): Promise<void> => {
+    const token = localStorage.getItem("token");
+    try {
+      const respuesta = await axios.get(
+        `${config.apiUrl}/materiales/descargaAlumno/${id ?? ""}/${
+          dataClase.id
+        }`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token ?? ""}`,
+          },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(respuesta.data);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${nombre}`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="w-full">
       <Tabs>
         <TabTitle title="Materiales" className="text-lg md:text-xl " />
         <TabContent>
-          <div>
-            <p>Materiales para esta clase.</p>
-          </div>
+          <ul className="divide-y divide-gray-200">
+            {dataClase.materiales.map((material: MaterialDataBase) => {
+              return (
+                <li
+                  key={material.id}
+                  className="px-4 py-4 sm:px-6 hover:bg-gray-50"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      {getIconForMaterialType(material.mime_type)}
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-gray-900">
+                          {material.nombre}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Subido el{" "}
+                          {formatearFechaParaInputDate(
+                            String(material.createdAt)
+                          )}{" "}
+                          •{convertirBytesAMb(material.size)}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() =>
+                          handleClickArchivo(material.id, material.nombre)
+                        }
+                        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-primary-main bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Descargar
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </TabContent>
 
         <TabTitle

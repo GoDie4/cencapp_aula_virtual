@@ -35,5 +35,16 @@ export interface CursoDetalles {
   certificacion?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  beneficios: Beneficio[];
   curso?: Curso;
+}
+
+export interface Beneficio {
+  id: number;
+  icono: string;
+  texto: string;
+  cursoId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  curso: Curso[];
 }

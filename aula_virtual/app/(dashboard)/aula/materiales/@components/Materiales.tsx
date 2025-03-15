@@ -5,7 +5,10 @@ import { ItemMaterial } from "./ItemMaterial";
 import { HeaderMaterial } from "./HeaderMaterial";
 import axios from "axios";
 import { Global } from "@/helper/Global";
-import { Curso, ResponseFetchMaterial } from "../@interfaces/FetchMaterialInterface";
+import {
+  Curso,
+  ResponseFetchMaterial,
+} from "../@interfaces/FetchMaterialInterface";
 
 const Materiales: React.FC = () => {
   const [cursosMaterial, setCursosMaterial] = useState<Curso[]>([]);
@@ -66,18 +69,22 @@ const Materiales: React.FC = () => {
   ];
   */
   const getMateriales = async () => {
-    const response = await axios.get<ResponseFetchMaterial>(`${Global.url}/obtenerCursoMateriales/cm853wgjo0001hy4ocgpkldt3`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+    const response = await axios.get<ResponseFetchMaterial>(
+      `${Global.url}/obtenerCursoMaterialesPorAlumno`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
       }
-    })
-    console.log(response.data)
-    setCursosMaterial(response.data.cursos)
-  }
+    );
+    console.log(response.data);
+    setCursosMaterial(response.data.cursos);
+  };
 
   useEffect(() => {
-    getMateriales()
-  }, [])
+    getMateriales();
+  }, []);
 
   return (
     <div className=" bg-secondary-50">
@@ -94,7 +101,9 @@ const Materiales: React.FC = () => {
                 setExpandedCourses={setExpandedCourses}
               />
 
-              {expandedCourses[curso.id] && <ItemMaterial seccion={curso.curso.Seccion} />}
+              {expandedCourses[curso.id] && (
+                <ItemMaterial seccion={curso.curso.Seccion} />
+              )}
             </div>
           ))}
         </div>
