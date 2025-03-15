@@ -1,6 +1,7 @@
 import { UserInterface } from "@/interfaces/AuthInteface";
 import { MaterialInterface } from "../../materiales/@interfaces/InterfacesMaterial";
 import { Curso } from "@/interfaces/CursoInterface";
+import { MaterialDataBase } from "@/interfaces/MaterialInterface";
 
 export interface CursoMaterial {
   id: string;
@@ -41,6 +42,7 @@ export interface Clase {
   seccion: Seccion;
   createdAt: Date;
   updatedAt: Date;
+  materiales: MaterialDataBase[]
   Comentarios: Comentario[];
   Seccion: Seccion[];
 }

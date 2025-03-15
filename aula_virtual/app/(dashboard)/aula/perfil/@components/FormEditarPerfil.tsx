@@ -76,7 +76,7 @@ export const FormEditarPerfil = () => {
         email: user.email || "",
       }));
     }
-  }, [user]);
+  }, [setValues, user, values]);
 
   useEffect(() => {
     if (errors && isSubmitting) {

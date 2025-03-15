@@ -5,13 +5,13 @@ import Tabs, {
   TabContent,
   TabTitle,
 } from "../../../../components/navigation/Tabs";
-import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
+import { ExamenesMetadata } from "@/seo/aula/ExamenesMetaData";
 
 export function generateMetadata() {
-  const metadata = AulaMetadata({ title: "Exámenes" });
-
+  const metadata = ExamenesMetadata();
   return metadata;
 }
+
 
 const Page: NextPage = () => {
   const examenesPendientes = [

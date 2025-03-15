@@ -1,5 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { CursoMaterial } from "../../cursos/@interfaces/InterfacesCurso";
+import React, { Dispatch, SetStateAction} from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { Curso } from "../@interfaces/FetchMaterialInterface";
 
