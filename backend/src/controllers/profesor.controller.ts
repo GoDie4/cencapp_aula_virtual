@@ -366,6 +366,7 @@ export const obtenerExamenesPorProfesor = async (req: Request, res: Response) =>
 }
 
 export const obtenerEjerciciosPorProfesor = async (req: Request, res: Response) => {
+  
   const { id } = req.params
   const user = (req as any).user;
   console.log(user.id)
@@ -421,3 +422,4 @@ export const obtenerEjerciciosPorProfesor = async (req: Request, res: Response) 
     prisma.$disconnect
   }
 }
+

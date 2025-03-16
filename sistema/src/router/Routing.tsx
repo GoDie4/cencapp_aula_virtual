@@ -56,6 +56,7 @@ import MaterialesCargoCrear from '../components/private/tables/profesores/Materi
 import { ListaBeneficios } from '../components/private/tables/beneficios/ListarBeneficios'
 import { AgregarBeneficio } from '../components/private/tables/beneficios/AgregarBeneficio'
 import { EditarBeneficio } from '../components/private/tables/beneficios/EditarBeneficio'
+import ExamenesCargoRevisar from '../components/private/tables/examenes/ExamenesCargoRevisar'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -113,6 +114,7 @@ export const Routing = (): JSX.Element => {
               <Route path='examenes/editar/:id' element={<EditarExamen />} />
               <Route path='examenes/cargo/:id' element={<ExamenesCargo />} />
               <Route path='examenes/cargo/crear' element={<ExamenesCargoCrear />} />
+              <Route path='examenes/cargo/revisar' element={<ExamenesCargoRevisar />} />
 
               {/** Ejercicios */ }
               <Route path='ejercicios' element={<ListaEjercicios />} />
