@@ -107,7 +107,7 @@ export const actualizarMaterial = async (req: Request, res: Response) => {
   let rutaArchivo = "";
   let archivoExiste = false;
 
-  if (!nombre || !descripcion || !mime_type || !path_archivo || !size) {
+  if (!nombre || !descripcion || !path_archivo) {
     res
       .status(400)
       .json({ message: "Faltan datos para actualizar el material." });

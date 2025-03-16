@@ -132,6 +132,7 @@ export async function createTest(req: Request, res: Response) {
     
     const nuevoTest = await prisma.test.create({
       data: {
+        estado: 'Pendiente',
         url_archivo: rutaArchivo ?? "",
         titulo: titulo,
         descripcion: descripcion,
@@ -198,6 +199,7 @@ export async function createEjercicio(req: Request, res: Response) {
   try {
     const nuevoEjercicio = await prisma.test.create({
       data: {
+        estado: 'Pendiente',
         url_archivo: rutaArchivo ?? "",
         titulo: titulo,
         descripcion: descripcion,
