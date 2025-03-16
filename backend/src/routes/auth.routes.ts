@@ -117,23 +117,6 @@ router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
 router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
 router.get("/obtenerCursoMateriales/:id", verifyAdminOrProfesor, obtenerCursoMateriales)
-router.get("/cursosDelProfesor/:id", verifyAdminOrProfesor, getAllCoursesDelProfesor)
-router.get(
-  "/obtenerCursoMateriales/:id",
-  verifyAdminOrProfesor,
-  obtenerCursoMateriales
-);
-router.post(
-  "/porcentajeCurso",
-  verifyAlumno,
-  verificarCompraCurso,
-  registrarOActualizarPorcentajeCurso
-);
-router.get(
-  "/obtenerCursoMateriales/:id",
-  verifyAdminOrProfesor,
-  obtenerCursoMateriales
-);
 
 /** Profesores */
 router.post("/profesores", verifyAdmin, crearProfesor);
@@ -163,13 +146,11 @@ router.post(
 );
 router.post("/borrarAlumno/:id", verifyAdmin, deleteAlumno);
 router.get("/matriculadoCurso/:id", verifyAdmin, obtenerCursosPorAlumno);
-router.get("/alumno/matriculado/:id", verifyProfesor, obtenerCursosPorMatriculado);
 
-/** Mercado */
-router.post("/mercado", enviarVenta);
-router.post("/mercado/webhook", recibirVenta);
-router.get("/mercado", verifyAdminOrProfesor, obtenerVentas);
-router.get("/cursosComprados", verifyAlumno, obtenerCursosComprados);
+{/** Mercado */  }
+router.post('/mercado', enviarVenta)
+router.post('/mercado/webhook', recibirVenta)
+router.get('/mercado', verifyAdminOrProfesor, obtenerVentas)
 
 /** Secciones */
 router.get("/secciones", verifyAdminOrProfesor, showAllSecciones);
@@ -213,18 +194,7 @@ router.post(
 );
 router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
 router.get('/tests/documento/:id', verifyAdminOrProfesor, obtenerDocumentoTestPorId)
-router.get('/ejercicios/cargo/:id', verifyAdminOrProfesor, obtenerEjerciciosPorProfesor)
-router.get('/examenes/cargo/:id', verifyAdminOrProfesor, obtenerExamenesPorProfesor)
-router.get(
-  "/tests/documento/:id",
-  verifyAdminOrProfesor,
-  obtenerDocumentoTestPorId
-);
-router.get(
-  "/ejercicios/documento/:id",
-  verifyAdminOrProfesor,
-  obtenerEjerciciosPorProfesor
-);
+router.get('/ejercicios/documento/:id', verifyAdminOrProfesor, obtenerEjerciciosPorProfesor)
 
 {/** Materiales */}
 router.get('/materiales', verifyAdminOrProfesor, showAllMateriales)
@@ -233,29 +203,5 @@ router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
 router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
 router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
 router.get('/materiales/documento/:id', verifyAdminOrProfesor, obtenerDocumentoPorId)
-router.get('/materiales/cargo/:id', verifyAdminOrProfesor, obtenerMaterialesPorProfesor)
-{
-  /** Materiales */
-}
-router.get("/materiales", verifyAdminOrProfesor, showAllMateriales);
-router.get("/materiales/:id", verifyAdminOrProfesor, obtenerMaterialPorId);
-router.post(
-  "/materiales",
-  verifyAdminOrProfesor,
-  uploadArchivo,
-  createMaterial
-);
-router.post(
-  "/materiales/:id",
-  verifyAdminOrProfesor,
-  uploadArchivo,
-  actualizarMaterial
-);
-router.post("/borrarMaterial/:id", verifyAdminOrProfesor, deleteMaterial);
-router.get(
-  "/materiales/documento/:id",
-  verifyAdminOrProfesor,
-  obtenerDocumentoPorId
-);
 
 export default router;
