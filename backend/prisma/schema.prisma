@@ -266,6 +266,7 @@ model Test {
     mime_type         String
     fecha_inicio      DateTime
     fecha_fin         DateTime
+    estado            EstadoTest
     tiempo_limite     Int?
     tipo_prueba       TipoPrueba
     puntaje_maxima    Decimal
@@ -277,6 +278,12 @@ model Test {
     examenesResueltos TestResuelto[]
 
     @@map("examenes")
+}
+
+enum EstadoTest {
+  Pendiente
+  EnProceso
+  Finalizado
 }
 
 model TestResuelto {

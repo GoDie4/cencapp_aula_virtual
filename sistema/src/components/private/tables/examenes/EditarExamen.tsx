@@ -11,9 +11,11 @@ import { Global } from '../../../../helper/Global'
 import axios from 'axios'
 import Editor from '../../../shared/Editar'
 import { formatearFechaParaInputDate } from '../../../../logic/parseDate'
+import useAuth from '../../../../hooks/useAuth'
 
 export default function EditarExamen(): JSX.Element {
   const { id } = useParams()
+  const { auth } = useAuth()
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
   const [loadingComponents, setLoadingComponents] = useState(false)
@@ -206,7 +208,7 @@ export default function EditarExamen(): JSX.Element {
             <div className="flex gap-2 w-full justify-end">
               <input type="hidden" name="oculto" value="1" />
               <Link
-                to="/admin/examenes"
+                to={auth.rolId === 1 ? '/admin/examenes' : `/admin/examenes/cargo/${auth.id}`}
                 className="bg-red-500 px-4 py-2 rounded-md text-white"
               >
                 Cancelar

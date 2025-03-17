@@ -107,7 +107,7 @@ export const actualizarMaterial = async (req: Request, res: Response) => {
   let rutaArchivo = "";
   let archivoExiste = false;
 
-  if (!nombre || !descripcion || !mime_type || !path_archivo || !size) {
+  if (!nombre || !descripcion || !path_archivo) {
     res
       .status(400)
       .json({ message: "Faltan datos para actualizar el material." });
@@ -221,6 +221,10 @@ export const obtenerMaterialPorId = async (req: Request, res: Response) => {
 
 export const obtenerDocumentoPorId = async (req: Request, res: Response) => {
   const id = req.params.id;
+  if (!id) {
+    res.status(400).json({ message: "Falta el ID del material" });
+    return;
+  }
   try {
     const material = await prisma.materiales.findUnique({
       where: { id: parseInt(id) },

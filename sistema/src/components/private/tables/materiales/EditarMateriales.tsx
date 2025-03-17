@@ -10,10 +10,12 @@ import { InputsBriefs } from '../../../shared/InputsBriefs'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
 import { Loading } from '../../../shared/Loading'
+import useAuth from '../../../../hooks/useAuth'
 
 export default function EditarMateriales (): JSX.Element {
   const token = localStorage.getItem('token')
   const { id } = useParams()
+  const { auth } = useAuth()
   const navigate = useNavigate()
   const [loadingComponents, setLoadingComponents] = useState(false)
   const [documento, setDocumento] = useState<File | null>(null)
@@ -148,7 +150,7 @@ export default function EditarMateriales (): JSX.Element {
             <div className="flex gap-2 w-full justify-end">
               <input type="hidden" name="oculto" value="1" />
               <Link
-                to="/admin/materiales"
+                to={auth.rolId === 1 ? '/admin/materiales' : `/admin/materiales/cargo/${auth.id}`}
                 className="bg-red-500 px-4 py-2 rounded-md text-white"
               >
                 Cancelar

@@ -19,7 +19,7 @@ export default function VerExamen ({ exam }: { exam: TestInterface }): JSX.Eleme
         </div>
         <div className='w-full lg:w-1/2'>
           <h3 className='font-bold'>Nombre de Curso</h3>
-          <p className='font-medium'>{exam.clase?.nombre}</p>
+          <p className='font-medium'>{exam.curso?.nombre}</p>
         </div>
       </div>
       <div className='flex max-lg:flex-col w-full gap-4'>
