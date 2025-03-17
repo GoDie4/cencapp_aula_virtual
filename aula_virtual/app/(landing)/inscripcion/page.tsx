@@ -10,7 +10,7 @@ import {
   FaEnvelope,
   FaUserLock,
 } from "react-icons/fa";
-import { InscripcionMetadata } from "@/layouts/seo/InscripcionMetaData";
+import { InscripcionMetadata } from "@/seo/InscripcionMetaData";
 
 export function generateMetadata() {
   const metadata = InscripcionMetadata();

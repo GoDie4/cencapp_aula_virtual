@@ -1,10 +1,10 @@
 import { TitleAula } from "../../@components/estructura/TitleAula";
 import { getServerSideProps } from "@/server/getServerSideProps";
 import { FormEditarPerfil } from "./@components/FormEditarPerfil";
-import FormCambiarContrasena from "../../../(auth)/restablecer/@components/FormCambiarContrasena";
-import { AulaMetadata } from "@/layouts/seo/aula/AulaMetaData";
+import { PerfilMetadata } from "@/seo/aula/PerfilMetaData";
+import { FormEditarContrasena } from "./@components/FormEditarContrasena";
 export function generateMetadata() {
-  const metadata = AulaMetadata({ title: "Perfil " });
+  const metadata = PerfilMetadata;
   return metadata;
 }
 export default async function page() {
@@ -16,7 +16,7 @@ export default async function page() {
       <TitleAula titulo="Mi Perfil" />
       <FormEditarPerfil />
       <TitleAula titulo="Editar Contraseña" />
-      <FormCambiarContrasena />
+      <FormEditarContrasena />
     </>
   );
 }

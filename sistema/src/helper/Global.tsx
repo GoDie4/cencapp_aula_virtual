@@ -6,8 +6,8 @@ export const Global = {
 */
 
 export const Global = {
-  url: 'http://localhost:4000/api',
-  urlImages: 'http://localhost:4000'
+  url: 'https://cencapp.agritecbol.com/api',
+  urlImages: 'https://cencapp.agritecbol.com'
 }
 
 /*

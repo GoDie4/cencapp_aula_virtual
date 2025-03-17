@@ -13,7 +13,7 @@ export function CarritoButton ({ curso }: { curso: Curso }) {
     if (carrito.find((car) => car.id === curso.id)) {
       setPedido(true)
     }
-  }, [carrito.length])
+  }, [carrito, carrito.length, curso.id])
 
   function handleCarrito (curso: Curso) {
     const newPedido: CursoPedido = {
