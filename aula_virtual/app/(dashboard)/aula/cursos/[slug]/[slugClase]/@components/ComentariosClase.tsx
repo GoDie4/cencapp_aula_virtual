@@ -88,65 +88,74 @@ const CommentComponent = ({ claseId, comentarios }: Props) => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-secondary-50 py-6 px-3 rounded-lg shadow">
-      <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
+    <div className="max-w-lg mx-auto bg-white py-4 px-4 rounded-md shadow-sm border border-gray-200">
+      <h3 className="text-lg font-medium text-gray-800 mb-4 pb-2 border-b border-gray-200">
+        Comentarios
+      </h3>
+
+      <form onSubmit={handleSubmit} className="mb-6">
         <div className="w-full relative">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Escribe un comentario..."
-            className="w-full p-2 border pr-8 border-gray-300 focus:border-primary-main rounded-md focus:outline-none"
+            placeholder="Escriba un comentario..."
+            className="w-full p-3 border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 rounded-md focus:outline-none text-sm"
             disabled={loading}
           />
           <button
             type="submit"
-            className="absolute top-0 right-2 text-primary-main h-full text-white py-2 rounded-md"
+            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-blue-600 hover:text-blue-800"
             disabled={loading}
           >
-            <BsFillSendFill />
+            <BsFillSendFill size={16} />
           </button>
         </div>
       </form>
 
-      <ul className="space-y-4">
+      <div className="overflow-y-auto max-h-96">
         {comments.length > 0 ? (
-          comments.map((comentario: ComentarioListar) => (
-            <li
-              key={comentario.id}
-              className="p-4 pt-6 rounded-lg shadow bg-white-main relative"
-            >
-              {user?.id === comentario.userId && (
-                <button
-                  type="button"
-                  onClick={() => handleDelete(comentario.id)}
-                  className="absolute top-2 right-2 text-sm text-red-500"
-                >
-                  <BsFillTrashFill />
+          <ul className="space-y-3">
+            {comments.map((comentario: ComentarioListar) => (
+              <li
+                key={comentario.id}
+                className="p-3 rounded-md border border-gray-100 bg-gray-50 relative"
+              >
+                {user?.id === comentario.userId && (
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(comentario.id)}
+                    className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors"
+                    aria-label="Eliminar comentario"
+                  >
+                    <BsFillTrashFill size={14} />
+                  </button>
+                )}
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-gray-700 text-sm">
+                    {comentario.usuario.nombres}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {new Date(comentario.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  {comentario.comentario}
+                </p>
+                <button className="text-blue-600 text-xs font-medium mt-2 hover:text-blue-800 transition-colors">
+                  Responder
                 </button>
-              )}
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-800">
-                  {comentario.usuario.nombres}
-                </span>
-                <span className="text-xs text-black-500">
-                  {new Date(comentario.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-              <p className="mt-2 text-black-800 text-sm">
-                {comentario.comentario}
-              </p>
-              <button className="text-primary-main text-sm font-semibold mt-2 hover:underline">
-                Responder
-              </button>
-            </li>
-          ))
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p className="text-sm text-center text-black-800">
-            Aún no hay comentarios para esta clase
-          </p>
+          <div className="py-6 text-center">
+            <p className="text-sm text-gray-500">
+              No hay comentarios para esta clase
+            </p>
+          </div>
         )}
-      </ul>
+      </div>
     </div>
   );
 };

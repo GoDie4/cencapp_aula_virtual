@@ -29,7 +29,7 @@ export default async function Page() {
       <div className="w-full flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-3/5">
           <WrapperCursos>
-            {data.cursos.map((curso: Curso) => (
+            {data?.cursos?.map((curso: Curso) => (
               <CardCursoAula curso={curso} key={curso.id} />
             ))}
           </WrapperCursos>
@@ -40,7 +40,7 @@ export default async function Page() {
               Progreso de aprendizaje
             </h3>
             <ul className="space-y-6">
-              {data.cursos.map((curso: Curso) => (
+              {data?.cursos?.map((curso: Curso) => (
                 <li key={curso.id}>
                   <ProgressCurso
                     progreso={curso?.PorcentajeCurso?.[0]?.porcentaje ?? 0}

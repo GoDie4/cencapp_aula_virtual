@@ -14,7 +14,7 @@ export default async function page() {
     <div>
       <TitleAula titulo="Mis Comentarios" />
       <div className="w-full mt-5 grid sm:grid-cols-2 relative md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-        {data.comentarios && data.comentarios.length > 0 ? (
+        {data?.comentarios && data.comentarios.length > 0 ? (
           data.comentarios.map((comentario: Comentario) => (
             <>
               <Link
