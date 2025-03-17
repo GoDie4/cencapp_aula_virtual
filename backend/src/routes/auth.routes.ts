@@ -46,8 +46,6 @@ import {
   verifyAdmin,
   verifyAdminOrProfesor,
   verifyAlumno,
-  verifyAlumnoNoCookie,
-  // verifyAlumnoOrProfesor,
   verifyProfesor,
   verifyUser,
 } from "../middlewares/JWTMiddleware";
@@ -121,24 +119,8 @@ router.get(
 );
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
-router.get(
-  "/obtenerCursoMateriales/:id",
-  verifyAdminOrProfesor,
-  obtenerCursoMateriales
-);
-
-router.get(
-  "/obtenerCursoMaterialesPorAlumno",
-  verifyAlumno,
-  obtenerCursoMateriales
-);
-router.post(
-  "/porcentajeCurso",
-  verifyAlumno,
-  verificarCompraCurso,
-  registrarOActualizarPorcentajeCurso
-);
-router.get("/obtenerExamenesAsignados", verifyAlumno, obtenerExamenesAsignados)
+router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
+router.get("/obtenerCursoMateriales/:id", verifyAdminOrProfesor, obtenerCursoMateriales)
 
 /** Profesores */
 router.post("/profesores", verifyAdmin, crearProfesor);
@@ -233,13 +215,6 @@ router.get('/materiales/:id', verifyAdminOrProfesor, obtenerMaterialPorId)
 router.post('/materiales', verifyAdminOrProfesor, uploadArchivo, createMaterial)
 router.post('/materiales/:id', verifyAdminOrProfesor, uploadArchivo, actualizarMaterial)
 router.post('/borrarMaterial/:id', verifyAdminOrProfesor, deleteMaterial)
-router.get('/materiales/documento/:id', verifyUser, obtenerDocumentoPorId)
-
-router.get(
-  "/materiales/descargaAlumno/:id/:claseId",
-  verifyAlumno,
-  verificarCompraCurso,
-  obtenerDocumentoPorId
-);
+router.get('/materiales/documento/:id', verifyAdminOrProfesor, obtenerDocumentoPorId)
 
 export default router;
