@@ -8,10 +8,10 @@ const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./config/database"));
 const config_1 = require("./config/config");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const auth_routes_1 = __importDefault(require("../src/routes/auth.routes"));
-const user_routes_1 = __importDefault(require("../src/routes/user.routes"));
-const comentarios_routes_1 = __importDefault(require("../src/routes/comentarios.routes"));
-const beneficios_routes_1 = __importDefault(require("../src/routes/beneficios.routes"));
+const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const user_routes_1 = __importDefault(require("./routes/user.routes"));
+const comentarios_routes_1 = __importDefault(require("./routes/comentarios.routes"));
+const beneficios_routes_1 = __importDefault(require("./routes/beneficios.routes"));
 /*
 import userRoutes from "../src/routes/user.routes";
 import categoryRoutes from "../src/routes/category.routes"
