@@ -96,42 +96,46 @@ export const TabsClases = ({ dataClase }: { dataClase: Clase }) => {
         <TabTitle title="Materiales" className="text-lg md:text-xl " />
         <TabContent>
           <ul className="divide-y divide-gray-200">
-            {dataClase.materiales.map((material: MaterialDataBase) => {
-              return (
-                <li
-                  key={material.id}
-                  className="px-4 py-4 sm:px-6 hover:bg-gray-50"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      {getIconForMaterialType(material.mime_type)}
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900">
-                          {material.nombre}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Subido el{" "}
-                          {formatearFechaParaInputDate(
-                            String(material.createdAt)
-                          )}{" "}
-                          •{convertirBytesAMb(material.size)}
-                        </p>
+            {dataClase.materiales.length > 0 ? (
+              dataClase.materiales.map((material: MaterialDataBase) => {
+                return (
+                  <li
+                    key={material.id}
+                    className="px-4 py-4 sm:px-6 hover:bg-gray-50"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        {getIconForMaterialType(material.mime_type)}
+                        <div className="ml-3">
+                          <p className="text-sm font-medium text-gray-900">
+                            {material.nombre}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Subido el{" "}
+                            {formatearFechaParaInputDate(
+                              String(material.createdAt)
+                            )}{" "}
+                            •{convertirBytesAMb(material.size)}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <button
+                          onClick={() =>
+                            handleClickArchivo(material.id, material.nombre)
+                          }
+                          className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-primary-main bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Descargar
+                        </button>
                       </div>
                     </div>
-                    <div>
-                      <button
-                        onClick={() =>
-                          handleClickArchivo(material.id, material.nombre)
-                        }
-                        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-primary-main bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        Descargar
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
+                  </li>
+                );
+              })
+            ) : (
+              <p>Esta clase no cuenta con materiales</p>
+            )}
           </ul>
         </TabContent>
 
