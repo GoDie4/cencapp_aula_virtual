@@ -7,7 +7,7 @@ import { config } from "@/config/config";
 import { ContentMain } from "../../../components/public/estructura/ContentMain";
 import { getServerSideProps } from "@/server/getServerSideProps";
 import { Categoria } from "@/interfaces/CategoriaInterface";
-import { CapacitacionesMetadata } from "@/layouts/seo/CapacitacionesMetaData";
+import { CapacitacionesMetadata } from "@/seo/CapacitacionesMetaData";
 export function generateMetadata() {
   const metadata = CapacitacionesMetadata();
   return metadata;

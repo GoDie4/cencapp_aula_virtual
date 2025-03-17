@@ -3,6 +3,7 @@
 import React, {
   Dispatch,
   SetStateAction,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -65,7 +66,7 @@ export const ReproductorClase = ({
     setDuration(totalDuration);
   };
 
-  const saveProgress = async (currentTime: number) => {
+  const saveProgress = useCallback(async (currentTime: number) => {
     const porcentaje = Number(((currentTime / duration) * 100).toFixed(0));
     console.log("Progreso:", porcentaje);
 
@@ -121,7 +122,7 @@ export const ReproductorClase = ({
         }
       }
     }
-  };
+  }, [cursoId, dataClase.clase.nombre, dataClase.clase.seccion.nombre, dataClase.clase.slug, duration, posicionClase, seccionId, setProgreso, totalClases, userId]);
 
   const startTrackingProgress = () => {
     if (!intervalRef.current) {
@@ -139,7 +140,7 @@ export const ReproductorClase = ({
     }
   };
 
-  const stopTrackingProgress = () => {
+  const stopTrackingProgress = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -149,7 +150,7 @@ export const ReproductorClase = ({
       const currentTime = playerRef.current.getCurrentTime();
       saveProgress(currentTime);
     }
-  };
+  }, [saveProgress]);
 
   const onStateChange = (event: any) => {
     const playerStatus = event.data;
@@ -163,7 +164,7 @@ export const ReproductorClase = ({
 
   useEffect(() => {
     return () => stopTrackingProgress();
-  }, []);
+  }, [stopTrackingProgress]);
 
   return (
     <div onContextMenu={(e) => e.preventDefault()}>
