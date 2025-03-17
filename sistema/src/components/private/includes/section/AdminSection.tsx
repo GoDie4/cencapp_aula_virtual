@@ -94,7 +94,7 @@ export default function AdminSection (): JSX.Element {
                 setShowMenu(false)
               }}
             >
-              Secciones
+              Sesiones
             </Link>
           </li>
 

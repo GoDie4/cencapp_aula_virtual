@@ -167,13 +167,13 @@ export default async function page({
               <FaLongArrowAltLeft /> Regresar a mis cursos
             </Link>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black-900">
-              {dataCurso.nombre}
+              {dataCurso?.nombre}
             </h2>
             <p className="mt-6 text-lg ">Por Logos Perú</p>
             <div className="w-full space-y-5 my-5 text-black-900 line-clamp-5">
               <p
                 dangerouslySetInnerHTML={{
-                  __html: dataCurso.detalles.presentacion ?? "",
+                  __html: dataCurso?.detalles.presentacion ?? "",
                 }}
               ></p>
             </div>
@@ -227,7 +227,7 @@ export default async function page({
             <div className="flex  flex-col-reverse lg:flex-col">
               <div className="w-fit mt-3 md:mt-0   md:mb-3">
                 <img
-                  src={`${config.imagesUrl}${dataCurso.imagen}`}
+                  src={`${config.imagesUrl}${dataCurso?.imagen}`}
                   alt=""
                   className="block rounded-main h-[345px] object-cover"
                 />
