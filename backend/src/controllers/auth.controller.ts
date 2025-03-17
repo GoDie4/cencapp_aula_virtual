@@ -121,6 +121,8 @@ export const register = async (
       sameSite: "none",
       secure: true,
       httpOnly: true,
+      domain: ".cencapperu.com",
+      maxAge: 2 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
@@ -165,6 +167,7 @@ export const login = async (
       sameSite: "none",
       secure: true,
       httpOnly: true,
+      domain: ".cencapperu.com",
       maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 
@@ -178,7 +181,7 @@ export const login = async (
         apellidos: usuarioExiste.apellidos,
         celular: usuarioExiste.celular,
         email: usuarioExiste.email,
-        rolId: usuarioExiste.rolId
+        rolId: usuarioExiste.rolId,
       },
       status: 200,
       token: token,
