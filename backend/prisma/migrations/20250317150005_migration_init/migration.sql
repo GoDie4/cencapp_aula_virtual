@@ -231,6 +231,7 @@ CREATE TABLE `examenes` (
     `mime_type` VARCHAR(191) NOT NULL,
     `fecha_inicio` DATETIME(3) NOT NULL,
     `fecha_fin` DATETIME(3) NOT NULL,
+    `estado` ENUM('Pendiente', 'EnProceso', 'Finalizado') NOT NULL,
     `tiempo_limite` INTEGER NULL,
     `tipo_prueba` ENUM('EXAMEN', 'EJERCICIOS') NOT NULL,
     `puntaje_maxima` DECIMAL(65, 30) NOT NULL,
