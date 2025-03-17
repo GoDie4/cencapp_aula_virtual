@@ -36,7 +36,8 @@ import {
   uploadImageCurso,
   obtenerCursoMateriales,
   getAllCoursesDelProfesor,
-  obtenerCursosPorMatriculado,
+  // obtenerCursosPorMatriculado,
+  
 } from "../controllers/curso.controller";
 
 import {
@@ -54,10 +55,11 @@ import { actualizarSeccion, createSeccion, deleteSeccion, obtenerSecciones, obte
 import { actualizarClase, clasesPorCurso, createClase, deleteClase, obtenerClasePorId, obtenerClasePorSlug, obtenerClases, obtenerClasesPorSeccion, showAllClases } from "../controllers/clase.controller";
 import { actualizarTest, createTest, deleteTest, obtenerDocumentoTestPorId, obtenerTestPorId, showAllEjercicios, showAllTests, uploadArchivoTest } from "../controllers/test.controller";
 import { actualizarMaterial, createMaterial, deleteMaterial, obtenerDocumentoPorId, obtenerMaterialPorId, showAllMateriales, uploadArchivo } from "../controllers/materiales.controller";
+/*
 import {
   obtenerCursosComprados,
 } from "../controllers/mercadopago.controller";
-
+*/
 // import { CategoriaSchema } from "../schemas/categoria.schema";
 
 const router = Router();
@@ -128,6 +130,7 @@ router.get("/cargosCurso/:id", verifyProfesor, obtenerCursosPorProfesor);
 router.get("/cargoCurso/:id", verifyAdmin, obtenerCargoCurso);
 router.post("/cargoCurso", verifyAdmin, darleCargoCurso);
 router.post("/eliminarCargoCurso/:id", verifyAdmin, eliminarCargoCurso);
+router.get("/cursosDelProfesor/:id", verifyProfesor, getAllCoursesDelProfesor);
 
 /** Alumnos */
 router.post(
@@ -192,6 +195,10 @@ router.post(
   uploadArchivoTest,
   actualizarTest
 );
+router.get('/examenes/cargo:id', verifyProfesor, obtenerExamenesPorProfesor)
+router.get('/materiales/cargo:id', verifyProfesor, obtenerMaterialesPorProfesor)
+router.get('/ejercicios/cargo/:id', verifyProfesor, obtenerEjerciciosPorProfesor)
+
 router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
 router.get('/tests/documento/:id', verifyAdminOrProfesor, obtenerDocumentoTestPorId)
 router.get('/ejercicios/documento/:id', verifyAdminOrProfesor, obtenerEjerciciosPorProfesor)
