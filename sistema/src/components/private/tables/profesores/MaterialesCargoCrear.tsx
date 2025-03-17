@@ -11,7 +11,7 @@ import { InputsBriefs } from '../../../shared/InputsBriefs'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { type ClasesInterface } from '../../../../interfaces/ClasesInterface'
 import { type SeccionInterface } from '../../../../interfaces/SeccionInterface'
-import { type Curso } from '../../../../interfaces/CursoInterface'
+import { CursosUsuarios, type Curso } from '../../../../interfaces/CursoInterface'
 import { Errors } from '../../../shared/Errors'
 import { Loading } from '../../../shared/Loading'
 import useAuth from '../../../../hooks/useAuth'
@@ -193,9 +193,9 @@ export default function MaterialesCargoCrear (): JSX.Element {
                   onBlur={handleBlur}
                 >
                   <option value="">Seleccionar</option>
-                  {cursos.map((curso: Curso) => (
-                    <option value={curso.id} key={curso.id}>
-                      {curso.nombre}
+                  {cursos.map((curso: CursosUsuarios) => (
+                    <option value={curso.curso?.id} key={curso.curso?.id}>
+                      {curso.curso?.nombre}
                     </option>
                   ))}
                 </select>
