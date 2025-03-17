@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import axios from 'axios'
 import { useState } from 'react'
 // Icons
@@ -45,7 +46,11 @@ const Auth = (): JSX.Element | undefined => {
           console.log(data)
           toast.success('Usuario identificado correctamente')
           localStorage.setItem('token', data.token)
-          window.location.href = '/admin'
+          if (data.usuario.rolId === 1) {
+            window.location.href = '/admin'
+          } else {
+            window.location.href = `/admin/cargos/${data.usuario.id}`
+          }
         } else {
           toast.error('Usuario no autorizado')
           setLoading(false)

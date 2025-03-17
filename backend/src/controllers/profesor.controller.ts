@@ -264,7 +264,9 @@ export const obtenerCursosPorProfesor = async (req: Request, res: Response) => {
 
 export const obtenerMaterialesPorProfesor = async (req: Request, res: Response) => {
   const user = (req as any).user;
-  const { id } = req.body
+  const { id } = req.params
+  console.log(user.id)
+  console.log(id)
   if (user.id !== id) {
     res.status(401).json({
       message: 'No tienes permiso para acceder a esta información'
@@ -291,7 +293,11 @@ export const obtenerMaterialesPorProfesor = async (req: Request, res: Response) 
                     posicion: 'asc'
                   },
                   include: {
-                    materiales: true
+                    materiales: {
+                      include: {
+                        clase: true
+                      }
+                    }
                   }
                 }
               }
@@ -315,8 +321,10 @@ export const obtenerMaterialesPorProfesor = async (req: Request, res: Response) 
 }
 
 export const obtenerExamenesPorProfesor = async (req: Request, res: Response) => {
-  const { id } = req.body
   const user = (req as any).user;
+  const { id } = req.params
+  console.log(user.id)
+  console.log(id)
   if (user.id !== id) {
     res.status(401).json({
       message: 'No tienes permiso para acceder a esta información'
@@ -334,7 +342,11 @@ export const obtenerExamenesPorProfesor = async (req: Request, res: Response) =>
       include: {
         curso: {
           include: {
-            test: true
+            test: {
+              include: {
+                curso: true
+              }
+            }
           }
         }
       }
@@ -354,8 +366,11 @@ export const obtenerExamenesPorProfesor = async (req: Request, res: Response) =>
 }
 
 export const obtenerEjerciciosPorProfesor = async (req: Request, res: Response) => {
+  
   const { id } = req.params
   const user = (req as any).user;
+  console.log(user.id)
+  console.log(id)
   if (user.id !== id) {
     res.status(401).json({
       message: 'No tienes permiso para acceder a esta información'
@@ -382,7 +397,11 @@ export const obtenerEjerciciosPorProfesor = async (req: Request, res: Response) 
                     posicion: 'asc'
                   },
                   include: {
-                    test: true
+                    test: {
+                      include: {
+                        clase: true
+                      }
+                    }
                   }
                 }
               }
@@ -403,3 +422,4 @@ export const obtenerEjerciciosPorProfesor = async (req: Request, res: Response) 
     prisma.$disconnect
   }
 }
+

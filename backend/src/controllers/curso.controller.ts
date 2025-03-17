@@ -707,3 +707,70 @@ export const obtenerCursoMateriales = async (req: any, res: Response) => {
     return;
   }
 };
+
+export const getAllCoursesDelProfesor = async (req: Request, res: Response) => {
+  try {
+    const profesorId = req.params.id;
+    const user = (req as any).user;
+
+    if (user.id !== profesorId) {
+      res.status(401).json({
+        message: 'No tienes permiso para acceder a esta información'
+      })
+      return
+    }
+
+    const cursos = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: profesorId,
+      },
+      include: {
+        curso: true
+      }
+    });
+
+    res.status(200).json({ cursos: cursos });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Ocurrió un error en el servidor" });
+    return;
+  }
+};
+
+export const obtenerCursosPorMatriculado = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = (req as any).user;
+  try {
+    const alumnos = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: user.id,
+        tipo: "CARGO",
+      },
+      include: {
+        curso: {
+          include: {
+            cursosUsuarios: {
+              where: {
+                cursoId: id,
+                tipo: "MATRICULADO",
+              },
+              include: {
+                usuario: true,
+              }
+            }
+          }
+        }
+      }
+    })
+    res.status(200).json({
+      alumnos: alumnos
+    })
+    return
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Ocurrió un error en el servidor" });
+    return;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
