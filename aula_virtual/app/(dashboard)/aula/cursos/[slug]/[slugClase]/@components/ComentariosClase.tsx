@@ -15,6 +15,7 @@ interface Props {
   comentarios: Comentario[];
 }
 import { BsFillTrashFill } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
 const CommentComponent = ({ claseId, comentarios }: Props) => {
   const [comments, setComments] = useState<ComentarioListar[]>(comentarios);
   const [input, setInput] = useState<string>("");
@@ -88,12 +89,12 @@ const CommentComponent = ({ claseId, comentarios }: Props) => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white py-4 px-4 rounded-md shadow-sm border border-gray-200">
-      <h3 className="text-lg font-medium text-gray-800 mb-4 pb-2 border-b border-gray-200">
+    <div className="max-w-lg mx-auto bg-white overflow-hidden  rounded-md shadow-sm border border-gray-200">
+      <h3 className="text-lg font-bold bg-primary-main text-white-main mb-4 px-4 py-4 border-b border-gray-200">
         Comentarios
       </h3>
 
-      <form onSubmit={handleSubmit} className="mb-6">
+      <form onSubmit={handleSubmit} className="mb-2 px-4  py-2">
         <div className="w-full relative">
           <input
             type="text"
@@ -112,45 +113,54 @@ const CommentComponent = ({ claseId, comentarios }: Props) => {
           </button>
         </div>
       </form>
-
-      <div className="overflow-y-auto max-h-96">
+      <div className="overflow-y-auto px-3  max-h-96   rounded-lg ">
         {comments.length > 0 ? (
-          <ul className="space-y-3">
+          <ul className="divide-y divide-blue-100">
             {comments.map((comentario: ComentarioListar) => (
               <li
                 key={comentario.id}
-                className="p-3 rounded-md border border-gray-100 bg-gray-50 relative"
+                className="px-1 py-4 hover:bg-blue-50 transition-colors relative flex items-start"
               >
-                {user?.id === comentario.userId && (
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(comentario.id)}
-                    className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors"
-                    aria-label="Eliminar comentario"
-                  >
-                    <BsFillTrashFill size={14} />
-                  </button>
-                )}
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium text-gray-700 text-sm">
-                    {comentario.usuario.nombres}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {new Date(comentario.createdAt).toLocaleDateString()}
-                  </span>
+                {/* Avatar */}
+                <div className="mr-2">
+                  <FaUserCircle size={28} className="text-blue-400" />
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  {comentario.comentario}
-                </p>
-                <button className="text-blue-600 text-xs font-medium mt-2 hover:text-blue-800 transition-colors">
-                  Responder
-                </button>
+                <div className="w-full">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center">
+                      <span className="font-semibold text-blue-800 text-base">
+                        {comentario.usuario.nombres}
+                      </span>
+                      <span className="ml-3 text-xs text-blue-600">
+                        {new Date(comentario.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    {user?.id === comentario.userId && (
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(comentario.id)}
+                        className="ml-4 text-red-500 hover:text-red-700 transition-colors"
+                        aria-label="Eliminar comentario"
+                      >
+                        <BsFillTrashFill size={16} />
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-gray-800 text-sm leading-relaxed">
+                    {comentario.comentario}
+                  </p>
+                  <div className="mt-3 text-right">
+                    <button className="bg-blue-600 text-white-main text-sm font-medium px-3 py-1 hover:bg-blue-700 rounded transition-colors">
+                      Responder
+                    </button>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
         ) : (
-          <div className="py-6 text-center">
-            <p className="text-sm text-gray-500">
+          <div className="py-10 text-center">
+            <p className="text-sm text-blue-600 font-medium">
               No hay comentarios para esta clase
             </p>
           </div>

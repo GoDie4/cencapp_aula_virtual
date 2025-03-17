@@ -68,6 +68,8 @@ const Materiales: React.FC = () => {
     },
   ];
   */
+
+  const total = 0;
   const getMateriales = async () => {
     const response = await axios.get<ResponseFetchMaterial>(
       `${Global.url}/obtenerCursoMaterialesPorAlumno`,
