@@ -66,11 +66,11 @@ CREATE TABLE `detalles_venta` (
 CREATE TABLE `cursos_detalles` (
     `id` VARCHAR(191) NOT NULL,
     `cursoId` VARCHAR(191) NOT NULL,
-    `objetivo` LONGTEXT NOT NULL DEFAULT '',
-    `presentacion` LONGTEXT NULL DEFAULT '',
-    `dirigido` LONGTEXT NULL DEFAULT '',
-    `metodologia` LONGTEXT NULL DEFAULT '',
-    `certificacion` LONGTEXT NULL DEFAULT '',
+    `objetivo` LONGTEXT NOT NULL,
+    `presentacion` LONGTEXT NULL,
+    `dirigido` LONGTEXT NULL,
+    `metodologia` LONGTEXT NULL,
+    `certificacion` LONGTEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
