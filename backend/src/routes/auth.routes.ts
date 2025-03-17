@@ -218,6 +218,7 @@ router.get("/materiales/cargo/:id", verifyProfesor, obtenerMaterialesPorProfesor
 router.get("/ejercicios/cargo/:id", verifyProfesor, obtenerEjerciciosPorProfesor);
 router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);
 router.post("/examenes/enviar", verifyAlumnoNoCookie, uploadArchivoRes, enviarExamen);
+router.get('/obtenerExamenesAsignados', verifyAlumno, obtenerExamenesAsignados)
 
 // Materiales
 router.get("/materiales", verifyAdminOrProfesor, showAllMateriales);
