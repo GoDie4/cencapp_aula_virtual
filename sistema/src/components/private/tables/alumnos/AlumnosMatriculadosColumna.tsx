@@ -1,12 +1,7 @@
-import { useNavigate } from 'react-router-dom'
 import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
-import { ModalContext } from '../../../../context/ModalProvider'
-import { useContext } from 'react'
 import { parseDate } from '../../../../logic/parseDate'
 
-export default function AlumnosMatriculadosColumna({ alum, token, getAlumnos, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { alum: CursosUsuarios, token: string, getAlumnos: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
-  const { setModalContent } = useContext(ModalContext)
-  const navigate = useNavigate()
+export default function AlumnosMatriculadosColumna ({ alum, token, getAlumnos, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { alum: CursosUsuarios, token: string, getAlumnos: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
   return (
     <div
       className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl"

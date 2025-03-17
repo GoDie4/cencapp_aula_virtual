@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obtenerCursosPorMatriculado = exports.getAllCoursesDelProfesor = exports.obtenerCursoMateriales = exports.obtenerCursosPorAlumno = exports.registrarOActualizarPorcentajeCurso = exports.cursoPorSlug = exports.buscarPorNombre = exports.deleteCurso = exports.obtenerCursoPorId = exports.actualizarCurso = exports.showAllCursos = exports.createCurso = exports.uploadImageCurso = void 0;
+exports.getAlumnoMatriculado = getAlumnoMatriculado;
 const client_1 = require("@prisma/client");
 const promises_1 = __importDefault(require("fs/promises"));
 const multer_1 = __importDefault(require("multer"));
@@ -685,4 +686,43 @@ const obtenerCursosPorMatriculado = async (req, res) => {
     }
 };
 exports.obtenerCursosPorMatriculado = obtenerCursosPorMatriculado;
+async function getAlumnoMatriculado(req, res) {
+    const user = req.user;
+    const { id } = req.params;
+    try {
+        const alumnos = await prisma.cursoUsuario.findMany({
+            where: {
+                userId: user.id,
+                cursoId: id,
+            },
+            include: {
+                curso: {
+                    include: {
+                        cursosUsuarios: {
+                            where: {
+                                tipo: "MATRICULADO"
+                            },
+                            include: {
+                                curso: true,
+                                usuario: true
+                            }
+                        }
+                    }
+                },
+            },
+        });
+        res.status(200).json({
+            alumnos: alumnos,
+        });
+        return;
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ message: "Ocurrió un error en el servidor" });
+        return;
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+}
 //# sourceMappingURL=curso.controller.js.map

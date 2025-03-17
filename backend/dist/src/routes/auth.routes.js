@@ -58,6 +58,7 @@ router.post("/borrarCurso/:id", JWTMiddleware_1.verifyAdmin, curso_controller_1.
 router.get("/obtenerCursoMateriales/:id", JWTMiddleware_1.verifyAdminOrProfesor, curso_controller_1.obtenerCursoMateriales);
 router.get("/obtenerCursoMaterialesPorAlumno", JWTMiddleware_1.verifyAlumno, curso_controller_1.obtenerCursoMateriales);
 router.post("/porcentajeCurso", JWTMiddleware_1.verifyAlumno, JWTMiddleware_1.verificarCompraCurso, curso_controller_1.registrarOActualizarPorcentajeCurso);
+router.get("/obtenerExamenesAsignados", JWTMiddleware_1.verifyAlumno, test_controller_1.obtenerExamenesAsignados);
 /** Profesores */
 router.post("/profesores", JWTMiddleware_1.verifyAdmin, profesor_controller_1.crearProfesor);
 router.get("/profesores", JWTMiddleware_1.verifyAdmin, profesor_controller_1.showAllProfesores);
@@ -69,6 +70,7 @@ router.get("/cargoCurso/:id", JWTMiddleware_1.verifyAdmin, profesor_controller_1
 router.post("/cargoCurso", JWTMiddleware_1.verifyAdmin, profesor_controller_1.darleCargoCurso);
 router.post("/eliminarCargoCurso/:id", JWTMiddleware_1.verifyAdmin, profesor_controller_1.eliminarCargoCurso);
 router.get("/cursosDelProfesor/:id", JWTMiddleware_1.verifyProfesor, curso_controller_1.getAllCoursesDelProfesor);
+router.get("/alumno/matriculado/:id", JWTMiddleware_1.verifyProfesor, curso_controller_1.getAlumnoMatriculado);
 /** Alumnos */
 router.post("/alumnos", (0, validatorSchemas_middleware_1.validateSchema)(auth_schema_1.registerSchema), JWTMiddleware_1.verifyAdmin, alumno_controller_1.crearAlumno);
 router.get("/alumnos", alumno_controller_1.showAllAlumnos);
@@ -104,19 +106,21 @@ router.get("/tests", test_controller_1.showAllTests);
 router.get("/ejercicios", test_controller_1.showAllEjercicios);
 router.get("/tests/:id", JWTMiddleware_1.verifyAdminOrProfesor, test_controller_1.obtenerTestPorId);
 router.post("/tests/:id", JWTMiddleware_1.verifyAdminOrProfesor, test_controller_1.uploadArchivoTest, test_controller_1.actualizarTest);
-router.get('/examenes/cargo:id', JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerExamenesPorProfesor);
-router.get('/materiales/cargo:id', JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerMaterialesPorProfesor);
+router.get('/examenes/cargo/:id', JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerExamenesPorProfesor);
+router.get('/materiales/cargo/:id', JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerMaterialesPorProfesor);
 router.get('/ejercicios/cargo/:id', JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);
+router.get('/examenes/revisar', JWTMiddleware_1.verifyProfesor, test_controller_1.obtenerExamenesPendientes);
+router.post('/examenes/enviar', JWTMiddleware_1.verifyAlumnoNoCookie, test_controller_1.uploadArchivoRes, test_controller_1.enviarExamen);
 router.post("/borrarTest/:id", JWTMiddleware_1.verifyAdminOrProfesor, test_controller_1.deleteTest);
-router.get('/tests/documento/:id', JWTMiddleware_1.verifyAdminOrProfesor, test_controller_1.obtenerDocumentoTestPorId);
-router.get('/ejercicios/documento/:id', JWTMiddleware_1.verifyAdminOrProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);
+router.get('/tests/documento/:id', JWTMiddleware_1.verifyUser, test_controller_1.obtenerDocumentoTestPorId);
+router.get('/ejercicios/documento/:id', JWTMiddleware_1.verifyUser, profesor_controller_1.obtenerEjerciciosPorProfesor);
 { /** Materiales */ }
 router.get('/materiales', JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.showAllMateriales);
 router.get('/materiales/:id', JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.obtenerMaterialPorId);
 router.post('/materiales', JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.uploadArchivo, materiales_controller_1.createMaterial);
 router.post('/materiales/:id', JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.uploadArchivo, materiales_controller_1.actualizarMaterial);
 router.post('/borrarMaterial/:id', JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.deleteMaterial);
-router.get('/materiales/documento/:id', JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.obtenerDocumentoPorId);
+router.get('/materiales/documento/:id', JWTMiddleware_1.verifyUser, materiales_controller_1.obtenerDocumentoPorId);
 router.get("/materiales/descargaAlumno/:id/:claseId", JWTMiddleware_1.verifyAlumno, JWTMiddleware_1.verificarCompraCurso, materiales_controller_1.obtenerDocumentoPorId);
 exports.default = router;
 //# sourceMappingURL=auth.routes.js.map

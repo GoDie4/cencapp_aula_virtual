@@ -46,7 +46,7 @@ export default function AlumnosMatriculados (): JSX.Element {
   const filterDate = (): CursosUsuarios[] => {
     return alumnos.slice(indexOfFirstPost, indexOfLastPost).flatMap(cursoUs => cursoUs.curso?.cursosUsuarios ?? [] as CursosUsuarios[]) ?? [] as CursosUsuarios[]
   }
-
+  console.log(filterDate())
   useEffect(() => {
     setTitle('Listado de alumnos')
     getAlumnos()
