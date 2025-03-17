@@ -231,7 +231,7 @@ CREATE TABLE `examenes` (
     `mime_type` VARCHAR(191) NOT NULL,
     `fecha_inicio` DATETIME(3) NOT NULL,
     `fecha_fin` DATETIME(3) NOT NULL,
-    `estado` ENUM('Pendiente', 'EnProceso', 'Finalizado') NOT NULL,
+    `estado` ENUM('Pendiente', 'EnRevision', 'Finalizado') NOT NULL DEFAULT 'Pendiente',
     `tiempo_limite` INTEGER NULL,
     `tipo_prueba` ENUM('EXAMEN', 'EJERCICIOS') NOT NULL,
     `puntaje_maxima` DECIMAL(65, 30) NOT NULL,
@@ -248,7 +248,10 @@ CREATE TABLE `examen_resueltos` (
     `examenId` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `url_archivo_resultado` VARCHAR(191) NOT NULL,
-    `puntuacion_total` VARCHAR(191) NOT NULL,
+    `puntaje_final` VARCHAR(191) NOT NULL,
+    `estado` ENUM('Pendiente', 'EnRevision', 'Finalizado') NOT NULL DEFAULT 'EnRevision',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
