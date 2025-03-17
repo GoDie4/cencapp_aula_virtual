@@ -9,31 +9,32 @@ import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
 import { Loading } from '../../../shared/Loading'
 import { extraerIdYouTube } from '../../../../logic/extraerID'
-import { ClaseValues } from '../../../shared/Interfaces'
+import { type ClaseValues } from '../../../shared/Interfaces'
+import ReproductorYoutube from './componets/ReproductorYoutube'
 
-export default function EditarClase(): JSX.Element {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const [loadingComponents, setLoadingComponents] = useState(false);
-  const [videoId, setVideoId] = useState("");
-  const [url_video, setUrlVideo] = useState<string>("");
-  const [nuevoVideoId, setNuevoVideoId] = useState<string | null>(null);
+export default function EditarClase (): JSX.Element {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const token = localStorage.getItem('token')
+  const [loadingComponents, setLoadingComponents] = useState(false)
+  const [videoId, setVideoId] = useState('')
+  const [url_video, setUrlVideo] = useState<string>('')
+  const [nuevoVideoId, setNuevoVideoId] = useState<string | null>(null)
 
   const handleVideoId = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setUrlVideo(e.target.value);
-    setNuevoVideoId(extraerIdYouTube(e.target.value));
-  };
+    setUrlVideo(e.target.value)
+    setNuevoVideoId(extraerIdYouTube(e.target.value))
+  }
 
   const editarClase = async (values: ClaseValues): Promise<void> => {
-    setLoadingComponents(true);
+    setLoadingComponents(true)
     const datos = {
       nombre: values.nombre,
       posicion: values.posicion,
       duracion: values.duracion,
-      url_video: nuevoVideoId != "" ? nuevoVideoId : videoId,
-      seccionId: values.seccionId,
-    };
+      url_video: nuevoVideoId != '' ? nuevoVideoId : videoId,
+      seccionId: values.seccionId
+    }
     /*
     const formData = new FormData()
     formData.append('nombre', values.nombre)
@@ -42,30 +43,30 @@ export default function EditarClase(): JSX.Element {
     */
     try {
       const { status, data } = await axios.post(
-        `${Global.url}/clases/${id ?? ""}`,
+        `${Global.url}/clases/${id ?? ''}`,
         datos,
         {
           headers: {
             Authorization: `Bearer ${
-              token !== null && token !== "" ? token : ""
-            }`,
-          },
+              token !== null && token !== '' ? token : ''
+            }`
+          }
         }
-      );
+      )
       if (status !== 200) {
-        toast.warning(data.message);
+        toast.warning(data.message)
       } else if (status === 200) {
-        toast.success("Creado correctamente");
-        navigate("/admin/clases");
+        toast.success('Creado correctamente')
+        navigate('/admin/clases')
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message);
+        toast.error(error.response?.data.message)
       }
     }
-    setLoadingComponents(false);
-  };
+    setLoadingComponents(false)
+  }
 
   const {
     handleSubmit,
@@ -74,47 +75,50 @@ export default function EditarClase(): JSX.Element {
     values,
     touched,
     handleBlur,
-    setValues,
+    setFieldValue,
+    setValues
   } = useFormik({
     initialValues: {
-      nombre: "",
-      duracion: "",
-      seccionId: "",
-      posicion: "",
+      nombre: '',
+      duracion: '',
+      seccionId: '',
+      posicion: ''
     },
     // validationSchema: SchemaCategorias,
-    onSubmit: editarClase,
-  });
+    onSubmit: editarClase
+  })
   const getCurso = async (): Promise<void> => {
     try {
-      const { data } = await axios.get(`${Global.url}/clases/${id ?? ""}`, {
+      const { data } = await axios.get(`${Global.url}/clases/${id ?? ''}`, {
         headers: {
           Authorization: `Bearer ${
-            token !== null && token !== "" ? token : ""
-          }`,
-        },
-      });
+            token !== null && token !== '' ? token : ''
+          }`
+        }
+      })
       setValues({
         duracion: data.clase.duracion,
         nombre: data.clase.nombre,
         posicion: data.clase.posicion,
-        seccionId: data.clase.seccionId,
-      });
-      setVideoId(data.clase.url_video);
-      setLoadingComponents(false);
+        seccionId: data.clase.seccionId
+      })
+      setVideoId(data.clase.url_video)
+      setLoadingComponents(false)
     } catch (error) {
-      toast.error("Error al traer los datos de las clase");
-      console.log(error);
+      toast.error('Error al traer los datos de las clase')
+      console.log(error)
     }
-  };
+  }
   useEffect(() => {
-    getCurso();
-  }, []);
+    getCurso()
+  }, [])
   return (
     <>
-      {loadingComponents ? (
+      {loadingComponents
+        ? (
         <Loading />
-      ) : (
+          )
+        : (
         <form
           className="p-8 mt-4 bg-secondary-100 rounded-xl"
           onSubmit={handleSubmit}
@@ -166,12 +170,12 @@ export default function EditarClase(): JSX.Element {
           </div>
           {nuevoVideoId == null && (
             <div className="w-full mb-5">
-              <lite-youtube videoid={videoId}></lite-youtube>
+              <ReproductorYoutube setFieldValue={setFieldValue} videoId={videoId}/>
             </div>
           )}
           {nuevoVideoId != null && (
             <div className="w-full mb-5">
-              <lite-youtube videoid={nuevoVideoId}></lite-youtube>
+              <ReproductorYoutube setFieldValue={setFieldValue} videoId={nuevoVideoId}/>
             </div>
           )}
 
@@ -190,7 +194,7 @@ export default function EditarClase(): JSX.Element {
             />
           </div>
         </form>
-      )}
+          )}
     </>
-  );
+  )
 }

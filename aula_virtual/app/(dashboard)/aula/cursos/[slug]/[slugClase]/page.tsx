@@ -25,8 +25,8 @@ export default async function page({
           </div>
           <div className="w-full lg:w-1/5">
             <CommentComponent
-              claseId={dataClase.clase.id}
-              comentarios={dataClase.clase.comentarios}
+              claseId={dataClase?.clase.id}
+              comentarios={dataClase?.clase.comentarios}
             />
           </div>
         </div>
