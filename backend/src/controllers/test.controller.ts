@@ -7,6 +7,27 @@ import fsPromise from "fs/promises";
 
 const prisma = new PrismaClient();
 
+const storageRes  = multer.diskStorage({
+  destination(req, file, callback) {
+    let folder = "private/"
+    if (file.fieldname === "respuesta") {
+      const user = (req as any).user;
+      folder = folder + "curso/respuesta/" + user.id;
+      if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder, { recursive: true });
+      }
+      callback(null, folder);
+    } else {
+      throw new Error("Error");
+    }
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const fileExtension = path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix + fileExtension);
+  },
+})
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let folder = "private/";
@@ -25,7 +46,7 @@ const storage = multer.diskStorage({
         cb(null, folder);
       } else {
         throw new Error("Error");
-      }
+      } 
     }
   },
   filename: function (req, file, cb) {
@@ -55,7 +76,30 @@ const uploadArchivo = multer({
   },
 });
 
+const uploadArchivoRespuesta = multer({
+  storage: storageRes,
+  limits: {
+    files: 1, // Límite de número de archivos subidos por campo (por ejemplo, máximo 2 imágenes 'imagen')
+  },
+  fileFilter: function (req, file, cb) {
+    // Filtro para aceptar solo ciertos tipos de archivos (imágenes en este ejemplo)
+    const filetypes = /doc|docx|pdf/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(null, false);
+  },
+});
+
 export const uploadArchivoTest = uploadArchivo.single("archivo");
+
+export const uploadArchivoRes = uploadArchivoRespuesta.single("respuesta");
+
 
 export async function showAllTests(req: Request, res: Response) {
   try {
@@ -411,3 +455,108 @@ export async function obtenerDocumentoTestPorId(req: Request, res: Response) {
     return;
   }
 }
+
+export async function obtenerExamenesPendientes(req: Request, res: Response) {
+  const user = (req as any).user;
+
+  try {
+    const examenes = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: user.id
+      },
+      include: {
+        curso: {
+          include: {
+            test: {
+              where: {
+                examenesResueltos: {
+                  every: {
+                    estado: "EnRevision"
+                  }
+                }
+              },
+              include: {
+                examenesResueltos: true
+              }
+            }
+          }
+        }
+      }
+    })
+    res.status(200).json({
+      examenes
+    })
+  }
+  catch (error) {
+    res.status(500).json({
+      message: 'Ocurrió un error en el servidor'
+    })
+  }
+}
+
+export async function obtenerExamenesAsignados(req: Request, res: Response) {
+  const user = (req as any).user;
+
+  try {
+    const examenes = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: user.id
+      },
+      include: {
+        curso: {
+          include: {
+            test: {
+              where: {
+                examenesResueltos: {
+                  none: {
+                    userId: user.id
+                  }
+                }
+              },
+              include: { curso: true }
+            }
+          }
+        }
+      }
+    })
+    res.status(200).json({
+      examenes
+    })
+  }
+  catch (error) {
+    res.status(500).json({
+      message: 'Ocurrió un error en el servidor'
+    })
+  }
+} 
+
+export async function enviarExamen(req: Request, res: Response) {
+  const user = (req as any).user;
+  const { examenId } = req.body 
+  try {
+    if (!req.file) {
+      res
+        .status(400)
+        .json({ message: "Falta el archivo para crear el ejercicio" });
+      return;
+    }
+    const rutaArchivo = "/" + req.file.path.replace(/\\/g, "/");
+    await prisma.testResuelto.create({
+      data: {
+        examenId: examenId,
+        userId: user.id,
+        puntaje_final: "0",
+        estado: 'EnRevision',
+        url_archivo_resultado: rutaArchivo ?? ""
+      }
+    })
+    res.status(201).json({
+      message: 'El examen ha sido enviado a revisión'
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Ocurrió un error en el servidor'
+    })
+    return
+  }
+} 
