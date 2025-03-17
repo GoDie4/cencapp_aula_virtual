@@ -266,9 +266,9 @@ model Test {
     mime_type         String
     fecha_inicio      DateTime
     fecha_fin         DateTime
-    estado            EstadoTest
+    estado            EstadoTest     @default(Pendiente)
     tiempo_limite     Int?
-    tipo_prueba       TipoPrueba
+    tipo_prueba       TipoPrueba    
     puntaje_maxima    Decimal
     activo            Boolean
     curso             Curso?         @relation(fields: [cursoId], references: [id], onDelete: Cascade)
@@ -282,18 +282,21 @@ model Test {
 
 enum EstadoTest {
   Pendiente
-  EnProceso
+  EnRevision
   Finalizado
 }
 
 model TestResuelto {
-    id                    String  @id @default(cuid())
+    id                    String            @id @default(cuid())
     examenId              String
     userId                String
     url_archivo_resultado String
-    puntuacion_total      String
-    examen                Test    @relation(fields: [examenId], references: [id], onDelete: Cascade)
-    usuario               Usuario @relation(fields: [userId], references: [id], onDelete: Cascade)
+    puntaje_final         String
+    estado                EstadoTest        @default(EnRevision)
+    examen                Test              @relation(fields: [examenId], references: [id], onDelete: Cascade)
+    usuario               Usuario           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt             DateTime          @default(now())
+    updatedAt             DateTime          @updatedAt
 
     @@map("examen_resueltos")
 }

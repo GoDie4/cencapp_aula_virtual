@@ -1,5 +1,6 @@
 import { type ClasesInterface } from './ClasesInterface'
 import { type Curso } from './CursoInterface'
+import { type Usuario } from './UserInterface'
 
 export interface TestInterface {
   id: string
@@ -14,6 +15,7 @@ export interface TestInterface {
   activo: boolean
   curso?: Curso
   clase?: ClasesInterface
+  examenesResueltos?: TestResuelto[]
   createdAt: Date
   updatedAt: Date
 }
@@ -31,4 +33,17 @@ export interface TestValues {
   tiempo_limite: string
   puntaje_maxima: string
   activo: boolean
+}
+
+export interface TestResuelto {
+  id: string
+  examenId: string
+  userId: string
+  url_archivo_resultado: string
+  puntaje_final: string
+  estado: string
+  examen: TestInterface
+  usuario: Usuario
+  createdAt: Date
+  updatedAt: Date
 }
