@@ -6,14 +6,20 @@ import Tabs, {
   TabTitle,
 } from "../../../../components/navigation/Tabs";
 import { ExamenesMetadata } from "@/seo/aula/ExamenesMetaData";
+import { getServerSideProps } from "@/server/getServerSideProps";
+import { CursosUsuario } from "../materiales/@interfaces/FetchMaterialInterface";
+import ExamenColumna from "./@components/ExamenColumna";
 
 export function generateMetadata() {
   const metadata = ExamenesMetadata();
   return metadata;
 }
+interface Root {
+  examenes: CursosUsuario[]
+}
 
-
-const Page: NextPage = () => {
+const Page: NextPage = async () => {
+  const data: Root = await getServerSideProps("obtenerExamenesAsignados");
   const examenesPendientes = [
     {
       id: "EX001",
@@ -88,34 +94,7 @@ const Page: NextPage = () => {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {examenesPendientes.map((examen) => (
-                        <tr key={examen.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                            {examen.id}
-                          </td>
-                          <td className="px-4 py-4 text-sm text-gray-900 whitespace-nowrap">
-                            {examen.nombre}
-                          </td>
-                          <td className="px-4 py-4 text-sm whitespace-nowrap text-black-700">
-                            {examen.curso}
-                          </td>
-                          <td className="px-4 py-4 text-sm whitespace-nowrap text-black-700">
-                            {examen.fechaLimite}
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap">
-                            <span className="inline-flex px-2 text-xs font-semibold leading-5 text-yellow-800 bg-yellow-100 rounded-full">
-                              Pendiente
-                            </span>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                            <button className="text-primary-main hover:text-primary-900">
-                              Dar examen
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
+                    <ExamenColumna data={data} />
                   </table>
                 </div>
 

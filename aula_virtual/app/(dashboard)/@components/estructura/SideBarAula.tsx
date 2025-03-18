@@ -7,6 +7,7 @@ import {
   FaTasks,
   FaFolderOpen,
   FaComments,
+  FaCertificate,
 } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
 import { IoChevronBackOutline } from "react-icons/io5";
@@ -17,6 +18,7 @@ const rutasHeaderAula = [
   { nombre: "Tareas", ruta: "tareas", icono: <FaTasks /> },
   { nombre: "Materiales", ruta: "materiales", icono: <FaFolderOpen /> },
   { nombre: "Comentarios", ruta: "comentarios", icono: <FaComments /> },
+  { nombre: "Certificados", ruta: "certificados", icono: <FaCertificate /> },
 ];
 
 export const SideBarAula = ({
@@ -33,8 +35,8 @@ export const SideBarAula = ({
   const [itemActive, setItemActive] = useState<string>(
     `${rutasHeaderAula[0].nombre.toLowerCase()}`
   );
-    const { cerrarSesion } = useAuth();
-  
+  const { cerrarSesion } = useAuth();
+
   return (
     <header
       className={`py-8 lg:py-12 fixed z-[1201] top-[79px] lg:top-0 ${
@@ -56,7 +58,7 @@ export const SideBarAula = ({
       </button>
       <div className="h-auto flex flex-col justify-between">
         <div className="w-full">
-          <Link href={'/'} className="w-full">
+          <Link href={"/"} className="w-full">
             <img
               src="/assets/images/logo/logo-white.png"
               alt=""

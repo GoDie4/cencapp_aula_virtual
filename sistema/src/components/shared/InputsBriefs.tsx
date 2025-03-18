@@ -11,9 +11,7 @@ export const InputsBriefs = (props: inputs): JSX.Element => {
   return (
     <input
       title={props.name}
-      className="border border-black  placeholder-gray-400 outline-none focus:outline-none
-                                                      focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-secondary-900
-                                                      rounded-md transition-all"
+      className="block w-full pt-4 pb-4 pl-4 pr-4 mt-2 mb-0 ml-0 mr-0 text-base placeholder-gray-400 transition-all border border-black rounded-md outline-none focus:outline-none focus:border-black bg-secondary-900"
       type={props.type}
       name={props.name}
       value={props.value}

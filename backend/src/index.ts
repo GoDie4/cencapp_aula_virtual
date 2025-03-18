@@ -8,6 +8,7 @@ import authRoutes from "../src/routes/auth.routes";
 import userRoutes from "../src/routes/user.routes";
 import comentariosRoutes from "../src/routes/comentarios.routes";
 import beneficiosRoutes from "../src/routes/beneficios.routes";
+import certificadosRoutes from "../src/routes/certificados.routes";
 
 /*
 import userRoutes from "../src/routes/user.routes";
@@ -34,6 +35,8 @@ app.use("/api", authRoutes);
 app.use("/api/comentarios", comentariosRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/beneficios", beneficiosRoutes);
+app.use("/api/certificados", certificadosRoutes);
+
 /*
 app.use("/api/usuarios", userRoutes);
 app.use("/api/categorias", categoryRoutes)

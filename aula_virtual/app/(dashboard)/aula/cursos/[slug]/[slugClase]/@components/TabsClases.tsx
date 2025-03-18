@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
 import Tabs, {
@@ -148,37 +149,41 @@ export const TabsClases = ({ dataClase }: { dataClase: Clase }) => {
         />
         <TabContent>
           <Accordion type="single" collapsible className="w-full">
-            {clases[0]?.Seccion.map((seccion: Seccion) => (
-              <AccordionItem key={seccion.id} value={seccion.id}>
-                <AccordionTrigger
-                  className={`bg-primary-900 justify-end mb-0.5 px-4 flex-row-reverse py-3 text-white-main rounded-t-main text-lg w-full ${
-                    seccion.id === dataClase.seccionId
-                      ? "opacity-100"
-                      : "opacity-80"
-                  }`}
-                >
-                  {seccion.nombre}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ul className="list-disc  space-y-2 py-3 px-5 pl-8  text-base">
-                    {seccion.clases.map((item: Clase, index) => (
-                      <li key={index} className="flex justify-between">
-                        <span
-                          className={`${
-                            item.id === dataClase.id ? "text-primary-main" : ""
-                          }`}
-                        >
-                          {item.nombre}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {item.duracion}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+            {clases[0]?.Seccion.sort((a: any, b: any) => a - b).map(
+              (seccion: Seccion) => (
+                <AccordionItem key={seccion.id} value={seccion.id}>
+                  <AccordionTrigger
+                    className={`bg-primary-900 justify-end mb-0.5 px-4 flex-row-reverse py-3 text-white-main rounded-t-main text-lg w-full ${
+                      seccion.id === dataClase.seccionId
+                        ? "opacity-100"
+                        : "opacity-80"
+                    }`}
+                  >
+                    {seccion.nombre}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="list-disc  space-y-2 py-3 px-5 pl-8  text-base">
+                      {seccion.clases.map((item: Clase, index) => (
+                        <li key={index} className="flex justify-between">
+                          <span
+                            className={`${
+                              item.id === dataClase.id
+                                ? "text-primary-main"
+                                : ""
+                            }`}
+                          >
+                            {item.nombre}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {item.duracion}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              )
+            )}
           </Accordion>
         </TabContent>
       </Tabs>
