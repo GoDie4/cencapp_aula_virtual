@@ -67,7 +67,8 @@ async function recibirVenta(req, res) {
         const parts = xSignature?.split(",");
         let ts;
         let hash;
-        if (action === "payment.created") {
+        /** Cuando el pago se ha realizado correctamente  */
+        if (action === 'payment.created') {
             // Parts
             parts.forEach((part) => {
                 // Split each part into key and value
@@ -103,23 +104,43 @@ async function recibirVenta(req, res) {
                         fecha_aprobada: datos.date_approved ?? "",
                     },
                 });
-                datos.additional_info?.items?.map(async (item) => {
-                    await prisma.cursoUsuario.create({
-                        data: {
-                            tipo: "MATRICULADO",
-                            cursoId: item.id,
-                            avance: "0",
+                if (!datos.additional_info) {
+                    res.status(404).json({
+                        message: 'Faltó información adicional'
+                    });
+                    return;
+                }
+                if (!datos.additional_info.items || datos.additional_info.items.length === 0) {
+                    res.status(404).json({
+                        message: 'Faltaron cursos para pedir'
+                    });
+                    return;
+                }
+                datos.additional_info.items.map(async (item) => {
+                    const matriculaEncontrada = await prisma.cursoUsuario.findFirst({
+                        where: {
                             userId: datos.metadata.user_id_con,
-                        },
+                            cursoId: item.id
+                        }
                     });
-                    await prisma.ventasDetalles.create({
-                        data: {
-                            ventaId: ventaAprovada.id,
-                            productoId: item.id,
-                            cantidad: Number(item.quantity),
-                            precio: item.unit_price,
-                        },
-                    });
+                    if (!matriculaEncontrada) {
+                        await prisma.cursoUsuario.create({
+                            data: {
+                                tipo: "MATRICULADO",
+                                cursoId: item.id,
+                                avance: "0",
+                                userId: datos.metadata.user_id_con,
+                            },
+                        });
+                        await prisma.ventasDetalles.create({
+                            data: {
+                                ventaId: ventaAprovada.id,
+                                productoId: item.id,
+                                cantidad: Number(item.quantity),
+                                precio: item.unit_price,
+                            },
+                        });
+                    }
                 });
             }
             else {
@@ -127,7 +148,12 @@ async function recibirVenta(req, res) {
                 console.log("HMAC verification failed");
                 throw new Error("error");
             }
+            res.status(200).json({
+                message: 'Orden Guardada'
+            });
+            return;
         }
+        /** Cuando no ha sido permitido el pago  */
         res.status(200).json({
             message: "Orden Guardada",
         });
