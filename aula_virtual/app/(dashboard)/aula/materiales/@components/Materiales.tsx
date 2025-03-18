@@ -8,7 +8,7 @@ import {
   Curso,
   ResponseFetchMaterial,
 } from "../@interfaces/FetchMaterialInterface";
-import { config } from "@/config/config";
+import { Global } from "@/helper/Global";
 
 const Materiales: React.FC = () => {
   const [cursosMaterial, setCursosMaterial] = useState<Curso[]>([]);
@@ -69,19 +69,17 @@ const Materiales: React.FC = () => {
   ];
   */
 
+  // const total = 0;
   const getMateriales = async () => {
-    const response = await axios.get<ResponseFetchMaterial>(
-      `${config.apiUrl}/obtenerCursoMaterialesPorAlumno`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      }
-    );
-    console.log(response.data);
-    setCursosMaterial(response.data.cursos);
-  };
+    const response = await axios.get<ResponseFetchMaterial>(`${Global.url}/obtenerCursoMateriales`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      withCredentials: true
+    })
+    console.log(response.data)
+    setCursosMaterial(response.data.cursos)
+  }
 
   useEffect(() => {
     getMateriales();

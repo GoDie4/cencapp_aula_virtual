@@ -46,7 +46,7 @@ import {
   verifyProfesor,
   verifyUser,
   verifyAlumnoNoCookie,
-  verifyAlumnoOrProfesor
+  // verifyAlumnoOrProfesor
 } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
 import {
