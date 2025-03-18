@@ -57,6 +57,9 @@ import { ListaBeneficios } from '../components/private/tables/beneficios/ListarB
 import { AgregarBeneficio } from '../components/private/tables/beneficios/AgregarBeneficio'
 import { EditarBeneficio } from '../components/private/tables/beneficios/EditarBeneficio'
 import ExamenesCargoRevisar from '../components/private/tables/examenes/ExamenesCargoRevisar'
+import ListaCertificados from '../components/private/tables/certificados/ListarCertificados'
+import CrearCertificado from '../components/private/tables/certificados/AgregarCertificado'
+import EditarCertificado from '../components/private/tables/certificados/EditarCertificado'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -67,33 +70,47 @@ export const Routing = (): JSX.Element => {
             <Route path="/" element={<Auth />} />
             <Route path="login" element={<Auth />} />
             <Route path="admin" element={<PrivateLayout />}>
-
               {/** Alumnos */}
               <Route path="alumnos/editar/:id" element={<EditarAlumno />} />
               <Route path="alumnos/agregar" element={<CrearAlumno />} />
               <Route path="alumnos" element={<ListaAlumnos />} />
 
               {/** Beneficios */}
-              <Route path="beneficios/editar/:id" element={<EditarBeneficio />} />
+              <Route
+                path="beneficios/editar/:id"
+                element={<EditarBeneficio />}
+              />
               <Route path="beneficios/agregar" element={<AgregarBeneficio />} />
               <Route path="beneficios" element={<ListaBeneficios />} />
 
               {/** Profesores */}
               <Route path="profesores" element={<ListaProfesor />} />
               <Route path="profesores/agregar" element={<CrearProfesor />} />
-              <Route path="profesores/editar/:id" element={<EditarProfesor />} />
+              <Route
+                path="profesores/editar/:id"
+                element={<EditarProfesor />}
+              />
               {/* Ccategorias */}
               <Route index element={<ListaCategorias />} />
               <Route path="categorias" element={<ListaCategorias />} />
               <Route path="categorias/agregar" element={<CrearCategoria />} />
-              <Route path="categorias/editar/:id" element={<EditarCategoria />} />
+              <Route
+                path="categorias/editar/:id"
+                element={<EditarCategoria />}
+              />
               {/* Cursos */}
               <Route path="cursos" element={<ListaProductos />} />
               <Route path="cursos/agregar" element={<CrearProducto />} />
               <Route path="cursos/editar/:id" element={<EditarProducto />} />
               <Route path="cursos/cargo/:id" element={<CargoCurso />} />
-              <Route path='cursos/cargos/alumnos/:id' element={<AlumnosMatriculados />} />
-              <Route path="cursos/matriculados/:id" element={<MatriculaCurso />} />
+              <Route
+                path="cursos/cargos/alumnos/:id"
+                element={<AlumnosMatriculados />}
+              />
+              <Route
+                path="cursos/matriculados/:id"
+                element={<MatriculaCurso />}
+              />
               {/** Secciones */}
               <Route path="secciones" element={<ListaSecciones />} />
               <Route path="secciones/agregar" element={<CrearSeccion />} />
@@ -108,28 +125,58 @@ export const Routing = (): JSX.Element => {
               <Route path="ventas" element={<ListaVentas />} />
 
               {/** Examenes */}
-              <Route path='examenes' element={<ListaExamen />} />
-              <Route path='examenes/agregar' element={<CrearExamen />} />
-              <Route path='examenes/editar/:id' element={<EditarExamen />} />
-              <Route path='examenes/cargo/:id' element={<ExamenesCargo />} />
-              <Route path='examenes/cargo/crear' element={<ExamenesCargoCrear />} />
-              <Route path='examenes/cargo/revisar' element={<ExamenesCargoRevisar />} />
+              <Route path="examenes" element={<ListaExamen />} />
+              <Route path="examenes/agregar" element={<CrearExamen />} />
+              <Route path="examenes/editar/:id" element={<EditarExamen />} />
+              <Route path="examenes/cargo/:id" element={<ExamenesCargo />} />
+              <Route
+                path="examenes/cargo/crear"
+                element={<ExamenesCargoCrear />}
+              />
+              <Route
+                path="examenes/cargo/revisar"
+                element={<ExamenesCargoRevisar />}
+              />
 
-              {/** Ejercicios */ }
-              <Route path='ejercicios' element={<ListaEjercicios />} />
-              <Route path='ejercicios/agregar' element={<CrearEjercicios />} />
-              <Route path='ejercicios/editar/:id' element={<EditarEjercicios />} />
-              <Route path='ejercicios/cargo/:id' element={<EjerciciosCargo />} />
-              <Route path='ejercicios/cargo/crear' element={<EjerciciosCargoCrear />} />
+              {/* CERTIFICADOS */}
+              <Route path="certificados" element={<ListaCertificados />} />
+              <Route path="certificados/agregar" element={<CrearCertificado />} />
+              <Route path="certificados/editar/:id" element={<EditarCertificado />} />
+              <Route path="certificados/cargo/:id" element={<ExamenesCargo />} />
+
+              {/** Ejercicios */}
+              <Route path="ejercicios" element={<ListaEjercicios />} />
+              <Route path="ejercicios/agregar" element={<CrearEjercicios />} />
+              <Route
+                path="ejercicios/editar/:id"
+                element={<EditarEjercicios />}
+              />
+              <Route
+                path="ejercicios/cargo/:id"
+                element={<EjerciciosCargo />}
+              />
+              <Route
+                path="ejercicios/cargo/crear"
+                element={<EjerciciosCargoCrear />}
+              />
 
               {/** Materiales */}
-              <Route path='materiales' element={<ListaMateriales />} />
-              <Route path='materiales/agregar' element={<CrearMateriales />} />
-              <Route path='materiales/editar/:id' element={<EditarMateriales />} />
-              <Route path='materiales/cargo/:id' element={<MaterialesCargo />} />
-              <Route path='materiales/cargo/crear' element={<MaterialesCargoCrear />} />
+              <Route path="materiales" element={<ListaMateriales />} />
+              <Route path="materiales/agregar" element={<CrearMateriales />} />
+              <Route
+                path="materiales/editar/:id"
+                element={<EditarMateriales />}
+              />
+              <Route
+                path="materiales/cargo/:id"
+                element={<MaterialesCargo />}
+              />
+              <Route
+                path="materiales/cargo/crear"
+                element={<MaterialesCargoCrear />}
+              />
 
-              <Route path='cargos/:id' element={<VerCursosCargo />} />
+              <Route path="cargos/:id" element={<VerCursosCargo />} />
 
               <Route path="cupones" element={<ListaCupones />} />
               <Route path="cupones/agregar" element={<AgregarCupon />} />
