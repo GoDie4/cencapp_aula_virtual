@@ -6,7 +6,6 @@ import fs from "fs/promises";
 import multer from "multer";
 import path from "node:path";
 
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let folder = "public/";
@@ -114,17 +113,14 @@ export const actualizarCategoria = async (
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     res.status(400).send({ error: "ID de categoría inválido." });
-    return
+    return;
   }
 
   if (!req.body.nombre) {
-    res
-      .status(400)
-      .send({
-        error:
-          "El nombre de la categoría es obligatorio para la actualización.",
-      });
-    return
+    res.status(400).send({
+      error: "El nombre de la categoría es obligatorio para la actualización.",
+    });
+    return;
   }
 
   const files = req.files as
@@ -138,12 +134,11 @@ export const actualizarCategoria = async (
     const categoriaExistente = await prisma.categorias.findUnique({
       where: { id: id },
     });
-    console.log(categoriaExistente)
     if (!categoriaExistente) {
       res
         .status(404)
         .send({ error: "Categoría no encontrada para actualizar." });
-      return
+      return;
     }
 
     if (files && files["url_imagen"] && files["url_imagen"][0]) {
@@ -152,17 +147,18 @@ export const actualizarCategoria = async (
     if (files && files["url_icono"] && files["url_icono"][0]) {
       urlIconoPath = "/" + files["url_icono"][0].path.replace(/\\/g, "/");
     }
-    console.log(urlIconoPath)
-    console.log(urlImagenPath)
     const categoriaActualizada = await prisma.categorias.update({
       where: { id: id },
       data: {
         nombre: req.body.nombre,
-        url_imagen: urlImagenPath !== null ? urlImagenPath : categoriaExistente.url_imagen,
-        url_icono: urlIconoPath !== null ? urlIconoPath : categoriaExistente.url_icono,
+        url_imagen:
+          urlImagenPath !== null
+            ? urlImagenPath
+            : categoriaExistente.url_imagen,
+        url_icono:
+          urlIconoPath !== null ? urlIconoPath : categoriaExistente.url_icono,
       },
     });
-    console.log(categoriaActualizada)
     // Borrar archivos viejos DESPUÉS de actualizar la base de datos y SÓLO si se subieron nuevos archivos
     if (
       files &&
@@ -185,7 +181,7 @@ export const actualizarCategoria = async (
             unlinkError
           );
         }
-        return
+        return;
       }
     }
     if (
@@ -198,7 +194,9 @@ export const actualizarCategoria = async (
         process.cwd(),
         categoriaExistente?.url_icono
       );
-      console.log(`[ACTUALIZAR CATEGORIA] Intentando borrar imagen vieja: ${filePathToDelete}`);
+      console.log(
+        `[ACTUALIZAR CATEGORIA] Intentando borrar imagen vieja: ${filePathToDelete}`
+      );
       try {
         await fs.unlink(filePathToDelete);
         console.log(`Archivo viejo de icono borrado: ${filePathToDelete}`);
@@ -211,11 +209,11 @@ export const actualizarCategoria = async (
     }
 
     res.json(categoriaActualizada);
-    return
+    return;
   } catch (error) {
     console.error("Error al actualizar categoría:", error);
     res.status(500).send({ error: "Error al actualizar la categoría." });
-    return
+    return;
   } finally {
     await prisma.$disconnect();
   }
@@ -236,7 +234,7 @@ export const obtenerCategoriaPorId = async (
     // Buscar una categoría por ID en la base de datos
     const categoria = await prisma.categorias.findUnique({
       where: { id: categoriaId },
-      include: { cursos: true }
+      include: { cursos: true },
     });
 
     if (categoria) {
@@ -256,30 +254,33 @@ export const obtenerCategoriaPorId = async (
   }
 };
 
-export const obtenerCategoriaPorNombre = async (req: Request, res: Response) => {
-  const { nombre } = req.params
+export const obtenerCategoriaPorSlug = async (req: Request, res: Response) => {
+  const { slug } = req.params;
   try {
-    
     const categoria = await prisma.categorias.findFirst({
       where: {
-        nombre: {
-          contains: nombre,
-        }
+        slug: {
+          contains: slug,
+        },
       },
-      include: {
-        cursos: true
-      }
-    })
+      select: {
+        id: true,
+        cursos: true,
+        nombre: true,
+        slug: true,
+        url_icono: true,
+        url_imagen: true,
+      },
+    });
 
     res.status(200).json({
-      categoria: categoria
-    })
+      categoria: categoria,
+    });
+  } catch (e) {
+    console.error(e);
+    return;
   }
-  catch (e) {
-    console.error(e)
-    return
-  }
-}
+};
 
 export const deleteCategoria = async (
   req: Request,
@@ -320,10 +321,7 @@ export const deleteCategoria = async (
       }
     }
     if (categoriaExistente.url_icono) {
-      const rutaIcono = path.join(
-        process.cwd(),
-        categoriaExistente.url_icono
-      );
+      const rutaIcono = path.join(process.cwd(), categoriaExistente.url_icono);
       try {
         await fs.unlink(rutaIcono);
         console.log(`Icono eliminada: ${rutaIcono}`);

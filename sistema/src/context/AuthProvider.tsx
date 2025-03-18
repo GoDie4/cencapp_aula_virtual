@@ -10,6 +10,7 @@ import {
 import { Global } from '../helper/Global'
 import axios from 'axios'
 import { type UserSchema } from './UserSchema'
+import { toast } from 'sonner'
 /*
 import io from 'socket.io-client'
 import { toast } from 'sonner'
@@ -94,8 +95,15 @@ export const AuthProvider = ({
           Authorization: `Bearer ${token ?? ''}`
         }
       })
-      setAuth(data)
-      setLoading(false)
+      if (data.rolId === 1 || data.rolId === 3) {
+        setAuth(data)
+        setLoading(false)
+        toast.success('Validado Correctamente. Bienvenido!')
+      } else {
+        setLoading(false)
+        window.location.href = '/login'
+        localStorage.removeItem('token')
+      }
     } catch (error) {
       //   console.log(error)
       setLoading(false)
@@ -152,7 +160,7 @@ export const AuthProvider = ({
     }
   }, [])
   */
-  const getNotificaciones = (): void => {}
+  const getNotificaciones = (): void => { }
   return (
     <AuthContext.Provider
       value={{

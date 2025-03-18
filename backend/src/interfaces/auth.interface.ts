@@ -9,4 +9,5 @@ export interface RegisterRequest {
 export interface LoginRequest {
   email: string;
   password: string;
+  mantenerConexion?: boolean;
 }

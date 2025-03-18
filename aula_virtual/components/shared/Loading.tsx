@@ -1,14 +1,7 @@
-import { logo } from "./images"
+import React from 'react'
 
-
-const Loading = (): JSX.Element => {
+export const Loading = () => {
   return (
-    <div className="loading-success">
-        <div className='loading-success-content'>
-            <img src={logo} alt="" />
-        </div>
-    </div>
+    <div>Loading</div>
   )
 }
-
-export default Loading

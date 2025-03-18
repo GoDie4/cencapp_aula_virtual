@@ -8,7 +8,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:3000",
+      "http://localhost:4000",
+      "https://aula.cencapperu.com",
+      "https://administrador.cencapperu.com/",
+    ],
     credentials: true,
   })
 );
@@ -24,7 +31,6 @@ morgan.format(
   ':date[iso] [ERROR] :method :url | Status: :status | Time: :response-time ms | IP: :remote-addr | User-Agent: ":user-agent"'
 );
 
-
 // Usar Morgan para registrar solo errores (4xx y 5xx)
 app.use(
   morgan("custom", {
@@ -34,7 +40,7 @@ app.use(
 );
 
 // Configurar el servidor para usar el directorio 'public' como directorio de archivos estáticos
-app.use('/public', express.static(path.resolve('public')))
+app.use("/public", express.static(path.resolve("public")));
 
 app.use(express.json());
 

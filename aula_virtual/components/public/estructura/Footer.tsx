@@ -7,7 +7,7 @@ import {
   BsPhoneFill,
   BsYoutube,
 } from "react-icons/bs";
-import { logo_white, lp } from "../../shared/images";
+import { logo_white } from "../../shared/images";
 import { BiSolidMapPin } from "react-icons/bi";
 import { JSX } from "react";
 import Link from "next/link";
@@ -146,12 +146,12 @@ export const Footer = (): JSX.Element => {
           <div className="py-6 border-t border-gray-600">
             <div className="flex flex-col items-center justify-between md:flex-row">
               <div className="mb-2 text-sm md:mb-0">
-                © 2024 <span>CENCAPP.</span> Todos los derechos reservados
+                © 2025 <span>CENCAPP.</span> Todos los derechos reservados
               </div>
               <div className="flex items-center text-sm">
                 Design by:{" "}
                 <a href="https://logosperu.com.pe/" className="ml-2">
-                  <img src={lp} alt="Logos Perú" width={20} />
+                  <img src={'/assets/images/logo/lp.png'} alt="Logos Perú" width={20} />
                 </a>
               </div>
             </div>

@@ -2,12 +2,17 @@ import { PrismaClient } from "@prisma/client";
 import { LoginRequest, RegisterRequest } from "../interfaces/auth.interface";
 import { Response, Request } from "express";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import createAccessToken from "../utils/jwt";
+import { sendEmail } from "./mail.controller";
 const prisma = new PrismaClient();
 
-export const crearAdmin = async (req: Request, res: Response): Promise<void> => {
+export const crearAdmin = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { nombres, apellidos, celular, email, password } = req.body;
-  
+
   try {
     const usuarioExiste = await prisma.usuario.findUnique({
       where: { email },
@@ -25,7 +30,7 @@ export const crearAdmin = async (req: Request, res: Response): Promise<void> => 
       res
         .status(500)
         .json({ message: "El rol por defecto no está configurado" });
-      return
+      return;
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -59,17 +64,17 @@ export const crearAdmin = async (req: Request, res: Response): Promise<void> => 
         email: nuevoUsuario.email,
         celular: nuevoUsuario.celular,
       },
-      token: token
+      token: token,
     });
-    return
+    return;
   } catch (error) {
     console.error("Error al registrar usuario", error);
     res.status(500).json({ message: "Error interno del servidor" });
-    return
+    return;
   } finally {
-    prisma.$disconnect
+    prisma.$disconnect;
   }
-}
+};
 
 export const register = async (
   req: Request<{}, {}, RegisterRequest>,
@@ -116,6 +121,8 @@ export const register = async (
       sameSite: "none",
       secure: true,
       httpOnly: true,
+      domain: ".cencapperu.com",
+      maxAge: 2 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
@@ -127,7 +134,7 @@ export const register = async (
         email: nuevoUsuario.email,
         celular: nuevoUsuario.celular,
       },
-      token: token
+      token: token,
     });
   } catch (error) {
     console.error("Error al registrar usuario", error);
@@ -139,7 +146,7 @@ export const login = async (
   req: Request<{}, {}, LoginRequest>,
   res: Response
 ): Promise<any | undefined> => {
-  const { email, password } = req.body;
+  const { email, password, mantenerConexion } = req.body;
 
   try {
     const usuarioExiste = await prisma.usuario.findFirst({
@@ -157,9 +164,11 @@ export const login = async (
     const token = await createAccessToken({ id: usuarioExiste.id });
 
     res.cookie("token", token, {
-      sameSite: "none",
-      secure: true,
+      sameSite: "lax",
+      secure: false,
       httpOnly: true,
+      //domain: ".cencapperu.com",
+      maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 
     const primerNombre = usuarioExiste.nombres.split(" ");
@@ -172,6 +181,7 @@ export const login = async (
         apellidos: usuarioExiste.apellidos,
         celular: usuarioExiste.celular,
         email: usuarioExiste.email,
+        rolId: usuarioExiste.rolId,
       },
       status: 200,
       token: token,
@@ -182,10 +192,64 @@ export const login = async (
   }
 };
 
+export const recuperarContrasena = async (req: any, res: any) => {
+  const { email } = req.body;
+
+  const user = await prisma.usuario.findUnique({ where: { email } });
+  if (!user) return res.status(404).json({ message: "Correo no registrado" });
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + 1000 * 60 * 30);
+
+  await prisma.passwordResetToken.create({
+    data: {
+      token,
+      expiresAt: expires,
+      userId: user.id,
+    },
+  });
+
+  const resetLink = `http://localhost:3000/restablecer?token=${token}`;
+
+  await sendEmail(email, "Recuperar contraseña", `RecuperarContrasena.html`, {
+    enlace: resetLink,
+    nombre: user.nombres.split(" ")[0],
+  });
+
+  res.json({
+    message: "Te hemos enviado un enlace para restablecer tu contraseña.",
+  });
+};
+
+export const cambiarContrasena = async (req: any, res: any) => {
+  const { token, newPassword } = req.body;
+
+  const registro = await prisma.passwordResetToken.findUnique({
+    where: { token },
+  });
+
+  if (!registro || registro.expiresAt < new Date()) {
+    return res.status(400).json({ message: "Token inválido o expirado" });
+  }
+
+  const hashed = await bcrypt.hash(newPassword, 10);
+
+  await prisma.usuario.update({
+    where: { id: registro.userId },
+    data: { password: hashed },
+  });
+
+  await prisma.passwordResetToken.delete({ where: { token } });
+
+  res.json({ message: "Contraseña actualizada con éxito" });
+};
+
 export const logout = (req: any, res: any) => {
   res.cookie("token", "", {
     expires: new Date(0),
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
   });
-
   return res.sendStatus(200);
 };

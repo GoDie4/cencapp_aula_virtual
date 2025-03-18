@@ -41,3 +41,18 @@ export const loginSchema = z.object({
     required_error: "La contraseña es requerida",
   }),
 });
+
+export const recuperarSchema = z.object({
+  email: z.string({
+    required_error: "El correo es requreido",
+  }),
+});
+
+export const cambiarContrasenaSchema = z.object({
+  token: z.string({
+    required_error: "Token requerido",
+  }),
+  newPassword: z.string({
+    required_error: "La contraseña es requerida",
+  }),
+});

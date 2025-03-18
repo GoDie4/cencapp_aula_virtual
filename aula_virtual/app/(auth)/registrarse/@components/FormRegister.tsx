@@ -173,7 +173,7 @@ const FormRegister = () => {
             type="password"
             value={values.password}
             className={`${
-              errors.email && touched.email
+              errors.password && touched.password
                 ? "border-red-500 focus:border-red-500"
                 : " focus:border-secondary-main"
             }`}

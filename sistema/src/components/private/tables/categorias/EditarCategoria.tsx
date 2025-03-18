@@ -129,11 +129,11 @@ export const EditarCategoria = (): JSX.Element => {
         ? (<Loading />)
         : (
         <form
-          className="bg-secondary-100 p-8 rounded-xl mt-4"
+          className="p-8 mt-4 bg-secondary-100 rounded-xl"
           onSubmit={handleSubmit}
         >
-          <div className="w-full flex flex-col gap-5 lg:flex-row">
-            <div className="w-full lg:1/3 lg:relative mb-5">
+          <div className="flex flex-col w-full gap-5 lg:flex-row">
+            <div className="w-full mb-5 lg:1/3 lg:relative">
               <TitleBriefs titulo=" Nombre de la categoria" />
               <InputsBriefs
                 name="nombre"
@@ -146,14 +146,14 @@ export const EditarCategoria = (): JSX.Element => {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center gap-2 mb-8">
+          <div className="flex flex-col gap-2 mb-8 md:flex-row md:items-center">
             <div className="w-full lg:w-1/2">
               <div className="w-full">
                 <p>
-                  Icono<span className="text-red-500">*</span>
+                  Fondo<span className="text-red-500">*</span>
                 </p>
               </div>
-              <div className="flex-1 flex  items-center gap-4">
+              <div className="flex items-center flex-1 gap-4">
                 <ImageUpdate
                   globalUrl="categorias/uploads"
                   url={url1}
@@ -169,10 +169,10 @@ export const EditarCategoria = (): JSX.Element => {
             <div className="w-full lg:w-1/2">
               <div className="w-full">
                 <p>
-                  Fondo<span className="text-red-500">*</span>
+                  Icono<span className="text-red-500">*</span>
                 </p>
               </div>
-              <div className="flex-1 flex  items-center gap-4">
+              <div className="flex items-center flex-1 gap-4">
                 <ImageUpdate
                   globalUrl="categorias/uploads"
                   url={url2}
@@ -187,17 +187,17 @@ export const EditarCategoria = (): JSX.Element => {
             </div>
           </div>
 
-          <div className="flex gap-2 w-full justify-end">
+          <div className="flex justify-end w-full gap-2">
             <input type="hidden" name="oculto" value="1" />
             <Link
               to="/admin/categorias"
-              className="bg-red-500 px-4 py-2 rounded-md text-white"
+              className="px-4 py-2 text-white bg-red-500 rounded-md"
             >
               Cancelar
             </Link>
             <input
               type="submit"
-              className="bg-green-500 text-black hover:bg-green-600 flex items-center gap-2 py-2 px-4 rounded-lg transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 text-black transition-colors bg-green-500 rounded-lg cursor-pointer hover:bg-green-600"
               value="Editar"
             />
           </div>

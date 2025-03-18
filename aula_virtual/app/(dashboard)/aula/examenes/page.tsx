@@ -1,7 +1,17 @@
 import { NextPage } from "next";
 
 import { TitleAula } from "../../@components/estructura/TitleAula";
-import Tabs, { TabContent, TabTitle } from "../../../../components/navigation/Tabs";
+import Tabs, {
+  TabContent,
+  TabTitle,
+} from "../../../../components/navigation/Tabs";
+import { ExamenesMetadata } from "@/seo/aula/ExamenesMetaData";
+
+export function generateMetadata() {
+  const metadata = ExamenesMetadata();
+  return metadata;
+}
+
 
 const Page: NextPage = () => {
   const examenesPendientes = [
