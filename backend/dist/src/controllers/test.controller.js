@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadArchivoTest = void 0;
+exports.uploadArchivoRes = exports.uploadArchivoTest = void 0;
 exports.showAllTests = showAllTests;
 exports.showAllEjercicios = showAllEjercicios;
 exports.createTest = createTest;
@@ -12,12 +12,36 @@ exports.actualizarTest = actualizarTest;
 exports.deleteTest = deleteTest;
 exports.obtenerTestPorId = obtenerTestPorId;
 exports.obtenerDocumentoTestPorId = obtenerDocumentoTestPorId;
+exports.obtenerExamenesPendientes = obtenerExamenesPendientes;
+exports.obtenerExamenesAsignados = obtenerExamenesAsignados;
+exports.enviarExamen = enviarExamen;
 const client_1 = require("@prisma/client");
 const multer_1 = __importDefault(require("multer"));
 const node_path_1 = __importDefault(require("node:path"));
 const fs_1 = __importDefault(require("fs"));
 const promises_1 = __importDefault(require("fs/promises"));
 const prisma = new client_1.PrismaClient();
+const storageRes = multer_1.default.diskStorage({
+    destination(req, file, callback) {
+        let folder = "private/";
+        if (file.fieldname === "respuesta") {
+            const user = req.user;
+            folder = folder + "curso/respuesta/" + user.id;
+            if (!fs_1.default.existsSync(folder)) {
+                fs_1.default.mkdirSync(folder, { recursive: true });
+            }
+            callback(null, folder);
+        }
+        else {
+            throw new Error("Error");
+        }
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const fileExtension = node_path_1.default.extname(file.originalname);
+        cb(null, file.fieldname + "-" + uniqueSuffix + fileExtension);
+    },
+});
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
         let folder = "private/";
@@ -63,7 +87,24 @@ const uploadArchivo = (0, multer_1.default)({
         cb(null, false);
     },
 });
+const uploadArchivoRespuesta = (0, multer_1.default)({
+    storage: storageRes,
+    limits: {
+        files: 1, // Límite de número de archivos subidos por campo (por ejemplo, máximo 2 imágenes 'imagen')
+    },
+    fileFilter: function (req, file, cb) {
+        // Filtro para aceptar solo ciertos tipos de archivos (imágenes en este ejemplo)
+        const filetypes = /doc|docx|pdf/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(node_path_1.default.extname(file.originalname).toLowerCase());
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb(null, false);
+    },
+});
 exports.uploadArchivoTest = uploadArchivo.single("archivo");
+exports.uploadArchivoRes = uploadArchivoRespuesta.single("respuesta");
 async function showAllTests(req, res) {
     try {
         const tests = await prisma.test.findMany({
@@ -371,6 +412,107 @@ async function obtenerDocumentoTestPorId(req, res) {
     catch (e) {
         console.error(e);
         res.status(500).json({ message: "Error interno al obtener el documento" });
+        return;
+    }
+}
+async function obtenerExamenesPendientes(req, res) {
+    const user = req.user;
+    try {
+        const examenes = await prisma.cursoUsuario.findMany({
+            where: {
+                userId: user.id
+            },
+            include: {
+                curso: {
+                    include: {
+                        test: {
+                            where: {
+                                examenesResueltos: {
+                                    every: {
+                                        estado: "EnRevision"
+                                    }
+                                }
+                            },
+                            include: {
+                                examenesResueltos: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        res.status(200).json({
+            examenes
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Ocurrió un error en el servidor'
+        });
+    }
+}
+async function obtenerExamenesAsignados(req, res) {
+    const user = req.user;
+    try {
+        const examenes = await prisma.cursoUsuario.findMany({
+            where: {
+                userId: user.id
+            },
+            include: {
+                curso: {
+                    include: {
+                        test: {
+                            where: {
+                                examenesResueltos: {
+                                    none: {
+                                        userId: user.id
+                                    }
+                                }
+                            },
+                            include: { curso: true }
+                        }
+                    }
+                }
+            }
+        });
+        res.status(200).json({
+            examenes
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Ocurrió un error en el servidor'
+        });
+    }
+}
+async function enviarExamen(req, res) {
+    const user = req.user;
+    const { examenId } = req.body;
+    try {
+        if (!req.file) {
+            res
+                .status(400)
+                .json({ message: "Falta el archivo para crear el ejercicio" });
+            return;
+        }
+        const rutaArchivo = "/" + req.file.path.replace(/\\/g, "/");
+        await prisma.testResuelto.create({
+            data: {
+                examenId: examenId,
+                userId: user.id,
+                puntaje_final: "0",
+                estado: 'EnRevision',
+                url_archivo_resultado: rutaArchivo ?? ""
+            }
+        });
+        res.status(201).json({
+            message: 'El examen ha sido enviado a revisión'
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Ocurrió un error en el servidor'
+        });
         return;
     }
 }

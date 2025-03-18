@@ -628,12 +628,12 @@ export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
 };
 
 export const obtenerCursoMateriales = async (req: any, res: Response) => {
-  const userId = req.user?.id;
+  const user = (req as any).user;
 
   try {
     const cursos = await prisma.cursoUsuario.findMany({
       where: {
-        userId: userId,
+        userId: user.id,
         tipo: "MATRICULADO",
       },
       include: {
@@ -780,6 +780,44 @@ export const obtenerCursosPorMatriculado = async (req: Request, res: Response) =
       alumnos: alumnos
     })
     return
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Ocurrió un error en el servidor" });
+    return;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function getAlumnoMatriculado(req: Request, res: Response) {
+  const user = (req as any).user;
+  const { id } = req.params;
+  try {
+    const alumnos = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: user.id,
+        cursoId: id,
+      },
+      include: {
+        curso: {
+          include: {
+            cursosUsuarios: {
+              where: {
+                tipo: "MATRICULADO"
+              },
+              include: {
+                curso: true,
+                usuario: true
+              }
+            }
+          }
+        },
+      },
+    });
+    res.status(200).json({
+      alumnos: alumnos,
+    });
+    return;
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Ocurrió un error en el servidor" });

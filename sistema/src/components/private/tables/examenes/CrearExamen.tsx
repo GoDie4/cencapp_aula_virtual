@@ -11,7 +11,6 @@ import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Loading } from '../../../shared/Loading'
 import { type Curso } from '../../../../interfaces/CursoInterface'
 import Editor from '../../../shared/Editar'
-import { formatearFechaParaInputDate } from '../../../../logic/parseDate'
 
 export default function CrearExamen (): JSX.Element {
   const token = localStorage.getItem('token')

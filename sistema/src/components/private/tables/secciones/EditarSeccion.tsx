@@ -9,7 +9,7 @@ import axios, { AxiosError } from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
-import { SeccionValues, type ClaseValuesModificate } from '../../../shared/Interfaces'
+import { type SeccionValues } from '../../../shared/Interfaces'
 import { type Curso } from '../../../../interfaces/CursoInterface'
 
 export default function EditarSeccion (): JSX.Element {

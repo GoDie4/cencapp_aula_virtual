@@ -9,7 +9,7 @@ import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
 import { Loading } from '../../../shared/Loading'
 import { extraerIdYouTube } from '../../../../logic/extraerID'
-import { type ClaseValues } from '../../../shared/Interfaces'
+import { type ClaseValuesModificate, type ClaseValues } from '../../../shared/Interfaces'
 import ReproductorYoutube from './componets/ReproductorYoutube'
 
 export default function EditarClase (): JSX.Element {
@@ -28,11 +28,11 @@ export default function EditarClase (): JSX.Element {
 
   const editarClase = async (values: ClaseValues): Promise<void> => {
     setLoadingComponents(true)
-    const datos = {
+    const datos: ClaseValuesModificate = {
       nombre: values.nombre,
       posicion: values.posicion,
       duracion: values.duracion,
-      url_video: nuevoVideoId != '' ? nuevoVideoId : videoId,
+      url_video: nuevoVideoId != undefined ? nuevoVideoId : videoId,
       seccionId: values.seccionId
     }
     /*
