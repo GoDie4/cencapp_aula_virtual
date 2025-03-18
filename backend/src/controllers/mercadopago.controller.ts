@@ -70,7 +70,8 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
     const parts = xSignature?.split(",");
     let ts;
     let hash;
-    if (action === "payment.created") {
+    /** Cuando el pago se ha realizado correctamente  */
+    if (action === 'payment.created') {
       // Parts
       parts.forEach((part) => {
         // Split each part into key and value
@@ -109,7 +110,19 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
           },
         });
 
-        datos.additional_info?.items?.map(async (item) => {
+        if (!datos.additional_info) {
+          res.status(404).json({
+            message: 'Faltó información adicional'
+          })
+          return
+        }
+        if (!datos.additional_info.items || datos.additional_info.items.length === 0) {
+          res.status(404).json({
+            message: 'Faltaron cursos para pedir'
+          })
+          return
+        }
+        datos.additional_info.items.map(async (item) => {
           await prisma.cursoUsuario.create({
             data: {
               tipo: "MATRICULADO",
@@ -133,7 +146,12 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
         console.log("HMAC verification failed");
         throw new Error("error");
       }
+      res.status(200).json({
+        message: 'Orden Guardada'
+      })
+      return
     }
+    /** Cuando no ha sido permitido el pago  */
     res.status(200).json({
       message: "Orden Guardada",
     });

@@ -6,10 +6,17 @@ import { IoMdSettings } from 'react-icons/io'
 import VerVenta from './VerVenta'
 import VerDetalle from './VerDetalle'
 
-export default function VentaColumnas({ venta, token, getVentas, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { venta: Ventas, token: string, getVentas: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
+export default function VentaColumnas ({ venta, token, getVentas, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { venta: Ventas, token: string, getVentas: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
   const { setModalContent } = useContext(ModalContext)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  console.log(venta)
+  console.log(token)
+  console.log(getVentas)
+  console.log(totalPosts)
+  console.log(cantidadRegistros)
+  console.log(paginaActual)
+  console.log(setpaginaActual)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget)
   }

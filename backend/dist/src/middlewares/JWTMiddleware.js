@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verificarCompraCurso = exports.verifyAdminOrProfesor = exports.verifyAlumnoOrProfesor = exports.verifyProfesor = exports.verifyAlumno = exports.verifyAdmin = void 0;
+exports.verifyAlumnoNoCookie = exports.verificarCompraCurso = exports.verifyUser = exports.verifyAdminOrProfesor = exports.verifyAlumnoOrProfesor = exports.verifyProfesor = exports.verifyAlumno = exports.verifyAdmin = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const client_1 = require("@prisma/client");
@@ -175,6 +175,36 @@ const verifyAdminOrProfesor = async (req, res, next) => {
     }
 };
 exports.verifyAdminOrProfesor = verifyAdminOrProfesor;
+const verifyUser = async (req, res, next) => {
+    if (!req.headers.authorization) {
+        res.status(401).json({ message: "Token no proporcionado." });
+        return;
+    }
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+        res.status(401).json({ message: "Token no proporcionado." });
+        return;
+    }
+    try {
+        const decoded = jsonwebtoken_1.default.verify(token ?? "", config_1.ENV.TOKEN_SECRET);
+        const user = await prisma.usuario.findUnique({
+            where: { id: decoded.id },
+            select: { id: true, email: true, rol: true },
+        });
+        if (!user) {
+            res.status(404).json({ message: "Usuario no encontrado" });
+            return;
+        }
+        req.user = user; // Agrega el usuario decodificado a la solicitud
+        next();
+    }
+    catch (error) {
+        console.error("Error al verificar el rol de usuario:", error);
+        res.status(500).json({ message: "Error al verificar el rol de usuario" });
+        return;
+    }
+};
+exports.verifyUser = verifyUser;
 const verificarCompraCurso = async (req, res, next) => {
     console.log("params: ", req.params);
     console.log("first:: ", req.body.claseId || req.params.claseId);
@@ -252,4 +282,37 @@ const verificarCompraCurso = async (req, res, next) => {
     }
 };
 exports.verificarCompraCurso = verificarCompraCurso;
+const verifyAlumnoNoCookie = async (req, res, next) => {
+    if (!req.headers.authorization) {
+        res.status(401).json({ message: "Token no proporcionado." });
+        return;
+    }
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+        res.status(401).json({ message: "Token no proporcionado." });
+    }
+    try {
+        const decoded = jsonwebtoken_1.default.verify(token ?? "", config_1.ENV.TOKEN_SECRET);
+        const user = await prisma.usuario.findUnique({
+            where: { id: decoded.id },
+            include: { rol: true },
+        });
+        if (!user) {
+            res.status(404).json({ message: "Usuario no encontrado" });
+            return;
+        }
+        if (user?.rolId !== 2) {
+            res.status(403).json({ message: "No tienes permiso de alumno" });
+            return;
+        }
+        req.user = user; // Agrega el usuario decodificado a la solicitud
+        next();
+    }
+    catch (error) {
+        console.error("Error al verificar el rol de usuario:", error);
+        res.status(500).json({ message: "Error al verificar el rol de usuario" });
+        return;
+    }
+};
+exports.verifyAlumnoNoCookie = verifyAlumnoNoCookie;
 //# sourceMappingURL=JWTMiddleware.js.map

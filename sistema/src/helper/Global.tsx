@@ -5,6 +5,7 @@
 //   urlImages: 'http://localhost:4000'
 // }
 
+
 /*
 export const Global = {
   url: 'https://cencapp.agritecbol.com/api',

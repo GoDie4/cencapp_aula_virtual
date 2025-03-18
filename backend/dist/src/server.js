@@ -10,7 +10,14 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000",
+        "http://localhost:4000",
+        "https://aula.cencapperu.com",
+        "https://administrador.cencapperu.com",
+    ],
     credentials: true,
 }));
 // Crear stream para guardar logs en error.log
@@ -25,7 +32,7 @@ app.use((0, morgan_1.default)("custom", {
     stream: errorLogStream,
 }));
 // Configurar el servidor para usar el directorio 'public' como directorio de archivos estáticos
-app.use('/public', express_1.default.static(path_1.default.resolve('public')));
+app.use("/public", express_1.default.static(path_1.default.resolve("public")));
 app.use(express_1.default.json());
 exports.default = app;
 //# sourceMappingURL=server.js.map

@@ -5,7 +5,7 @@ import useAuth from '../../../../hooks/useAuth'
 
 export default function ProfesorSection (): JSX.Element {
   const { auth } = useAuth()
-  const [showMenu, setShowMenu] = useState(false)
+  const [, setShowMenu] = useState(false)
   const [showSubmenu, setShowSubmenu] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
   const handleItemClick = (itemId: number): void => {
@@ -87,19 +87,18 @@ export default function ProfesorSection (): JSX.Element {
             </Link>
           </li>
 
-          {/* <li>
+          <li>
             <Link
-              to={`ejercicios/cargo/${auth.id}`}
-              className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 97 ? 'before:bg-main' : 'before:bg-gray-500'
-                } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+              to='examenes/cargo/revisar'
+              className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 96 ? 'before:bg-main' : 'before:bg-gray-500'} before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
               onClick={() => {
-                handleItemClick(97)
+                handleItemClick(96)
                 setShowMenu(false)
               }}
             >
               Examenes Por Revisar
             </Link>
-          </li> */}
+          </li>
         </ul>
       </li>
     </ul>

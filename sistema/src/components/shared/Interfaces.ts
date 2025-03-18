@@ -208,8 +208,8 @@ export interface ClaseValuesModificate {
   nombre: string
   duracion: string
   posicion: string
+  url_video?: string
   seccionId: string
-  url_video: string
 }
 
 // PRODUCTOS

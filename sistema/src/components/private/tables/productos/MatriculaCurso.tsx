@@ -99,7 +99,7 @@ export default function MatriculaCurso (): JSX.Element {
                 </div>
               ))}
               <div className="flex flex-col md:flex-row gap-5 mt-8 md:gap-0 justify-between content_buttons ">
-                <p className="text-md ml-1"> {totalRegistros} Registros </p>
+                <p className="text-md ml-1"> {totalRegistros} Registros a</p>
                 <Paginacion
                   totalPosts={totalPosts}
                   cantidadRegistros={cantidadRegistros}
