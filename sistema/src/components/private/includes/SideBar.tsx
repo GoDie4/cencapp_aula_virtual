@@ -8,24 +8,21 @@ import {
   RiMenu3Line,
   RiCloseLine,
   //   RiStackFill,
-  RiArrowRightSLine,
-  RiHomeWifiFill,
-  RiRadioButtonLine,
-  RiStackFill
+  RiRadioButtonLine
 } from 'react-icons/ri'
 
 import axios from 'axios'
 import { Global } from '../../../helper/Global'
 import { icono } from '../../shared/Images'
+import AdminSection from './section/AdminSection'
+import ProfesorSection from './section/ProfesorSection'
 
 const SideBar = (): JSX.Element => {
   const { auth, setAuth, setLoading, setShowNotificaciones } = useAuth()
   const token = localStorage.getItem('token')
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
-  const [showSubmenu, setShowSubmenu] = useState(false)
   //   const [showSubmenu2, setShowSubmenu2] = useState(false);
-  const [activeItem, setActiveItem] = useState(0)
 
   const cerrarSession = async (): Promise<void> => {
     setLoading(true)
@@ -49,10 +46,6 @@ const SideBar = (): JSX.Element => {
     setLoading(false)
   }
 
-  const handleItemClick = (itemId: number): void => {
-    setActiveItem(itemId)
-  }
-
   return (
     <>
       <div
@@ -62,7 +55,7 @@ const SideBar = (): JSX.Element => {
         <div>
           <nav className="py-4">
             <div
-              className="relative w-fit mx-auto mb-4 cursor-pointer"
+              className="relative mx-auto mb-4 cursor-pointer w-fit"
               onClick={() => {
                 setShowNotificaciones(true)
               }}
@@ -70,26 +63,27 @@ const SideBar = (): JSX.Element => {
               <img
                 src={icono}
                 alt=""
-                className="w-20 h-20 object-contain mx-auto border-gray-800 rounded-full border-2 p-2"
+                className="object-contain w-20 h-20 p-2 mx-auto border-2 border-gray-800 rounded-full"
               />
-              <span className="text-green-500 absolute bottom-0 text-xl right-0 animate-pulse">
+              <span className="absolute bottom-0 right-0 text-xl text-green-500 animate-pulse">
                 <RiRadioButtonLine />
               </span>
             </div>
-            <h2 className="text-center text-gray-300 font-bold text-sm">
+            <h2 className="text-sm font-bold text-center text-gray-300">
               {auth.nombres}
             </h2>
-            <h2 className="text-center text-gray-400 text-xs">{auth.email}</h2>
+            <h2 className="text-xs text-center text-gray-400">{auth.email}</h2>
           </nav>
           <div className="mb-5 h-[1px] w-full bg-gray-500 text-gray-500 block" />
-          <ul className="ml-0 p-0">
+          {auth.rolId === 1 ? <AdminSection /> : <ProfesorSection />}
+          {/* <ul className="p-0 ml-0">
             <li>
               <Link
                 onClick={() => {
                   setShowMenu(false)
                 }}
                 to="profesores"
-                className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+                className="flex items-center justify-between w-full px-4 py-2 transition-colors rounded-lg hover:bg-secondary-900"
               >
                 <span className="flex items-center gap-4">
                   <RiHomeWifiFill className="text-main" /> Profesores
@@ -101,7 +95,7 @@ const SideBar = (): JSX.Element => {
                 onClick={() => {
                   setShowSubmenu(!showSubmenu)
                 }}
-                className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+                className="flex items-center justify-between w-full px-4 py-2 transition-colors rounded-lg hover:bg-secondary-900"
               >
                 <span className="flex items-center gap-4">
                   <RiHomeWifiFill className="text-main" /> Aula
@@ -112,7 +106,7 @@ const SideBar = (): JSX.Element => {
                 />
               </button>
               <ul
-                className={` ${showSubmenu ? 'h-[170px]' : 'h-0'
+                className={` ${showSubmenu ? 'h-[290px]' : 'h-0'
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -145,6 +139,20 @@ const SideBar = (): JSX.Element => {
 
                 <li>
                   <Link
+                    to="beneficios"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 97 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(98)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Beneficios
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
                     to="secciones"
                     className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 96 ? 'before:bg-main' : 'before:bg-gray-500'
                       } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
@@ -170,6 +178,48 @@ const SideBar = (): JSX.Element => {
                     Clases
                   </Link>
                 </li>
+
+                <li>
+                  <Link
+                    to="examenes"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 94 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(94)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Examenes
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="ejercicios"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 93 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(93)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Ejercicios
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="materiales"
+                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${activeItem == 92 ? 'before:bg-main' : 'before:bg-gray-500'
+                      } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
+                    onClick={() => {
+                      handleItemClick(92)
+                      setShowMenu(false)
+                    }}
+                  >
+                    Materiales
+                  </Link>
+                </li>
               </ul>
             </li>
 
@@ -177,97 +227,34 @@ const SideBar = (): JSX.Element => {
               <Link
                 onClick={()=> setShowMenu(false)}
                 to="configuracion/1"
-                className="flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-secondary-900 transition-colors"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
               >
                 <RiStackFill className="text-main" /> Configuracion
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link
                 onClick={() => {
                   setShowMenu(false)
                 }}
                 to="alumnos"
-                className="flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-secondary-900 transition-colors"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
               >
                 <RiStackFill className="text-main" /> Alumnos
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link
                 onClick={() => {
                   setShowMenu(false)
                 }}
-                to="clientes"
-                className="flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-secondary-900 transition-colors"
+                to="ventas"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
               >
-                <RiStackFill className="text-main" /> Clientes
+                <RiStackFill className="text-main" /> Ventas
               </Link>
-            </li> */}
-            {/* <li>
-              <Link
-                onClick={() => {
-                  setShowMenu(false)
-                }}
-                to="cupones"
-                className="flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-secondary-900 transition-colors"
-              >
-                <RiStackFill className="text-main" /> Cupones
-              </Link>
-            </li> */}
-            {/* <li>
-              <button
-                onClick={() => {
-                  setShowSubmenu2(!showSubmenu2);
-                }}
-                className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
-              >
-                <span className="flex items-center gap-4">
-                  <RiHomeWifiFill className="text-main" /> Delivery
-                </span>
-                <RiArrowRightSLine
-                  className={`mt-1 ${
-                    showSubmenu2 ? 'rotate-90' : ''
-                  } transition-all`}
-                />
-              </button>
-              <ul
-                className={` ${
-                  showSubmenu2 ? 'h-[100px]' : 'h-0'
-                } overflow-y-hidden transition-all`}
-              >
-                <li>
-                  <Link
-                    to="departamentos"
-                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${
-                      activeItem == 99 ? 'before:bg-main' : 'before:bg-gray-500'
-                    } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
-                    onClick={() => {
-                      handleItemClick(99);
-                      setShowMenu(false);
-                    }}
-                  >
-                    Departamentos
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    to="distritos"
-                    className={`py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute ${
-                      activeItem == 97 ? 'before:bg-main' : 'before:bg-gray-500'
-                    } before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors`}
-                    onClick={() => {
-                      handleItemClick(97);
-                      setShowMenu(false);
-                    }}
-                  >
-                    Distritos
-                  </Link>
-                </li>
-              </ul>
-            </li> */}
-          </ul>
+            </li>
+          </ul> */}
         </div>
         <nav>
           <Link
@@ -275,7 +262,7 @@ const SideBar = (): JSX.Element => {
             onClick={() => {
               void cerrarSession()
             }}
-            className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-main_2-100 text-main transition-colors hover:text-main"
+            className="flex items-center gap-4 px-4 py-2 transition-colors rounded-lg hover:bg-main_2-100 text-main hover:text-main"
           >
             <RiLogoutCircleRLine className="text-main " /> Cerrar sesión
           </Link>
@@ -285,7 +272,7 @@ const SideBar = (): JSX.Element => {
         onClick={() => {
           setShowMenu(!showMenu)
         }}
-        className="xl:hidden fixed bottom-4 right-4 bg-main text-white p-3 rounded-full z-50"
+        className="fixed z-50 p-3 text-white rounded-full xl:hidden bottom-4 right-4 bg-main"
       >
         {showMenu ? <RiCloseLine /> : <RiMenu3Line />}
       </button>

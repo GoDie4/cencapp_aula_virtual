@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { generarSlug } from "../utils/generadorSlug";
 
 const prisma = new PrismaClient();
 
@@ -13,6 +14,7 @@ export const createClase = async (req: Request, res: Response) => {
     const nuevaClase = await prisma.clases.create({
       data: {
         nombre: nombre,
+        slug: generarSlug(nombre),
         duracion: duracion,
         posicion: parseInt(posicion),
         url_video: url_video,
@@ -56,6 +58,40 @@ export const showAllClases = async (req: Request, res: Response) => {
     });
   } finally {
     await prisma.$disconnect();
+  }
+};
+
+export const clasesPorCurso = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  try {
+    const clases = await prisma.curso.findMany({
+      where: { id: id },
+      include: {
+        Seccion: {
+          include: {
+            clases: true,
+          },
+        },
+      },
+    });
+
+    if (!clases) {
+      res
+        .status(404)
+        .json({ message: "No se encontraron clases para este curso." });
+      return;
+    }
+
+    res.status(200).json({
+      clases: clases,
+    });
+  } catch (error: any) {
+    console.error("Error al traer las clases", error);
+    res.status(500).json({
+      message: "Error al traer las clases",
+      error: error.message,
+    });
   }
 };
 
@@ -163,23 +199,22 @@ export const deleteClase = async (req: Request, res: Response) => {
 
 export const obtenerClases = async (req: Request, res: Response) => {
   const { nombre } = req.params;
-  let clases
+  let clases;
   try {
-    if (nombre === 'all') {
+    if (nombre === "all") {
       clases = await prisma.clases.findMany({
         include: {
           seccion: true,
         },
       });
-    }
-    else {
+    } else {
       clases = await prisma.clases.findMany({
         where: {
           seccion: {
             nombre: {
               contains: nombre,
-            }
-          }
+            },
+          },
         },
         include: {
           seccion: true,
@@ -187,9 +222,178 @@ export const obtenerClases = async (req: Request, res: Response) => {
       });
     }
 
-    res.json(clases ? { clases } : { clases: [] });	
+    res.json(clases ? { clases } : { clases: [] });
   } catch (error) {
     console.error("Error al obtener clases:", error);
     res.status(500).json({ error: "Error al obtener clases" });
   }
 };
+
+export const obtenerClasePorSlug = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  const { slug } = req.params;
+  try {
+    const clase = await prisma.clases.findFirst({
+      where: {
+        slug: {
+          contains: slug,
+        },
+      },
+      include: {
+        materiales: true,
+        comentarios: {
+          include: {
+            usuario: {
+              select: {
+                nombres: true,
+              },
+            },
+          },
+        },
+        seccion: {
+          include: {
+            curso: {
+              select: {
+                PorcentajeCurso: {
+                  select: {
+                    porcentaje: true,
+                  },
+                },
+                nombre: true,
+                slug: true,
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const totalClases = await prisma.clases.count({
+      where: {
+        seccion: {
+          curso: {
+            id: clase?.seccion.curso.id,
+          },
+        },
+      },
+    });
+
+    let ultimaClase = false;
+
+    if (clase?.posicion === totalClases) {
+      ultimaClase = true;
+    }
+
+    if (!clase) {
+      return res.status(404).json({ error: "Clase no encontrada" });
+    }
+
+    // Obtener clase siguiente
+    let siguienteClase = await prisma.clases.findFirst({
+      where: {
+        seccionId: clase.seccionId,
+        posicion: clase.posicion + 1,
+      },
+      select: {
+        slug: true,
+        nombre: true,
+      },
+    });
+
+    if (!siguienteClase) {
+      const siguienteSeccion = await prisma.seccion.findFirst({
+        where: {
+          cursoId: clase.seccion.cursoId,
+          posicion: clase.seccion.posicion + 1,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (siguienteSeccion) {
+        siguienteClase = await prisma.clases.findFirst({
+          where: {
+            seccionId: siguienteSeccion.id,
+          },
+          orderBy: {
+            posicion: "asc",
+          },
+          select: {
+            slug: true,
+            nombre: true,
+          },
+        });
+      }
+    }
+
+    // Obtener clase anterior
+    let anteriorClase = await prisma.clases.findFirst({
+      where: {
+        seccionId: clase.seccionId,
+        posicion: clase.posicion - 1,
+      },
+      select: {
+        slug: true,
+        nombre: true,
+      },
+    });
+
+    if (!anteriorClase) {
+      const seccionAnterior = await prisma.seccion.findFirst({
+        where: {
+          cursoId: clase.seccion.cursoId,
+          posicion: clase.seccion.posicion - 1,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (seccionAnterior) {
+        anteriorClase = await prisma.clases.findFirst({
+          where: {
+            seccionId: seccionAnterior.id,
+          },
+          orderBy: {
+            posicion: "desc",
+          },
+          select: {
+            slug: true,
+            nombre: true,
+          },
+        });
+      }
+    }
+
+    res.json({
+      clase,
+      siguienteClase,
+      anteriorClase,
+      totalClases,
+      ultimaClase,
+    });
+  } catch (error) {
+    console.error("Error al obtener la clase:", error);
+    res.status(500).json({ error: "Error al obtener la clase" });
+  }
+};
+
+export const obtenerClasesPorSeccion = async (req: Request, res: Response) => {
+  const seccionId = req.params.id;
+  try {
+    const clases = await prisma.clases.findMany({
+      where: {
+        seccionId: seccionId,
+      },
+    });
+    res.status(200).json(clases ? { clases } : { clases: [] });
+  } catch (error) {
+    console.error("Error al obtener clases:", error);
+    res.status(500).json({ error: "Error al obtener clases" });
+  }
+};
+

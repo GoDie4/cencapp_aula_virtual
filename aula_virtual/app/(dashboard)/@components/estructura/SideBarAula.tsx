@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
 import { IoChevronBackOutline } from "react-icons/io5";
+import { useAuth } from "@/context/AuthContext";
 const rutasHeaderAula = [
   { nombre: "Cursos", ruta: "cursos", icono: <FaBookOpen /> },
   { nombre: "Exámenes", ruta: "examenes", icono: <FaClipboardCheck /> },
@@ -32,6 +33,8 @@ export const SideBarAula = ({
   const [itemActive, setItemActive] = useState<string>(
     `${rutasHeaderAula[0].nombre.toLowerCase()}`
   );
+    const { cerrarSesion } = useAuth();
+  
   return (
     <header
       className={`py-8 lg:py-12 fixed z-[1201] top-[79px] lg:top-0 ${
@@ -53,13 +56,13 @@ export const SideBarAula = ({
       </button>
       <div className="h-auto flex flex-col justify-between">
         <div className="w-full">
-          <div className="w-full">
+          <Link href={'/'} className="w-full">
             <img
               src="/assets/images/logo/logo-white.png"
               alt=""
               className="hidden lg:block w-32 mx-auto"
             />
-          </div>
+          </Link>
           <nav className="lg:py-10 h-auto ">
             <ul className="space-y-4">
               {rutasHeaderAula.map((item, index) => (
@@ -102,6 +105,9 @@ export const SideBarAula = ({
         </div>
         <button
           type="button"
+          onClick={() => {
+            cerrarSesion();
+          }}
           className={`px-5 outline-none text-white-main py-3 flex ${
             ocultarSideBar ? "justify-center" : "justify-start"
           } items-center gap-2 transition-all duration-500 group hover:bg-secondary-main rounded-main`}

@@ -1,6 +1,0 @@
--- AlterTable
-ALTER TABLE `cursos` ADD COLUMN `objetivo` LONGTEXT NOT NULL DEFAULT '',
-    MODIFY `certificacion` LONGTEXT NOT NULL DEFAULT '',
-    MODIFY `dirigido` LONGTEXT NOT NULL DEFAULT '',
-    MODIFY `metodologia` LONGTEXT NOT NULL DEFAULT '',
-    MODIFY `presentacion` LONGTEXT NOT NULL DEFAULT '';

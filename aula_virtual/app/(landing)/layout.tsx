@@ -1,6 +1,8 @@
-import { FooterLayout } from "@/layouts/FooterLayout";
-import { HeaderLayout } from "@/layouts/HeaderLayout";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import Carrito from "../../components/public/utils/Carrito";
+import { Header } from "../../components/public/estructura/Header";
+import { Footer } from "../../components/public/estructura/Footer";
 
 /*
 const montserrat = Montserrat({
@@ -17,15 +19,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  components, // Recíbelo para cumplir con la interfaz
+  params, // También se recibe, aunque sea opcional
+}: {
+  children?: React.ReactNode;
+  components: React.ReactNode;
+  params?: Promise<{ [key: string]: string }>; // Ajusta el tipo si es necesario
+}) {
   return (
     <>
-      <HeaderLayout />
+      <Header />
       <Carrito />
       {children}
-      <FooterLayout />
+      <Footer />
     </>
   );
 }

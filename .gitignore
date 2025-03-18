@@ -46,6 +46,6 @@ Thumbs.db
 
 # Miscellaneous
 coverage/
-dist/
+
 build/
 tmp/

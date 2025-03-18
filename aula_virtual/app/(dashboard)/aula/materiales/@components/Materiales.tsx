@@ -1,14 +1,21 @@
 "use client";
-import { useState } from "react";
-import { CursoMaterial } from "../../cursos/@interfaces/InterfacesCurso";
+import { useEffect, useState } from "react";
+// import { CursoMaterial } from "../../cursos/@interfaces/InterfacesCurso";
 import { ItemMaterial } from "./ItemMaterial";
 import { HeaderMaterial } from "./HeaderMaterial";
+import axios from "axios";
+import { Global } from "@/helper/Global";
+import {
+  Curso,
+  ResponseFetchMaterial,
+} from "../@interfaces/FetchMaterialInterface";
 
 const Materiales: React.FC = () => {
+  const [cursosMaterial, setCursosMaterial] = useState<Curso[]>([]);
   const [expandedCourses, setExpandedCourses] = useState<
     Record<string, boolean>
   >({});
-
+  /*
   const cursos: CursoMaterial[] = [
     {
       id: "C001",
@@ -60,12 +67,32 @@ const Materiales: React.FC = () => {
       ],
     },
   ];
+  */
+
+  const total = 0;
+  const getMateriales = async () => {
+    const response = await axios.get<ResponseFetchMaterial>(
+      `${Global.url}/obtenerCursoMaterialesPorAlumno`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        withCredentials: true,
+      }
+    );
+    console.log(response.data);
+    setCursosMaterial(response.data.cursos);
+  };
+
+  useEffect(() => {
+    getMateriales();
+  }, []);
 
   return (
     <div className=" bg-secondary-50">
       <main className="py-6 px-2 md:px-4 ">
         <div className="space-y-4">
-          {cursos.map((curso) => (
+          {cursosMaterial.map((curso) => (
             <div
               key={curso.id}
               className="bg-white-main shadow rounded-lg overflow-hidden"
@@ -76,7 +103,9 @@ const Materiales: React.FC = () => {
                 setExpandedCourses={setExpandedCourses}
               />
 
-              {expandedCourses[curso.id] && <ItemMaterial curso={curso} />}
+              {expandedCourses[curso.id] && (
+                <ItemMaterial seccion={curso.curso.Seccion} />
+              )}
             </div>
           ))}
         </div>
