@@ -430,11 +430,16 @@ async function obtenerExamenesPendientes(req, res) {
                                 examenesResueltos: {
                                     every: {
                                         estado: "EnRevision"
-                                    }
+                                    },
                                 }
                             },
                             include: {
-                                examenesResueltos: true
+                                examenesResueltos: {
+                                    include: {
+                                        usuario: true
+                                    }
+                                },
+                                curso: true
                             }
                         }
                     }
@@ -502,7 +507,8 @@ async function enviarExamen(req, res) {
                 userId: user.id,
                 puntaje_final: "0",
                 estado: 'EnRevision',
-                url_archivo_resultado: rutaArchivo ?? ""
+                url_archivo_resultado: rutaArchivo ?? "",
+                mime_type: req.file.mimetype
             }
         });
         res.status(201).json({
