@@ -1,25 +1,7 @@
-'use client'
-import { usePathname } from "next/navigation"
-import { Header } from "../../components/public/estructura/Header"
-import { useEffect } from "react"
+"use client";
+import { Header } from "../../components/public/estructura/Header";
 
-const rutasPublicas = [
-  '',
-  '/',
-  '/nosotros',
-  '/inscripcion',
-  '/contacto',
-  '/capacitaciones'
-]
-
-export function HeaderLayout () {
-  
-  const pathname = usePathname()
-
-  useEffect(() => {
-    console.log(rutasPublicas.includes(pathname))
-  }, [pathname])
-
+export function HeaderLayout() {
   return (
     <>
       <Header />
@@ -27,5 +9,5 @@ export function HeaderLayout () {
         // rutasPublicas.includes(pathname) || pathname.startsWith('/cursos/') || pathname.startsWith('/curso/') ? <Header /> : null
       }
     </>
-  )
+  );
 }

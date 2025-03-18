@@ -5,139 +5,172 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-}
-
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./diagrama.png" // Guarda la imagen en la carpeta prisma
-  format   = "png" // Puedes cambiarlo a "png" o "dot"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model Curso {
-  id              String            @id @default(cuid())
-  nombre          String            @db.VarChar(255)
-  imagen          String            @db.VarChar(255)
-  banner          String            @db.VarChar(255)
-  horas           Int
-  precio          Decimal
-  categoriaId     Int
-  categoria       Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  cursosUsuarios  CursoUsuario[]
-  secciones       Seccion[]
-  detalles        CursoDetalles?
-  beneficios      Beneficio[]
-  curso_detalles  CursoPagadoDetalles[]
-  @@map("cursos")
+    id              String            @id @default(cuid())
+    nombre          String            @db.VarChar(255)
+    slug            String            @default("") @db.VarChar(255)
+    imagen          String            @db.VarChar(255)
+    banner          String            @db.VarChar(255)
+    horas           Int
+    precio          Decimal
+    categoriaId     Int
+    categoria       Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+    cursosUsuarios  CursoUsuario[]
+    secciones       SeccionesCursos[]
+    detalles        CursoDetalles?
+    beneficios      Beneficio[]
+    Seccion         Seccion[]
+    PorcentajeCurso PorcentajeCurso[]
+    ventas_detalles VentasDetalles[]
+    test            Test[]
+
+    @@map("cursos")
 }
 
 model Seccion {
-  id            String            @id @default(cuid())
-  nombre        String   
-  cursoId       String
-  curso         Curso             @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  posicion      Int
-  clases        Clases[]
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+    id        String   @id @default(cuid())
+    nombre    String
+    slug      String   @default("") @db.VarChar(255)
+    cursoId   String
+    curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+    posicion  Int
+    clases    Clases[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("secciones")
 }
 
 model Clases {
-  id            String            @id @default(cuid())
-  nombre        String
-  duracion      String
-  posicion      Int
-  url_video     String
-  seccionId     String
-  seccion       Seccion           @relation(fields: [seccionId], references: [id], onDelete: Cascade)
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-}
+    id          String        @id @default(cuid())
+    nombre      String
+    slug        String        @unique
+    duracion    String
+    posicion    Int
+    url_video   String
+    seccionId   String
+    seccion     Seccion       @relation(fields: [seccionId], references: [id], onDelete: Cascade)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    comentarios Comentarios[]
+    test        Test[]
+    materiales  Materiales[]
 
-model CursoDetalles {
-  id            String    @id @default(cuid())
-  curso         Curso     @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  cursoId       String    @unique
-  objetivo      String    @db.LongText @default("")
-  presentacion  String?   @db.LongText @default("")
-  dirigido      String?   @db.LongText @default("")
-  metodologia   String?   @db.LongText @default("")
-  certificacion String?   @db.LongText @default("")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  @@map("cursos_detalles")
-}
-
-model Beneficio {
-  id        Int    @id @default(autoincrement())
-  icono     String @db.VarChar(255)
-  texto     String @db.Text
-  curso     Curso  @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  cursoId   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@map("beneficios")
-}
-
-model CursoUsuario {
-  id        Int      @id @default(autoincrement())
-  cursoId   String
-  userId    String
-  avance    String?
-  tipo      CursoUsuarioTipo
-  curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  usuario   Usuario  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@map("cursos_usuarios")
-}
-
-enum CursoUsuarioTipo {
-  MATRICULADO
-  CARGO
-}
-
-model Rol {
-  id        Int       @id @default(autoincrement())
-  nombre    String    @unique @db.VarChar(20)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Usuario   Usuario[]
-  @@map("roles")
-}
-
-model Usuario {
-  id                String           @id @default(cuid()) @db.Char(36)
-  rolId             Int              @default(1)
-  nombres           String           @db.VarChar(255)
-  apellidos         String           @db.VarChar(255)
-  email             String           @unique
-  celular           String           @db.VarChar(15)
-  password          String
-  activo            Boolean          @default(false)
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  rol               Rol              @relation(fields: [rolId], references: [id], onDelete: Cascade)
-  cursosUsuarios    CursoUsuario[]
-  cursosPagados     CursoPagado[]
-  @@map("usuarios")
+    @@map("clases")
 }
 
 model CursoPagado {
-  id                         String           @id @default(cuid())
-  mercadoPaymentId           String
-  userId                     String
-  usuario                    Usuario          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  totalPagado                Decimal
-  createdAt                  DateTime         @default(now())
-  updatedAt                  DateTime         @updatedAt
+    id               String  @id @default(cuid())
+    mercadoPaymentId String
+    cursoId          String
+    userId           String
+    totalPagado      Decimal
 
-  @@map("ventas")
+    @@map("venta")
+}
+
+model CursoPagadoDetalles {
+    id            String @id @default(cuid())
+    cursoPagadoId String
+
+    @@map("detalles_venta")
+}
+
+model CursoDetalles {
+    id            String   @id @default(cuid())
+    curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    cursoId       String   @unique
+    objetivo      String   @db.LongText
+    presentacion  String?  @db.LongText
+    dirigido      String?  @db.LongText
+    metodologia   String?  @db.LongText
+    certificacion String?  @db.LongText
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    @@map("cursos_detalles")
+}
+
+model Beneficio {
+    id        Int      @id @default(autoincrement())
+    icono     String   @db.VarChar(255)
+    texto     String   @db.Text
+    curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+    cursoId   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("beneficios")
+}
+
+model CursoUsuario {
+    id      Int              @id @default(autoincrement())
+    cursoId String
+    userId  String
+    avance  String?
+    tipo    CursoUsuarioTipo
+    curso   Curso            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+    usuario Usuario          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("cursos_usuarios")
+}
+
+enum CursoUsuarioTipo {
+    MATRICULADO
+    CARGO
+}
+
+model SeccionesCursos {
+    id        String   @id @default(cuid())
+    cursoId   String   @db.Char(36)
+    seccionId String   @db.Char(36)
+    curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("secciones_cursos")
+}
+
+model Rol {
+    id        Int       @id @default(autoincrement())
+    nombre    String    @unique @db.VarChar(20)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    Usuario   Usuario[]
+
+    @@map("roles")
+}
+
+model Usuario {
+    id                 String               @id @default(cuid()) @db.Char(36)
+    rolId              Int                  @default(1)
+    nombres            String               @db.VarChar(255)
+    apellidos          String               @db.VarChar(255)
+    email              String               @unique
+    celular            String               @db.VarChar(15)
+    password           String
+    activo             Boolean              @default(false)
+    createdAt          DateTime             @default(now())
+    updatedAt          DateTime             @updatedAt
+    rol                Rol                  @relation(fields: [rolId], references: [id], onDelete: Cascade)
+    cursosUsuarios     CursoUsuario[]
+    Comentarios        Comentarios[]
+    PasswordResetToken PasswordResetToken[]
+    PorcentajeCurso    PorcentajeCurso[]
+    ventas             Ventas[]
+    examenesResueltos  TestResuelto[]
+
+    @@map("usuarios")
 }
 
 model CardVenta {
@@ -158,25 +191,147 @@ model MethodVenta {
   tipo                       String
 }
 
-model CursoPagadoDetalles {
-  id                         String           @id @default(cuid())
-  cursoPagadoId              String
-  cursoId                    String
-  cantidad                   Int              @default(1)
-  precio                     Decimal
-  curso                      Curso            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+model Categorias {
+    id         Int      @id @default(autoincrement())
+    nombre     String   @db.VarChar(255)
+    slug       String   @default("") @db.VarChar(255)
+    url_icono  String   @db.VarChar(255)
+    url_imagen String   @db.VarChar(255)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    cursos     Curso[]
 
-  @@map("ventas_detalles")
+    @@map("categorias")
 }
 
+model Comentarios {
+    id         String   @id @default(cuid()) @db.Char(36)
+    userId     String
+    claseId    String
+    comentario String   @db.Text
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    usuario    Usuario  @relation(fields: [userId], references: [id])
+    clase      Clases   @relation(fields: [claseId], references: [id])
 
-model Categorias {
-  id            Int       @id @default(autoincrement())
-  nombre        String    @db.VarChar(255)
-  url_icono     String    @db.VarChar(255)
-  url_imagen    String    @db.VarChar(255)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  cursos        Curso[]
-  @@map("categorias")
+    @@map("comentarios")
+}
+
+model PasswordResetToken {
+    id        Int      @id @default(autoincrement())
+    token     String   @unique
+    expiresAt DateTime
+    user      Usuario  @relation(fields: [userId], references: [id])
+    userId    String
+    createdAt DateTime @default(now())
+
+    @@map("password_reset_tokens")
+}
+
+model PorcentajeCurso {
+    id          String   @id @default(cuid())
+    userId      String
+    cursoId     String
+    porcentaje  Float    @default(0)
+    ultimaClase Json
+    updatedAt   DateTime @updatedAt
+
+    user  Usuario @relation(fields: [userId], references: [id])
+    curso Curso   @relation(fields: [cursoId], references: [id])
+
+    @@unique([userId, cursoId])
+}
+
+model Ventas {
+    id                String           @id @default(cuid())
+    usuarioId         String
+    pedidoMercadoId   String           @unique
+    fecha_aprobada    DateTime
+    estado            String
+    estado_detalle    String
+    total_neto        Decimal
+    total             Decimal
+    ultimo_caracteres String
+    usuario           Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+    detalles          VentasDetalles[]
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+
+    @@map("ventas")
+}
+
+model VentasDetalles {
+    id         String  @id @default(cuid())
+    ventaId    String
+    productoId String
+    cantidad   Int
+    precio     Decimal
+    venta      Ventas  @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+    curso      Curso   @relation(fields: [productoId], references: [id], onDelete: Cascade)
+
+    @@map("ventas_detalles")
+}
+
+model Test {
+    id                String         @id @default(cuid())
+    url_archivo       String
+    titulo            String
+    descripcion       String         @db.Text
+    claseId           String?
+    cursoId           String?
+    size              Int
+    mime_type         String
+    fecha_inicio      DateTime
+    fecha_fin         DateTime
+    estado            EstadoTest     @default(Pendiente)
+    tiempo_limite     Int?
+    tipo_prueba       TipoPrueba    
+    puntaje_maxima    Decimal
+    activo            Boolean
+    curso             Curso?         @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+    clase             Clases?        @relation(fields: [claseId], references: [id], onDelete: Cascade)
+    createdAt         DateTime       @default(now())
+    updatedAt         DateTime       @updatedAt
+    examenesResueltos TestResuelto[]
+
+    @@map("examenes")
+}
+
+enum EstadoTest {
+  Pendiente
+  EnRevision
+  Finalizado
+}
+
+model TestResuelto {
+    id                    String            @id @default(cuid())
+    examenId              String
+    userId                String
+    url_archivo_resultado String
+    puntaje_final         String
+    estado                EstadoTest        @default(EnRevision)
+    examen                Test              @relation(fields: [examenId], references: [id], onDelete: Cascade)
+    usuario               Usuario           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt             DateTime          @default(now())
+    updatedAt             DateTime          @updatedAt
+
+    @@map("examen_resueltos")
+}
+
+enum TipoPrueba {
+    EXAMEN
+    EJERCICIOS
+}
+
+model Materiales {
+    id           Int      @id @default(autoincrement())
+    nombre       String   @db.VarChar(255)
+    descripcion  String   @db.Text
+    path_archivo String   @db.VarChar(255)
+    mime_type    String   @db.VarChar(255)
+    size         Int
+    claseId      String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    clase        Clases   @relation(fields: [claseId], references: [id], onDelete: Cascade)
 }

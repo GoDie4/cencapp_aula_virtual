@@ -1,14 +1,18 @@
 "use client";
+import Link from "next/link";
 import React from "react";
 import { FaUser } from "react-icons/fa";
 
 export default function InicioSesionBoton() {
   return (
-    <div className="px-6 py-3 rounded-lg bg-primary-main flex gap-2 items-center">
+    <Link
+      href="/login"
+      className="px-4 py-3 bg-primary-main rounded-main text-white-main flex gap-2 items-center"
+    >
       <span>
-        <FaUser color="white" />
+        <FaUser className={`text-2xl  text-white-main`} />
       </span>
       <span>Iniciar Sesión</span>
-    </div>
+    </Link>
   );
 }

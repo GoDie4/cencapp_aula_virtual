@@ -33,7 +33,7 @@ export const HeaderAula = ({
           {showMenu ? <IoCloseOutline /> : <TbMenu2 />}
         </button>
         <p className="text-base sm:text-xl text-white-main lg:text-black-main">
-          Bienvenido! {user?.nombres}
+          Bienvenido! {user?.nombres.split(" ")[0]}
         </p>
       </div>
       <div className="w-fit">
@@ -47,7 +47,7 @@ export const HeaderAula = ({
             </p>
           </span>
           <p className="hidden sm:block text-sm sm:text-base  lg:text-black-main">
-            {user?.nombres + " " + user?.apellidos}
+            {user?.nombres.split(" ")[0] + " " + user?.apellidos.split(" ")[0]}
           </p>
 
           <span className="text-secondary-main lg:text-black-main">

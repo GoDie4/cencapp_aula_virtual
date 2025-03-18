@@ -1,3 +1,5 @@
+import { type Curso } from '../../interfaces/CursoInterface'
+
 export interface valuesTransaccion {
   id: number
   nombres: string
@@ -161,9 +163,25 @@ export interface categoriasValues {
   created_at: string | null
   updated_at: string | null
 }
+
+export interface Beneficio {
+  id: number
+  icono: string
+  texto: string
+  cursoId: string
+  createdAt: Date
+  updatedAt: Date
+  curso: Curso[]
+}
+
 // CREACION - UPDATE
 export interface categoriasValuesMoficate {
   nombre: string
+}
+
+export interface beneficiosValuesModificate {
+  texto: string
+  cursoId: string
 }
 
 export interface seccionValues {
@@ -191,6 +209,7 @@ export interface ClaseValuesModificate {
   duracion: string
   posicion: string
   url_video?: string
+  seccionId: string
 }
 
 // PRODUCTOS

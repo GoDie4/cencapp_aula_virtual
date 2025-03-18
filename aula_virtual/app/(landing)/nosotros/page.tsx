@@ -1,13 +1,16 @@
-"use client";
 import { FaLightbulb, FaBalanceScale, FaMedal, FaStar } from "react-icons/fa";
 import Banner from "../../../components/public/Banner";
 import { slide1 } from "../../../components/shared/images";
-import { JSX, useEffect } from "react";
 
-const Nosotros = (): JSX.Element => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+import { NosotrosMetadata } from "@/seo/NosotrosMetaData";
+
+export function generateMetadata() {
+  const metadata = NosotrosMetadata();
+  return metadata;
+}
+
+const Nosotros = () => {
+
   return (
     <>
       <Banner imagen={`${slide1.src}`} titulo="Nosotros" />

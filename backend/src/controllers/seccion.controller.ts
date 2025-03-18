@@ -14,7 +14,8 @@ export const createSeccion = async (req: Request, res: Response) => {
   try {
     const findSeccion = await prisma.seccion.findFirst({
       where: {
-        posicion: parseInt(posicion)
+        cursoId: cursoId,
+        posicion: parseInt(posicion),
       }
     })
     if (findSeccion) {

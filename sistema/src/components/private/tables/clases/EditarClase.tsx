@@ -4,43 +4,36 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Global } from '../../../../helper/Global'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
-import { ClaseValuesModificate } from '../../../shared/Interfaces'
 import { InputsBriefs } from '../../../shared/InputsBriefs'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
 import { Loading } from '../../../shared/Loading'
-import '@justinribeiro/lite-youtube'
 import { extraerIdYouTube } from '../../../../logic/extraerID'
-import { ClasesInterface } from '../../../../interfaces/ClasesInterface'
+import { type ClaseValuesModificate, type ClaseValues } from '../../../shared/Interfaces'
+import ReproductorYoutube from './componets/ReproductorYoutube'
 
-export default function EditarClase(): JSX.Element {
+export default function EditarClase (): JSX.Element {
   const { id } = useParams()
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
-  const [clase, setClase] = useState<ClasesInterface>()
-  const [videoId, setVideoId] = useState('')
-  const [videoIdNuevo, setVideoIdNuevo] = useState('')
   const [loadingComponents, setLoadingComponents] = useState(false)
-  const [url, setUrl] = useState('')
+  const [videoId, setVideoId] = useState('')
+  const [url_video, setUrlVideo] = useState<string>('')
+  const [nuevoVideoId, setNuevoVideoId] = useState<string | null>(null)
 
-  useEffect(() => {
-    getClase()
-  }, [])
-
-  const handleVideoId = (e: { target: { value: string } }) => {
-    setUrl(e.target.value)
-    setVideoIdNuevo(extraerIdYouTube(e.target.value) ?? '')
+  const handleVideoId = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setUrlVideo(e.target.value)
+    setNuevoVideoId(extraerIdYouTube(e.target.value))
   }
 
-  const saveSeccion = async (
-    values: ClaseValuesModificate
-  ): Promise<void> => {
+  const editarClase = async (values: ClaseValues): Promise<void> => {
     setLoadingComponents(true)
     const datos: ClaseValuesModificate = {
       nombre: values.nombre,
       posicion: values.posicion,
       duracion: values.duracion,
-      url_video: videoIdNuevo ? videoIdNuevo : videoId
+      url_video: nuevoVideoId != undefined ? nuevoVideoId : videoId,
+      seccionId: values.seccionId
     }
     /*
     const formData = new FormData()
@@ -50,11 +43,13 @@ export default function EditarClase(): JSX.Element {
     */
     try {
       const { status, data } = await axios.post(
-        `${Global.url}/clases/${clase?.id}`,
+        `${Global.url}/clases/${id ?? ''}`,
         datos,
         {
           headers: {
-            Authorization: `Bearer ${token !== null && token !== '' ? token : ''}`
+            Authorization: `Bearer ${
+              token !== null && token !== '' ? token : ''
+            }`
           }
         }
       )
@@ -73,126 +68,132 @@ export default function EditarClase(): JSX.Element {
     setLoadingComponents(false)
   }
 
-  const { handleSubmit, handleChange, errors, values, touched, handleBlur, setValues } =
-    useFormik({
-      initialValues: {
-        nombre: '',
-        duracion: '',
-        posicion: ''
-      },
-      // validationSchema: SchemaCategorias,
-      onSubmit: saveSeccion
-    });
-  const getClase = async (): Promise<void> => {
+  const {
+    handleSubmit,
+    handleChange,
+    errors,
+    values,
+    touched,
+    handleBlur,
+    setFieldValue,
+    setValues
+  } = useFormik({
+    initialValues: {
+      nombre: '',
+      duracion: '',
+      seccionId: '',
+      posicion: ''
+    },
+    // validationSchema: SchemaCategorias,
+    onSubmit: editarClase
+  })
+  const getCurso = async (): Promise<void> => {
     try {
-      const { data } = await axios.get(
-        `${Global.url}/clases/${id ?? ''}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token !== null && token !== '' ? token : ''
-              }`
-          }
+      const { data } = await axios.get(`${Global.url}/clases/${id ?? ''}`, {
+        headers: {
+          Authorization: `Bearer ${
+            token !== null && token !== '' ? token : ''
+          }`
         }
-      )
-      setClase(data.clase)
+      })
       setValues({
-        ...values,
-        nombre: data.clase.nombre,
         duracion: data.clase.duracion,
+        nombre: data.clase.nombre,
         posicion: data.clase.posicion,
+        seccionId: data.clase.seccionId
       })
       setVideoId(data.clase.url_video)
       setLoadingComponents(false)
     } catch (error) {
+      toast.error('Error al traer los datos de las clase')
       console.log(error)
     }
   }
-
+  useEffect(() => {
+    getCurso()
+  }, [])
   return (
     <>
-      {
-        loadingComponents
-          ? (<Loading />)
-          : (
-            <form
-              className="bg-secondary-100 p-8 rounded-xl mt-4"
-              onSubmit={handleSubmit}
-            >
-              <div className="w-full flex flex-col gap-5 lg:flex-row">
-                <div className="w-full lg:w-1/3 mb-5">
-                  <TitleBriefs titulo="Título de la clase" />
-                  <InputsBriefs
-                    name="nombre"
-                    type="text"
-                    value={values.nombre}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <Errors errors={errors.nombre} touched={touched.nombre} />
-                </div>
-                <div className="w-full lg:w-1/3 mb-5">
-                  <TitleBriefs titulo="Duración de la clase" />
-                  <InputsBriefs
-                    name="duracion"
-                    type="text"
-                    value={values.duracion}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <Errors errors={errors.duracion} touched={touched.duracion} />
-                </div>
-                <div className="w-full lg:w-1/3 mb-5">
-                  <TitleBriefs titulo="Posición de la clase" />
-                  <InputsBriefs
-                    name="posicion"
-                    type="text"
-                    value={values.posicion}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <Errors errors={errors.posicion} touched={touched.posicion} />
-                </div>
-              </div>
-              <div className='w-full mb-5'>
-                <TitleBriefs titulo="Url del video" />
-                <InputsBriefs
-                  onBlur={handleBlur}
-                  name="videoId"
-                  type="text"
-                  onChange={handleVideoId}
-                  value={url}
-                />
-              </div>
-              {
-                videoId !== '' && videoIdNuevo === '' && (
-                  <div className='w-full mb-5'>
-                    <lite-youtube videoid={videoId}></lite-youtube>
-                  </div>
-                )
-              }
-              {
-                videoIdNuevo !== '' && (
-                  <div className='w-full mb-5'>
-                    <lite-youtube videoid={videoIdNuevo}></lite-youtube>
-                  </div>
-                )
-              }
+      {loadingComponents
+        ? (
+        <Loading />
+          )
+        : (
+        <form
+          className="p-8 mt-4 bg-secondary-100 rounded-xl"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex flex-col w-full gap-5 lg:flex-row">
+            <div className="w-full mb-5 lg:w-1/3">
+              <TitleBriefs titulo="Título de la clase" />
+              <InputsBriefs
+                name="nombre"
+                type="text"
+                value={values.nombre}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Errors errors={errors.nombre} touched={touched.nombre} />
+            </div>
+            <div className="w-full mb-5 lg:w-1/3">
+              <TitleBriefs titulo="Duración de la clase" />
+              <InputsBriefs
+                name="duracion"
+                type="text"
+                value={values.duracion}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Errors errors={errors.duracion} touched={touched.duracion} />
+            </div>
+            <div className="w-full mb-5 lg:w-1/3">
+              <TitleBriefs titulo="Posición de la clase" />
+              <InputsBriefs
+                name="posicion"
+                type="text"
+                value={values.posicion}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Errors errors={errors.posicion} touched={touched.posicion} />
+            </div>
+          </div>
+          <div className="w-full mb-5">
+            <TitleBriefs titulo="Url del video" />
+            <InputsBriefs
+              onBlur={handleBlur}
+              name="videoId"
+              type="text"
+              onChange={handleVideoId}
+              value={url_video}
+            />
+          </div>
+          {nuevoVideoId == null && (
+            <div className="w-full mb-5">
+              <ReproductorYoutube setFieldValue={setFieldValue} videoId={videoId}/>
+            </div>
+          )}
+          {nuevoVideoId != null && (
+            <div className="w-full mb-5">
+              <ReproductorYoutube setFieldValue={setFieldValue} videoId={nuevoVideoId}/>
+            </div>
+          )}
 
-              <div className="flex gap-2 w-full justify-end">
-                <input type="hidden" name="oculto" value="1" />
-                <Link
-                  to="/admin/clases"
-                  className="bg-red-500 px-4 py-2 rounded-md text-white"
-                >
-                  Cancelar
-                </Link>
-                <input
-                  type="submit"
-                  className="bg-green-500 text-black hover:bg-green-600 flex items-center gap-2 py-2 px-4 rounded-lg transition-colors cursor-pointer"
-                  value="Registrar"
-                />
-              </div>
-            </form>
+          <div className="flex justify-end w-full gap-2">
+            <input type="hidden" name="oculto" value="1" />
+            <Link
+              to="/admin/clases"
+              className="px-4 py-2 text-white bg-red-500 rounded-md"
+            >
+              Cancelar
+            </Link>
+            <input
+              type="submit"
+              className="flex items-center gap-2 px-4 py-2 text-black transition-colors bg-green-500 rounded-lg cursor-pointer hover:bg-green-600"
+              value="Registrar"
+            />
+          </div>
+        </form>
           )}
     </>
   )

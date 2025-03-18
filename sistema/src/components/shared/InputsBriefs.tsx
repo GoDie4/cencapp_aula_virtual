@@ -1,7 +1,7 @@
 interface inputs {
   name: string
   type: string
-  value: string | number | readonly string[] | undefined
+  value?: string | number | readonly string[] | undefined
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   onBlur: (event: React.ChangeEvent<HTMLInputElement>) => void
   disabled?: boolean
@@ -20,6 +20,7 @@ export const InputsBriefs = (props: inputs): JSX.Element => {
       autoComplete="off"
       disabled={props.disabled}
       onChange={props.onChange}
+      accept={props.type === 'file' ? '.doc,.docx,application/pdf' : ''}
       onBlur={props.onBlur}
       step={props.type === 'number' ? 1.00 : undefined}
     />
