@@ -1,3 +1,4 @@
+import { DialogResponsiveProvider } from "@/context/DialogResponsive";
 import { ProviderAula } from "./@components/ProviderAula";
 
 export default function AulaLayout({
@@ -5,5 +6,11 @@ export default function AulaLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <ProviderAula>{children}</ProviderAula>;
+  return (
+    <ProviderAula>
+      <DialogResponsiveProvider>
+        {children}
+      </DialogResponsiveProvider>
+    </ProviderAula>
+  );
 }

@@ -1,3 +1,5 @@
+import { TestInterface } from "@/interfaces/TestInterface"
+
 export interface ResponseFetchMaterial {
   cursos: Curso[]
 }
@@ -9,6 +11,7 @@ export interface Curso {
   avance: string
   tipo: string
   curso: Curso2
+  test?: TestInterface[]
 }
 
 export interface Curso2 {
@@ -21,6 +24,8 @@ export interface Curso2 {
 export interface CursosUsuario {
   userId: string
   usuario: Usuario
+  curso?: Curso
+  test?: TestInterface[]
 }
 
 export interface Usuario {
