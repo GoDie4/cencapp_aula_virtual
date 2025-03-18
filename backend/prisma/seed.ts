@@ -40,15 +40,9 @@ async function main() {
     await prisma.$disconnect();
   }
 }
-
-async function registrarRoles() {
-  const roles = ["administrador", "estudiante", "profesor", "prueba"];
-
-  for (const nombre of roles) {
     const rolExiste = await prisma.rol.findUnique({
       where: { nombre },
     });
-
     if (!rolExiste) {
       await prisma.rol.create({
         data: { nombre },
@@ -266,6 +260,8 @@ async function registrarVentaYDetalles(cursoId: string) {
       ultimo_caracteres: "1234",
     },
   });
+  console.log('Categoría Creada');
+}
 
   await prisma.ventasDetalles.create({
     data: {
