@@ -12,6 +12,7 @@ const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const comentarios_routes_1 = __importDefault(require("./routes/comentarios.routes"));
 const beneficios_routes_1 = __importDefault(require("./routes/beneficios.routes"));
+const certificados_routes_1 = __importDefault(require("./routes/certificados.routes"));
 /*
 import userRoutes from "../src/routes/user.routes";
 import categoryRoutes from "../src/routes/category.routes"
@@ -34,6 +35,7 @@ server_1.default.use("/api", auth_routes_1.default);
 server_1.default.use("/api/comentarios", comentarios_routes_1.default);
 server_1.default.use("/api/user", user_routes_1.default);
 server_1.default.use("/api/beneficios", beneficios_routes_1.default);
+server_1.default.use("/api/certificados", certificados_routes_1.default);
 /*
 app.use("/api/usuarios", userRoutes);
 app.use("/api/categorias", categoryRoutes)

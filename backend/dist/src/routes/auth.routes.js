@@ -15,6 +15,7 @@ const seccion_controller_1 = require("../controllers/seccion.controller");
 const clase_controller_1 = require("../controllers/clase.controller");
 const test_controller_1 = require("../controllers/test.controller");
 const materiales_controller_1 = require("../controllers/materiales.controller");
+const testResueltos_controller_1 = require("../controllers/testResueltos.controller");
 const router = (0, express_1.Router)();
 // Auth
 router.post("/crearAdmin", (0, validatorSchemas_middleware_1.validateSchema)(auth_schema_1.registerSchema), auth_controller_1.crearAdmin);
@@ -103,9 +104,13 @@ router.get("/ejercicios/documento/:id", JWTMiddleware_1.verifyUser, profesor_con
 router.get("/examenes/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerExamenesPorProfesor);
 router.get("/materiales/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerMaterialesPorProfesor);
 router.get("/ejercicios/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);
-router.get("/examenes/revisar", JWTMiddleware_1.verifyProfesor, test_controller_1.obtenerExamenesPendientes);
 router.post("/examenes/enviar", JWTMiddleware_1.verifyAlumnoNoCookie, test_controller_1.uploadArchivoRes, test_controller_1.enviarExamen);
 router.get('/obtenerExamenesAsignados', JWTMiddleware_1.verifyAlumno, test_controller_1.obtenerExamenesAsignados);
+// Test Resueltos
+router.get("/examenes/revisar", JWTMiddleware_1.verifyProfesor, test_controller_1.obtenerExamenesPendientes);
+router.post("/testsResuelto/documento", JWTMiddleware_1.verifyProfesor, testResueltos_controller_1.obtenerExamenResueltoDocumento);
+router.post("/colocarPuntaje", JWTMiddleware_1.verifyProfesor, testResueltos_controller_1.colocarPuntaje);
+router.get("/examenes/resueltos", JWTMiddleware_1.verifyAlumno, testResueltos_controller_1.obtenerExamenesResueltos);
 // Materiales
 router.get("/materiales", JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.showAllMateriales);
 router.get("/materiales/:id", JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.obtenerMaterialPorId);
