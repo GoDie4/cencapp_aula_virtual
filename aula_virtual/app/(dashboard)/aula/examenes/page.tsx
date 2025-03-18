@@ -9,6 +9,8 @@ import { ExamenesMetadata } from "@/seo/aula/ExamenesMetaData";
 import { getServerSideProps } from "@/server/getServerSideProps";
 import { CursosUsuario } from "../materiales/@interfaces/FetchMaterialInterface";
 import ExamenColumna from "./@components/ExamenColumna";
+import { TestResuelto } from "@/interfaces/TestInterface";
+import ExamenResueltoColumna from "./@components/ExamenResueltoColumna";
 
 export function generateMetadata() {
   const metadata = ExamenesMetadata();
@@ -17,9 +19,13 @@ export function generateMetadata() {
 interface Root {
   examenes: CursosUsuario[]
 }
+interface Root2 {
+  testResueltos: TestResuelto[]
+}
 
 const Page: NextPage = async () => {
   const data: Root = await getServerSideProps("obtenerExamenesAsignados");
+  const dataResueltos: Root2 = await getServerSideProps("examenes/resueltos");
   const examenesPendientes = [
     {
       id: "EX001",
@@ -162,32 +168,7 @@ const Page: NextPage = async () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {examenesTerminados.map((examen) => (
-                        <tr key={examen.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                            {examen.id}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                            {examen.nombre}
-                          </td>
-                          <td className="px-6 py-4 text-sm whitespace-nowrap text-black-700">
-                            {examen.curso}
-                          </td>
-                          <td className="px-6 py-4 text-sm whitespace-nowrap text-black-700">
-                            {examen.fechaFinalizacion}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
-                              {examen.calificacion}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
-                            <button className="text-primary-main hover:text-primary-900">
-                              Ver Detalles
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
+                      <ExamenResueltoColumna dataResueltos={dataResueltos} />
                     </tbody>
                   </table>
                 </div>

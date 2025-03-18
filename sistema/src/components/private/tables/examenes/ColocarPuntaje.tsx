@@ -1,11 +1,13 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { TestInterface, TestResuelto } from "../../../../interfaces/TestInterface";
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
 import { Global } from "../../../../helper/Global";
+import { ModalContext } from "../../../../context/ModalProvider";
 
-export function ColocarPuntaje({ test, testResuelto }: { test: TestInterface, testResuelto: TestResuelto }) {
+export function ColocarPuntaje({ test, testResuelto, getExamenes }: { test: TestInterface, testResuelto: TestResuelto, getExamenes: () => Promise<void> }) {
   const [puntaje, setPuntaje] = useState('')
+  const { handleClose } = useContext(ModalContext)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPuntaje(event.target.value)
@@ -25,9 +27,15 @@ export function ColocarPuntaje({ test, testResuelto }: { test: TestInterface, te
       const response = await axios.post(`${Global.url}/colocarPuntaje`, {
         testId: testResuelto.id,
         puntaje: puntaje
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') ?? ''}`
+        }
       })
       if (response.status === 200) {
         toast.success(response.data.message)
+        handleClose()
+        getExamenes()
       }
       
     } catch (e) {

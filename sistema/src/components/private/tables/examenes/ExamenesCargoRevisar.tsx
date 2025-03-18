@@ -74,6 +74,7 @@ export default function ExamenesCargoRevisar (): JSX.Element {
                           curso={test.curso} 
                           examenResuelto={examenResuelto}  
                           test={test}
+                          getExamenes={getExamenes}
                         />
                       </>
                     )
