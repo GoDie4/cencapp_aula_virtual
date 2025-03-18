@@ -1,6 +1,7 @@
 'use client'
 import { Dialog, DialogContent, DialogTitle, useMediaQuery, useTheme } from '@mui/material'
 import React from 'react'
+import { IoClose } from 'react-icons/io5'
 
 export interface DialogResponsiveContextType {
   open: boolean
@@ -19,7 +20,7 @@ export function DialogResponsiveProvider({ children }: { children: React.ReactNo
   const [title, setTitle] = React.useState('');
   const [content, setContent] = React.useState<React.ReactNode | null>(null);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xl'));
 
   const handleClickOpen = ({ title, content }: { title: string, content: React.ReactNode }) => {
     setOpen(true);
@@ -39,6 +40,9 @@ export function DialogResponsiveProvider({ children }: { children: React.ReactNo
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
+        <button title='cerrar' onClick={handleClose} type='button' className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none'>
+          <IoClose size={25} color='black' />
+        </button>
         <DialogTitle id="responsive-dialog-title">
           { title }
         </DialogTitle>

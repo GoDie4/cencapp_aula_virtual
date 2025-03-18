@@ -363,3 +363,4 @@
 2025-03-18T17:41:16.129Z [ERROR] GET /api/obtenerExamenesAsignados | Status: 401 | Time: 21.830 ms | IP: ::1 | User-Agent: "node"
 2025-03-18T17:43:52.836Z [ERROR] GET /api/user | Status: 500 | Time: 50.779 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
 2025-03-18T19:30:32.409Z [ERROR] GET /api/obtenerExamenesAsignados | Status: 401 | Time: 19.467 ms | IP: ::1 | User-Agent: "node"
+2025-03-18T20:32:52.615Z [ERROR] POST /api/colocarPuntaje | Status: 401 | Time: 1.430 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"

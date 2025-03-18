@@ -119,7 +119,7 @@ import {
   showAllMateriales,
   uploadArchivo
 } from "../controllers/materiales.controller";
-import { colocarPuntaje, obtenerExamenResueltoDocumento } from "../controllers/testResueltos.controller";
+import { colocarPuntaje, obtenerExamenesResueltos, obtenerExamenResueltoDocumento } from "../controllers/testResueltos.controller";
 
 const router = Router();
 
@@ -225,6 +225,7 @@ router.get('/obtenerExamenesAsignados', verifyAlumno, obtenerExamenesAsignados)
 router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);
 router.post("/testsResuelto/documento", verifyProfesor, obtenerExamenResueltoDocumento)
 router.post("/colocarPuntaje", verifyProfesor, colocarPuntaje)
+router.get("/examenes/resueltos", verifyAlumno, obtenerExamenesResueltos)
 
 // Materiales
 router.get("/materiales", verifyAdminOrProfesor, showAllMateriales);

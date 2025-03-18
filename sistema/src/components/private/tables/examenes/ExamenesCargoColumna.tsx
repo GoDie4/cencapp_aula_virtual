@@ -9,7 +9,7 @@ import { ModalContext } from "../../../../context/ModalProvider";
 import { Curso } from "../../../../interfaces/CursoInterface";
 import { ColocarPuntaje } from "./ColocarPuntaje";
 
-export function ExamenesCargoColumna({ examenResuelto, curso, test }: { examenResuelto: TestResuelto, curso?: Curso, test: TestInterface }): JSX.Element {
+export function ExamenesCargoColumna({ examenResuelto, curso, test, getExamenes }: { examenResuelto: TestResuelto, curso?: Curso, test: TestInterface, getExamenes: () => Promise<void> }): JSX.Element {
   const { setModalContent } = useContext(ModalContext)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -127,7 +127,7 @@ export function ExamenesCargoColumna({ examenResuelto, curso, test }: { examenRe
             }
           }}
         >
-          <MenuItem onClick={() => { setModalContent({ title: 'Colocar Puntaje', content: <ColocarPuntaje test={test} /> }) }}>Colocar Nota</MenuItem>
+          <MenuItem onClick={() => { setModalContent({ title: 'Colocar Puntaje', content: <ColocarPuntaje test={test} testResuelto={examenResuelto} getExamenes={getExamenes} /> }) }}>Colocar Nota</MenuItem>
         </Menu>
       </div>
 
