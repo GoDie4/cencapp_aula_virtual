@@ -98,8 +98,8 @@ const clasesPorCurso = async (req, res) => {
 exports.clasesPorCurso = clasesPorCurso;
 const actualizarClase = async (req, res) => {
     const id = req.params.id;
-    const { nombre, duracion, url_video, seccionId, posicion } = req.body;
-    if (!nombre || !duracion || !url_video || !seccionId || !posicion) {
+    const { nombre, duracion, url_video, posicion } = req.body;
+    if (!nombre || !duracion || !url_video || !posicion) {
         res.status(400).json({ message: "Faltan datos para actualizar la clase." });
         return;
     }
@@ -118,8 +118,7 @@ const actualizarClase = async (req, res) => {
                 nombre: nombre,
                 duracion: duracion,
                 posicion: parseInt(posicion),
-                url_video: url_video,
-                seccionId: seccionId,
+                url_video: url_video
             },
         });
         res.status(200).json({
