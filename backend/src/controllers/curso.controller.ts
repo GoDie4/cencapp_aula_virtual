@@ -628,12 +628,12 @@ export const obtenerCursosPorAlumno = async (req: Request, res: Response) => {
 };
 
 export const obtenerCursoMateriales = async (req: any, res: Response) => {
-  const userId = req.user?.id;
+  const user = (req as any).user;
 
   try {
     const cursos = await prisma.cursoUsuario.findMany({
       where: {
-        userId: userId,
+        userId: user.id,
         tipo: "MATRICULADO",
       },
       include: {

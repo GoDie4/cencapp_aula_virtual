@@ -48,7 +48,7 @@ router.get("/cursoPorSlug/:slug", JWTMiddleware_1.verifyAlumno, JWTMiddleware_1.
 router.post("/cursos/:id", JWTMiddleware_1.verifyAdmin, curso_controller_1.uploadImageCurso, curso_controller_1.actualizarCurso);
 router.post("/borrarCurso/:id", JWTMiddleware_1.verifyAdmin, curso_controller_1.deleteCurso);
 router.post("/porcentajeCurso", curso_controller_1.registrarOActualizarPorcentajeCurso);
-router.get("/obtenerCursoMateriales/:id", JWTMiddleware_1.verifyAlumno, curso_controller_1.obtenerCursoMateriales);
+router.get("/obtenerCursoMateriales", JWTMiddleware_1.verifyAlumno, curso_controller_1.obtenerCursoMateriales);
 // Profesores
 router.post("/profesores", JWTMiddleware_1.verifyAdmin, profesor_controller_1.crearProfesor);
 router.get("/profesores", JWTMiddleware_1.verifyAdmin, profesor_controller_1.showAllProfesores);
