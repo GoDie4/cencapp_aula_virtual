@@ -306,18 +306,19 @@ enum EstadoTest {
 }
 
 model TestResuelto {
-    id                    String     @id @default(cuid())
-    examenId              String
-    userId                String
-    url_archivo_resultado String
-    puntaje_final         String
-    estado                EstadoTest @default(EnRevision)
-    examen                Test       @relation(fields: [examenId], references: [id], onDelete: Cascade)
-    usuario               Usuario    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    createdAt             DateTime   @default(now())
-    updatedAt             DateTime   @updatedAt
+  id                     String     @id @default(cuid())
+  examenId               String
+  userId                 String
+  url_archivo_resultado  String
+  puntaje_final          String
+  estado                 EstadoTest @default(EnRevision)
+  examen                 Test       @relation(fields: [examenId], references: [id], onDelete: Cascade)
+  usuario                Usuario    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mime_type              String
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
 
-    @@map("examen_resueltos")
+  @@map("examen_resueltos")
 }
 
 enum TipoPrueba {

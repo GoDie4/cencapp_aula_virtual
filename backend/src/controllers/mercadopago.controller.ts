@@ -123,23 +123,34 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
           return
         }
         datos.additional_info.items.map(async (item) => {
-          await prisma.cursoUsuario.create({
-            data: {
-              tipo: "MATRICULADO",
-              cursoId: item.id as string,
-              avance: "0",
-              userId: datos.metadata.user_id_con,
-            },
-          });
 
-          await prisma.ventasDetalles.create({
-            data: {
-              ventaId: ventaAprovada.id,
-              productoId: item.id as string,
-              cantidad: Number(item.quantity),
-              precio: item.unit_price,
-            },
-          });
+          const matriculaEncontrada = await prisma.cursoUsuario.findFirst({
+            where: {
+              userId: datos.metadata.user_id_con,
+              cursoId: item.id as string
+            }
+          })
+
+          if (!matriculaEncontrada) {
+            await prisma.cursoUsuario.create({
+              data: {
+                tipo: "MATRICULADO",
+                cursoId: item.id as string,
+                avance: "0",
+                userId: datos.metadata.user_id_con,
+              },
+            });
+
+            await prisma.ventasDetalles.create({
+              data: {
+                ventaId: ventaAprovada.id,
+                productoId: item.id as string,
+                cantidad: Number(item.quantity),
+                precio: item.unit_price,
+              },
+            });
+          }
+
         });
       } else {
         // HMAC verification failed

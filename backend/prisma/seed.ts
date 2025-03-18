@@ -3,6 +3,13 @@ import * as bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
+const roles: string[] = [
+  'administrador',
+  'estudiante',
+  'profesor',
+  'prueba'
+]
+
 async function main() {
   try {
     // Registrar Roles
@@ -39,6 +46,20 @@ async function main() {
   } finally {
     await prisma.$disconnect();
   }
+
+  roles.map(async (nombre) => {
+    const rolExiste = await prisma.rol.findUnique({
+      where: { nombre },
+    });
+    if (!rolExiste) {
+      await prisma.rol.create({
+        data: { nombre },
+      });
+
+      console.log(`Rol '${nombre}' registrado.`);
+    }
+  })
+
 }
 
 async function registrarRoles() {
@@ -266,6 +287,8 @@ async function registrarVentaYDetalles(cursoId: string) {
       ultimo_caracteres: "1234",
     },
   });
+
+  console.log('Venta creada');
 
   await prisma.ventasDetalles.create({
     data: {

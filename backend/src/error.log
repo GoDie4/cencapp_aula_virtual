@@ -355,6 +355,7 @@
 2025-03-18T00:01:10.065Z [ERROR] GET /api/obtenerCursoMateriales/cm853wgjo0001hy4ocgpkldt3 | Status: 404 | Time: 4.592 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-18T00:04:42.546Z [ERROR] GET /api/obtenerCursoMaterialesPorAlumno/cm853wgjo0001hy4ocgpkldt3 | Status: 404 | Time: 5.623 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-18T00:04:58.899Z [ERROR] GET /api/obtenerCursoMaterialesPorAlumno/cm853wgjo0001hy4ocgpkldt3 | Status: 404 | Time: 2.079 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+
 2025-03-18T17:24:52.511Z [ERROR] POST /api/certificados | Status: 400 | Time: 65.858 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-18T17:36:44.003Z [ERROR] GET /api/certificados/documento/cd0d058d-b181-428f-8f44-bc3719f90ffb | Status: 404 | Time: 3.898 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-18T17:39:44.390Z [ERROR] POST /api/borrarCertificado/cd0d058d-b181-428f-8f44-bc3719f90ffb | Status: 404 | Time: 20.007 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
@@ -371,3 +372,14 @@
 2025-03-18T20:02:16.049Z [ERROR] GET /api/certificacos/mios | Status: 404 | Time: 3.808 ms | IP: ::1 | User-Agent: "node"
 2025-03-18T20:12:50.366Z [ERROR] GET /api/certificados/descargarCertificadoByAlumno/fff26a5e-065d-4408-8336-660cff6783ba | Status: 401 | Time: 1.735 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-18T20:15:15.307Z [ERROR] GET /api/certificados/descargarCertificadoByAlumno/fff26a5e-065d-4408-8336-660cff6783ba | Status: 401 | Time: 1.014 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+
+2025-03-18T17:19:03.303Z [ERROR] GET /api/cursosComprados | Status: 401 | Time: 6.584 ms | IP: ::1 | User-Agent: "node"
+2025-03-18T17:19:17.395Z [ERROR] GET /api/cursosComprados | Status: 401 | Time: 0.878 ms | IP: ::ffff:127.0.0.1 | User-Agent: "node"
+2025-03-18T17:25:13.317Z [ERROR] GET /api/cursosComprados | Status: 401 | Time: 1.832 ms | IP: ::1 | User-Agent: "node"
+2025-03-18T17:25:41.057Z [ERROR] GET /api/cursosComprados | Status: 401 | Time: 4.612 ms | IP: ::ffff:127.0.0.1 | User-Agent: "node"
+2025-03-18T17:25:41.614Z [ERROR] GET /api/cursosComprados | Status: 401 | Time: 0.829 ms | IP: ::ffff:127.0.0.1 | User-Agent: "node"
+2025-03-18T17:41:16.129Z [ERROR] GET /api/obtenerExamenesAsignados | Status: 401 | Time: 21.830 ms | IP: ::1 | User-Agent: "node"
+2025-03-18T17:43:52.836Z [ERROR] GET /api/user | Status: 500 | Time: 50.779 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+2025-03-18T19:30:32.409Z [ERROR] GET /api/obtenerExamenesAsignados | Status: 401 | Time: 19.467 ms | IP: ::1 | User-Agent: "node"
+2025-03-18T20:32:52.615Z [ERROR] POST /api/colocarPuntaje | Status: 401 | Time: 1.430 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+

@@ -112,6 +112,6 @@ router.get("/materiales/:id", JWTMiddleware_1.verifyAdminOrProfesor, materiales_
 router.post("/materiales", JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.uploadArchivo, materiales_controller_1.createMaterial);
 router.post("/materiales/:id", JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.uploadArchivo, materiales_controller_1.actualizarMaterial);
 router.post("/borrarMaterial/:id", JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.deleteMaterial);
-router.get("/materiales/documento/:id", JWTMiddleware_1.verifyAdminOrProfesor, materiales_controller_1.obtenerDocumentoPorId);
+router.get("/materiales/documento/:id", JWTMiddleware_1.verifyUser, materiales_controller_1.obtenerDocumentoPorId);
 exports.default = router;
 //# sourceMappingURL=auth.routes.js.map

@@ -45,7 +45,8 @@ import {
   verifyAlumno,
   verifyProfesor,
   verifyUser,
-  verifyAlumnoNoCookie
+  verifyAlumnoNoCookie,
+  // verifyAlumnoOrProfesor
 } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
 import {
@@ -118,6 +119,7 @@ import {
   showAllMateriales,
   uploadArchivo
 } from "../controllers/materiales.controller";
+import { colocarPuntaje, obtenerExamenesResueltos, obtenerExamenResueltoDocumento } from "../controllers/testResueltos.controller";
 
 const router = Router();
 
@@ -216,9 +218,14 @@ router.get("/ejercicios/documento/:id", verifyUser, obtenerEjerciciosPorProfesor
 router.get("/examenes/cargo/:id", verifyProfesor, obtenerExamenesPorProfesor);
 router.get("/materiales/cargo/:id", verifyProfesor, obtenerMaterialesPorProfesor);
 router.get("/ejercicios/cargo/:id", verifyProfesor, obtenerEjerciciosPorProfesor);
-router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);
 router.post("/examenes/enviar", verifyAlumnoNoCookie, uploadArchivoRes, enviarExamen);
 router.get('/obtenerExamenesAsignados', verifyAlumno, obtenerExamenesAsignados)
+
+// Test Resueltos
+router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);
+router.post("/testsResuelto/documento", verifyProfesor, obtenerExamenResueltoDocumento)
+router.post("/colocarPuntaje", verifyProfesor, colocarPuntaje)
+router.get("/examenes/resueltos", verifyAlumno, obtenerExamenesResueltos)
 
 // Materiales
 router.get("/materiales", verifyAdminOrProfesor, showAllMateriales);
@@ -226,6 +233,6 @@ router.get("/materiales/:id", verifyAdminOrProfesor, obtenerMaterialPorId);
 router.post("/materiales", verifyAdminOrProfesor, uploadArchivo, createMaterial);
 router.post("/materiales/:id", verifyAdminOrProfesor, uploadArchivo, actualizarMaterial);
 router.post("/borrarMaterial/:id", verifyAdminOrProfesor, deleteMaterial);
-router.get("/materiales/documento/:id", verifyAdminOrProfesor, obtenerDocumentoPorId);
+router.get("/materiales/documento/:id", verifyUser, obtenerDocumentoPorId);
 
 export default router;

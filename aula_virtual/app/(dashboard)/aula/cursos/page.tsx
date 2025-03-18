@@ -13,7 +13,7 @@ export function generateMetadata() {
 
 export default async function Page() {
   const data = await getServerSideProps("cursosComprados");
-
+  console.log(data)
   return (
     <>
       <div className="w-full mb-6">

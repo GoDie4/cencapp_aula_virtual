@@ -203,7 +203,9 @@ async function obtenerSecciones(req, res) {
             secciones = await prisma.seccion.findMany({
                 where: {
                     curso: {
-                        nombre: nombre,
+                        nombre: {
+                            contains: nombre
+                        }
                     },
                 },
                 include: {
