@@ -103,7 +103,7 @@ const register = async (req, res) => {
             sameSite: "none",
             secure: true,
             httpOnly: true,
-            domain: ".cencapperu.com",
+            // domain: ".cencapperu.com",
             maxAge: 2 * 60 * 60 * 1000,
         });
         return res.status(201).json({
@@ -140,7 +140,7 @@ const login = async (req, res) => {
             sameSite: "none",
             secure: true,
             httpOnly: true,
-            domain: ".cencapperu.com",
+            // domain: ".cencapperu.com",
             maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
         });
         const primerNombre = usuarioExiste.nombres.split(" ");
