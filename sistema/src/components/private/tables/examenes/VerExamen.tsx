@@ -3,8 +3,8 @@ import { parseDate } from '../../../../logic/parseDate'
 
 export default function VerExamen ({ exam }: { exam: TestInterface }): JSX.Element {
   return (
-    <div className="space-y-4">
-      <div>
+    <div className="w-full space-y-4">
+      <div className='w-full'>
         <h3 className='font-bold'>Código</h3>
         <p className='font-medium'>{exam.id}</p>
       </div>
