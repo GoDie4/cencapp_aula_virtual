@@ -31,17 +31,17 @@ export default function ExamenesCargoRevisar (): JSX.Element {
       setLoadingComponents(false)
     }
   }
-
+  /*
   const filterDate = (): CursosUsuarios[] => {
     return examenes.slice(indexOfFirstPost, indexOfLastPost)
   }
-
+  */
   useEffect(() => {
     getExamenes()
   }, [])
 
-  const indexOfLastPost = paginaActual * cantidadRegistros
-  const indexOfFirstPost = indexOfLastPost - cantidadRegistros
+  // const indexOfLastPost = paginaActual * cantidadRegistros
+  // const indexOfFirstPost = indexOfLastPost - cantidadRegistros
   let totalPosts = 0
 
   return (
@@ -84,7 +84,7 @@ export default function ExamenesCargoRevisar (): JSX.Element {
                   />
                 </div>
           </div>
-        )}
+          )}
     </>
   )
 }

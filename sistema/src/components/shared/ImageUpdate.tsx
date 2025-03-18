@@ -4,7 +4,7 @@ import { type ImagePreviewPropsUdpdate } from './Interfaces'
 import { Global } from '../../helper/Global'
 
 export const ImageUpdate = ({
-  globalUrl,
+  // globalUrl,
   url,
   setUrl,
   boton,

@@ -1,8 +1,7 @@
-import React from 'react'
 import { type MaterialesInterface } from '../../../../interfaces/MaterialesInterface'
 import { parseDate } from '../../../../logic/parseDate'
 
-export default function VerMateriales({ materiales }: { materiales: MaterialesInterface }): JSX.Element {
+export default function VerMateriales ({ materiales }: { materiales: MaterialesInterface }): JSX.Element {
   return (
     <div className="space-y-4">
       <div>

@@ -13,7 +13,7 @@ import Editor from '../../../shared/Editar'
 import { formatearFechaParaInputDate } from '../../../../logic/parseDate'
 import useAuth from '../../../../hooks/useAuth'
 
-export default function EditarExamen(): JSX.Element {
+export default function EditarExamen (): JSX.Element {
   const { id } = useParams()
   const { auth } = useAuth()
   const token = localStorage.getItem('token')

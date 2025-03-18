@@ -55,7 +55,7 @@ const Home = (): JSX.Element => {
   return (
     <div>
       <div className="flex items-center justify-between mb-10" >
-        <h1 className="text-2xl md:text-4xl text-white">{mensaje}, {auth.name}!</h1>
+        <h1 className="text-2xl md:text-4xl text-white">{mensaje}, {auth.nombres}!</h1>
       </div>
       {loading
         ? <Loading />

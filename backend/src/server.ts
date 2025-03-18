@@ -14,7 +14,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:4000",
       "https://aula.cencapperu.com",
-      "https://administrador.cencapperu.com/",
+      "https://administrador.cencapperu.com",
     ],
     credentials: true,
   })
