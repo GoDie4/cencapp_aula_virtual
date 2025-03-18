@@ -45,7 +45,8 @@ import {
   verifyAlumno,
   verifyProfesor,
   verifyUser,
-  verifyAlumnoNoCookie
+  verifyAlumnoNoCookie,
+  verifyAlumnoOrProfesor
 } from "../middlewares/JWTMiddleware";
 import { getDecodedUser } from "../controllers/user.controller";
 import {
@@ -226,6 +227,6 @@ router.get("/materiales/:id", verifyAdminOrProfesor, obtenerMaterialPorId);
 router.post("/materiales", verifyAdminOrProfesor, uploadArchivo, createMaterial);
 router.post("/materiales/:id", verifyAdminOrProfesor, uploadArchivo, actualizarMaterial);
 router.post("/borrarMaterial/:id", verifyAdminOrProfesor, deleteMaterial);
-router.get("/materiales/documento/:id", verifyAdminOrProfesor, obtenerDocumentoPorId);
+router.get("/materiales/documento/:id", verifyUser, obtenerDocumentoPorId);
 
 export default router;
