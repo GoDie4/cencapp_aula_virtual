@@ -155,7 +155,7 @@ router.get("/cursoPorSlug/:slug", verifyAlumno, verificarCompraCurso, cursoPorSl
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
 router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
-router.get("/obtenerCursoMateriales/:id", verifyAdminOrProfesor, obtenerCursoMateriales);
+router.get("/obtenerCursoMateriales/:id", verifyAlumno, obtenerCursoMateriales);
 
 // Profesores
 router.post("/profesores", verifyAdmin, crearProfesor);

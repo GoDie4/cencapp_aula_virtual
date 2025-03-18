@@ -349,3 +349,9 @@
 2025-03-17T16:56:28.866Z [ERROR] GET /api/cursosComprados | Status: 404 | Time: 1.634 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 2025-03-17T16:56:32.594Z [ERROR] GET /api/cursosComprados | Status: 404 | Time: 0.679 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 
+2025-03-18T00:00:54.850Z [ERROR] GET /api/obtenerExamenesAsignados | Status: 401 | Time: 5.059 ms | IP: ::1 | User-Agent: "node"
+2025-03-18T00:01:00.216Z [ERROR] GET /api/obtenerExamenesAsignados | Status: 401 | Time: 2.441 ms | IP: ::1 | User-Agent: "node"
+2025-03-18T00:01:10.055Z [ERROR] GET /api/obtenerCursoMateriales/cm853wgjo0001hy4ocgpkldt3 | Status: 404 | Time: 26.035 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+2025-03-18T00:01:10.065Z [ERROR] GET /api/obtenerCursoMateriales/cm853wgjo0001hy4ocgpkldt3 | Status: 404 | Time: 4.592 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+2025-03-18T00:04:42.546Z [ERROR] GET /api/obtenerCursoMaterialesPorAlumno/cm853wgjo0001hy4ocgpkldt3 | Status: 404 | Time: 5.623 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+2025-03-18T00:04:58.899Z [ERROR] GET /api/obtenerCursoMaterialesPorAlumno/cm853wgjo0001hy4ocgpkldt3 | Status: 404 | Time: 2.079 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"

@@ -610,7 +610,20 @@ const obtenerCursoMateriales = async (req, res) => {
                 },
             },
         });
-        res.status(200).json({ cursos });
+        const cursosFiltrados = cursos.map((c) => {
+            const secciones = c.curso.Seccion.map((s) => {
+                const clasesConMateriales = s.clases.filter((clase) => clase.materiales.length > 0);
+                return { ...s, clases: clasesConMateriales };
+            });
+            return {
+                ...c,
+                curso: {
+                    ...c.curso,
+                    Seccion: secciones,
+                },
+            };
+        });
+        res.status(200).json({ cursos: cursosFiltrados });
     }
     catch (e) {
         console.error(e);
