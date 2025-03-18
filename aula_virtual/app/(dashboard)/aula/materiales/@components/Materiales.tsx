@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { ItemMaterial } from "./ItemMaterial";
 import { HeaderMaterial } from "./HeaderMaterial";
 import axios from "axios";
-import { Global } from "@/helper/Global";
 import {
   Curso,
   ResponseFetchMaterial,
 } from "../@interfaces/FetchMaterialInterface";
+import { config } from "@/config/config";
 
 const Materiales: React.FC = () => {
   const [cursosMaterial, setCursosMaterial] = useState<Curso[]>([]);
@@ -69,10 +69,9 @@ const Materiales: React.FC = () => {
   ];
   */
 
-  const total = 0;
   const getMateriales = async () => {
     const response = await axios.get<ResponseFetchMaterial>(
-      `${Global.url}/obtenerCursoMaterialesPorAlumno`,
+      `${config.apiUrl}/obtenerCursoMaterialesPorAlumno`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

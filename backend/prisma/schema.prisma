@@ -88,7 +88,7 @@ model CursoPagadoDetalles {
 
 model CursoDetalles {
     id            String   @id @default(cuid())
-    curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
     cursoId       String   @unique
     objetivo      String   @db.LongText
     presentacion  String?  @db.LongText
