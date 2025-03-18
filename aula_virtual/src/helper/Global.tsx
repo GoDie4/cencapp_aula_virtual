@@ -11,6 +11,6 @@ export const Global = {
 */
 
 export const Global = {
-  url: 'http://localhost:4000/api',
-  urlImages: 'http://localhost:4000'
+  url: process.env.NEXT_PUBLIC_API_URL,
+  urlImages: process.env.NEXT_PUBLIC_IMAGES_URL
 }

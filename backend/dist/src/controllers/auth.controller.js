@@ -137,10 +137,10 @@ const login = async (req, res) => {
             return res.status(400).json({ message: "Contraseña incorrecta" });
         const token = await (0, jwt_1.default)({ id: usuarioExiste.id });
         res.cookie("token", token, {
-            sameSite: "lax",
-            secure: false,
+            sameSite: "none",
+            secure: true,
             httpOnly: true,
-            //domain: ".cencapperu.com",
+            domain: ".cencapperu.com",
             maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
         });
         const primerNombre = usuarioExiste.nombres.split(" ");

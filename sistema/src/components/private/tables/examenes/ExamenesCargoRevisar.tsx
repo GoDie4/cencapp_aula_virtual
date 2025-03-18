@@ -6,6 +6,7 @@ import { Paginacion } from '../../../shared/Paginacion'
 import { Loading } from '../../../shared/Loading'
 import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
 import { type TestInterface, type TestResuelto } from '../../../../interfaces/TestInterface'
+import { ExamenesCargoColumna } from './ExamenesCargoColumna'
 
 export default function ExamenesCargoRevisar (): JSX.Element {
   const { loadingComponents, setLoadingComponents } = useAuth()
@@ -52,10 +53,10 @@ export default function ExamenesCargoRevisar (): JSX.Element {
         : (
           <div className="bg-secondary-100 p-8 rounded-xl mt-4">
             <div className="hidden md:grid grid-cols-1 md:grid-cols-6 gap-4 mb-10 p-4">
-              <h5 className="md:text-center">Código</h5>
-              <h5 className="md:text-center">Titulo</h5>
+              <h5 className="md:text-center">Curso</h5>
+              <h5 className="md:text-center">Estudiante</h5>
               <h5 className="md:text-center">Examen</h5>
-              <h5 className="md:text-center">Activo</h5>
+              <h5 className="md:text-center">Estado</h5>
               <h5 className="md:text-center">Tipo</h5>
               <h5 className="md:text-center">Acciones</h5>
 
@@ -65,9 +66,16 @@ export default function ExamenesCargoRevisar (): JSX.Element {
                 return cursoUsuario.curso?.test.map((test: TestInterface) => {
                   return test.examenesResueltos?.map((examenResuelto: TestResuelto) => {
                     totalPosts++
+                    
                     return (
                       <>
-                        {examenResuelto.puntaje_final}
+                        <ExamenesCargoColumna 
+                          key={examenResuelto.id} 
+                          curso={test.curso} 
+                          examenResuelto={examenResuelto}  
+                          test={test}
+                          getExamenes={getExamenes}
+                        />
                       </>
                     )
                   })
