@@ -39,6 +39,12 @@ export function DialogResponsiveProvider({ children }: { children: React.ReactNo
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
+        sx={{
+          '.MuiDialog-paper': {
+            backgroundColor: '#fff !important',
+            width: '100% !important'
+          }
+        }}
       >
         <button title='cerrar' onClick={handleClose} type='button' className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none'>
           <IoClose size={25} color='black' />
