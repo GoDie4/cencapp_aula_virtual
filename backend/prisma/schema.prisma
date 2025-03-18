@@ -8,32 +8,31 @@ generator client {
     provider = "prisma-client-js"
 }
 
-generator erd {
-    provider = "prisma-erd-generator"
-    output   = "./diagrama.png" // Guarda la imagen en la carpeta prisma
-    format   = "png" // Puedes cambiarlo a "png" o "dot"
-}
-
 datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
 }
 
 model Curso {
-    id             String         @id @default(cuid())
-    nombre         String         @db.VarChar(255)
-    imagen         String         @db.VarChar(255)
-    banner         String         @db.VarChar(255)
-    horas          Int
-    precio         Decimal
-    categoriaId    Int
-    categoria      Categorias     @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
-    createdAt      DateTime       @default(now())
-    updatedAt      DateTime       @updatedAt
-    cursosUsuarios CursoUsuario[]
-    secciones      Seccion[]
-    detalles       CursoDetalles?
-    beneficios     Beneficio[]
+    id              String            @id @default(cuid())
+    nombre          String            @db.VarChar(255)
+    slug            String            @default("") @db.VarChar(255)
+    imagen          String            @db.VarChar(255)
+    banner          String            @db.VarChar(255)
+    horas           Int
+    precio          Decimal
+    categoriaId     Int
+    categoria       Categorias        @relation(fields: [categoriaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+    cursosUsuarios  CursoUsuario[]
+    secciones       SeccionesCursos[]
+    detalles        CursoDetalles?
+    beneficios      Beneficio[]
+    Seccion         Seccion[]
+    PorcentajeCurso PorcentajeCurso[]
+    ventas_detalles VentasDetalles[]
+    test            Test[]
 
     @@map("cursos")
 }
@@ -41,17 +40,21 @@ model Curso {
 model Seccion {
     id        String   @id @default(cuid())
     nombre    String
+    slug      String   @default("") @db.VarChar(255)
     cursoId   String
     curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
     posicion  Int
     clases    Clases[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@map("secciones")
 }
 
 model Clases {
     id          String        @id @default(cuid())
     nombre      String
+    slug        String        @unique
     duracion    String
     posicion    Int
     url_video   String
@@ -59,18 +62,39 @@ model Clases {
     seccion     Seccion       @relation(fields: [seccionId], references: [id], onDelete: Cascade)
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
-    Comentarios Comentarios[]
+    comentarios Comentarios[]
+    test        Test[]
+    materiales  Materiales[]
+
+    @@map("clases")
+}
+
+model CursoPagado {
+    id               String  @id @default(cuid())
+    mercadoPaymentId String
+    cursoId          String
+    userId           String
+    totalPagado      Decimal
+
+    @@map("venta")
+}
+
+model CursoPagadoDetalles {
+    id            String @id @default(cuid())
+    cursoPagadoId String
+
+    @@map("detalles_venta")
 }
 
 model CursoDetalles {
     id            String   @id @default(cuid())
     curso         Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
     cursoId       String   @unique
-    objetivo      String   @default("") @db.LongText
-    presentacion  String?  @default("") @db.LongText
-    dirigido      String?  @default("") @db.LongText
-    metodologia   String?  @default("") @db.LongText
-    certificacion String?  @default("") @db.LongText
+    objetivo      String   @db.LongText
+    presentacion  String?  @db.LongText
+    dirigido      String?  @db.LongText
+    metodologia   String?  @db.LongText
+    certificacion String?  @db.LongText
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
@@ -106,6 +130,17 @@ enum CursoUsuarioTipo {
     CARGO
 }
 
+model SeccionesCursos {
+    id        String   @id @default(cuid())
+    cursoId   String   @db.Char(36)
+    seccionId String   @db.Char(36)
+    curso     Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("secciones_cursos")
+}
+
 model Rol {
     id        Int       @id @default(autoincrement())
     nombre    String    @unique @db.VarChar(20)
@@ -117,39 +152,31 @@ model Rol {
 }
 
 model Usuario {
-    id             String         @id @default(cuid()) @db.Char(36)
-    rolId          Int            @default(1)
-    nombres        String         @db.VarChar(255)
-    apellidos      String         @db.VarChar(255)
-    email          String         @unique
-    celular        String         @db.VarChar(15)
-    password       String
-    activo         Boolean        @default(false)
-    createdAt      DateTime       @default(now())
-    updatedAt      DateTime       @updatedAt
-    rol            Rol            @relation(fields: [rolId], references: [id], onDelete: Cascade)
-    cursosUsuarios CursoUsuario[]
-    Comentarios    Comentarios[]
+    id                 String               @id @default(cuid()) @db.Char(36)
+    rolId              Int                  @default(1)
+    nombres            String               @db.VarChar(255)
+    apellidos          String               @db.VarChar(255)
+    email              String               @unique
+    celular            String               @db.VarChar(15)
+    password           String
+    activo             Boolean              @default(false)
+    createdAt          DateTime             @default(now())
+    updatedAt          DateTime             @updatedAt
+    rol                Rol                  @relation(fields: [rolId], references: [id], onDelete: Cascade)
+    cursosUsuarios     CursoUsuario[]
+    Comentarios        Comentarios[]
+    PasswordResetToken PasswordResetToken[]
+    PorcentajeCurso    PorcentajeCurso[]
+    ventas             Ventas[]
+    examenesResueltos  TestResuelto[]
 
     @@map("usuarios")
-}
-
-model CursoPagado {
-    id               String  @id @default(cuid())
-    mercadoPaymentId String
-    cursoId          String
-    userId           String
-    totalPagado      Decimal
-}
-
-model CursoPagadoDetalles {
-    id            String @id @default(cuid())
-    cursoPagadoId String
 }
 
 model Categorias {
     id         Int      @id @default(autoincrement())
     nombre     String   @db.VarChar(255)
+    slug       String   @default("") @db.VarChar(255)
     url_icono  String   @db.VarChar(255)
     url_imagen String   @db.VarChar(255)
     createdAt  DateTime @default(now())
@@ -170,4 +197,120 @@ model Comentarios {
     clase      Clases   @relation(fields: [claseId], references: [id])
 
     @@map("comentarios")
+}
+
+model PasswordResetToken {
+    id        Int      @id @default(autoincrement())
+    token     String   @unique
+    expiresAt DateTime
+    user      Usuario  @relation(fields: [userId], references: [id])
+    userId    String
+    createdAt DateTime @default(now())
+
+    @@map("password_reset_tokens")
+}
+
+model PorcentajeCurso {
+    id          String   @id @default(cuid())
+    userId      String
+    cursoId     String
+    porcentaje  Float    @default(0)
+    ultimaClase Json
+    updatedAt   DateTime @updatedAt
+
+    user  Usuario @relation(fields: [userId], references: [id])
+    curso Curso   @relation(fields: [cursoId], references: [id])
+
+    @@unique([userId, cursoId])
+}
+
+model Ventas {
+    id                String           @id @default(cuid())
+    usuarioId         String
+    pedidoMercadoId   String           @unique
+    fecha_aprobada    DateTime
+    estado            String
+    estado_detalle    String
+    total_neto        Decimal
+    total             Decimal
+    ultimo_caracteres String
+    usuario           Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+    detalles          VentasDetalles[]
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+
+    @@map("ventas")
+}
+
+model VentasDetalles {
+    id         String  @id @default(cuid())
+    ventaId    String
+    productoId String
+    cantidad   Int
+    precio     Decimal
+    venta      Ventas  @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+    curso      Curso   @relation(fields: [productoId], references: [id], onDelete: Cascade)
+
+    @@map("ventas_detalles")
+}
+
+model Test {
+    id                String         @id @default(cuid())
+    url_archivo       String
+    titulo            String
+    descripcion       String         @db.Text
+    claseId           String?
+    cursoId           String?
+    size              Int
+    mime_type         String
+    fecha_inicio      DateTime
+    fecha_fin         DateTime
+    estado            EstadoTest
+    tiempo_limite     Int?
+    tipo_prueba       TipoPrueba
+    puntaje_maxima    Decimal
+    activo            Boolean
+    curso             Curso?         @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+    clase             Clases?        @relation(fields: [claseId], references: [id], onDelete: Cascade)
+    createdAt         DateTime       @default(now())
+    updatedAt         DateTime       @updatedAt
+    examenesResueltos TestResuelto[]
+
+    @@map("examenes")
+}
+
+enum EstadoTest {
+    Pendiente
+    EnProceso
+    Finalizado
+}
+
+model TestResuelto {
+    id                    String  @id @default(cuid())
+    examenId              String
+    userId                String
+    url_archivo_resultado String
+    puntuacion_total      String
+    examen                Test    @relation(fields: [examenId], references: [id], onDelete: Cascade)
+    usuario               Usuario @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("examen_resueltos")
+}
+
+enum TipoPrueba {
+    EXAMEN
+    EJERCICIOS
+}
+
+model Materiales {
+    id           Int      @id @default(autoincrement())
+    nombre       String   @db.VarChar(255)
+    descripcion  String   @db.Text
+    path_archivo String   @db.VarChar(255)
+    mime_type    String   @db.VarChar(255)
+    size         Int
+    claseId      String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    clase        Clases   @relation(fields: [claseId], references: [id], onDelete: Cascade)
 }

@@ -9,7 +9,7 @@ import axios, { AxiosError } from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
-import { type ClaseValuesModificate } from '../../../shared/Interfaces'
+import { SeccionValues, type ClaseValuesModificate } from '../../../shared/Interfaces'
 import { type Curso } from '../../../../interfaces/CursoInterface'
 
 export default function EditarSeccion (): JSX.Element {
@@ -42,7 +42,7 @@ export default function EditarSeccion (): JSX.Element {
   }, [])
 
   const EditarSeccion = async (
-    values: ClaseValuesModificate
+    values: SeccionValues
   ): Promise<void> => {
     setLoadingComponents(true)
     const token = localStorage.getItem('token')
@@ -55,9 +55,7 @@ export default function EditarSeccion (): JSX.Element {
     const body = {
       nombre: values.nombre,
       posicion: values.posicion,
-      duracion: values.duracion,
-      seccionId: values.seccionId,
-      url_video: values.url_video
+      cursoId: values.cursoId
     }
     try {
       const { status, data } = await axios.post(

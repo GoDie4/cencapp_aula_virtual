@@ -1,10 +1,19 @@
-import { NextPage } from "next";
 import { WrapperCursos } from "./@components/WrapperCursos";
 import { CardCursoAula } from "./@components/CardCursoAula";
 import { ProgressCurso } from "./@components/ProgressCurso";
 import { TitleAula } from "../../@components/estructura/TitleAula";
+import { getServerSideProps } from "@/server/getServerSideProps";
+import { Curso } from "@/interfaces/CursoInterface";
+import { CursosMetadata } from "@/seo/aula/CursosMetaData";
 
-const Page: NextPage = () => {
+export function generateMetadata() {
+  const metadata = CursosMetadata();
+  return metadata;
+}
+
+export default async function Page() {
+  const data = await getServerSideProps("cursosComprados");
+
   return (
     <>
       <div className="w-full mb-6">
@@ -16,14 +25,13 @@ const Page: NextPage = () => {
             Ver progreso
           </a>
         </TitleAula>
-      
       </div>
       <div className="w-full flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-3/5">
           <WrapperCursos>
-            <CardCursoAula />
-            <CardCursoAula />
-            <CardCursoAula />
+            {data?.cursos?.map((curso: Curso) => (
+              <CardCursoAula curso={curso} key={curso.id} />
+            ))}
           </WrapperCursos>
         </div>
         <div className="w-full lg:w-2/5" id="progreso">
@@ -32,27 +40,18 @@ const Page: NextPage = () => {
               Progreso de aprendizaje
             </h3>
             <ul className="space-y-6">
-              <li>
-                <ProgressCurso progreso={35} />
-              </li>
-              <li>
-                <ProgressCurso progreso={60} />
-              </li>
-              <li>
-                <ProgressCurso progreso={90} />
-              </li>
-              <li>
-                <ProgressCurso progreso={40} />
-              </li>
-              <li>
-                <ProgressCurso progreso={5} />
-              </li>
+              {data?.cursos?.map((curso: Curso) => (
+                <li key={curso.id}>
+                  <ProgressCurso
+                    progreso={curso?.PorcentajeCurso?.[0]?.porcentaje ?? 0}
+                    curso={curso.nombre}
+                  />
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
     </>
   );
-};
-
-export default Page;
+}

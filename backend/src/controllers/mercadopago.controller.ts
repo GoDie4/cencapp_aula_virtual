@@ -7,14 +7,9 @@ import { InfoRequest } from "../interfaces/InfoRequest";
 import crypto from "crypto";
 import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 import { PrismaClient } from "@prisma/client";
-import path from "path";
-import fs from "fs/promises";
-import * as dotenv from "dotenv";
-
-dotenv.config();
 
 const client = new MercadoPagoConfig({
-  accessToken: process.env.ACCESS_TOKEN_MERCADO_PAGO || "",
+  accessToken: ENV.ACCESS_TOKEN,
 });
 
 const prisma = new PrismaClient();
@@ -58,17 +53,11 @@ export async function enviarVenta(req: Request, res: Response): Promise<void> {
       init_point,
     });
     return;
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
-    const errorMessage = `[${new Date().toISOString()}] Error en /api/seccionesBuscar/all: ${
-      error.message
-    }\n`;
-    fs.appendFile(path.join(__dirname, "error.log"), errorMessage);
-
     res.status(404).json({
-      message: error,
+      message: "Se ha generado un error en su pedido",
     });
-
     return;
   }
 }
@@ -97,7 +86,7 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
         }
       });
       const manifest = `id:${data.id};request-id:${requestId};ts:${ts};`;
-      const hmac = crypto.createHmac("sha256", ENV.MercadoSecret);
+      const hmac = crypto.createHmac("sha256", ENV.MercadoSecret ?? "03c3ba195e0cb7a3e67b990e18d884aa9db163ad459b6f5ef3174f505c06d9a5");
       hmac.update(manifest);
 
       const sha = hmac.digest("hex");
@@ -106,14 +95,36 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
         // HMAC verification passed
 
         const datos: PaymentResponse = await payment.get({ id: data.id });
+        console.log(datos);
+        const ventaAprovada = await prisma.ventas.create({
+          data: {
+            pedidoMercadoId: data.id,
+            usuarioId: datos.metadata.user_id_con,
+            estado: datos.status ?? "",
+            estado_detalle: datos.status_detail ?? "",
+            total: datos.transaction_details?.total_paid_amount ?? 0,
+            total_neto: datos.transaction_details?.net_received_amount ?? 0,
+            ultimo_caracteres: datos.card?.last_four_digits ?? "",
+            fecha_aprobada: datos.date_approved ?? "",
+          },
+        });
 
         datos.additional_info?.items?.map(async (item) => {
           await prisma.cursoUsuario.create({
             data: {
               tipo: "MATRICULADO",
-              cursoId: item.id,
+              cursoId: item.id as string,
               avance: "0",
               userId: datos.metadata.user_id_con,
+            },
+          });
+
+          await prisma.ventasDetalles.create({
+            data: {
+              ventaId: ventaAprovada.id,
+              productoId: item.id as string,
+              cantidad: Number(item.quantity),
+              precio: item.unit_price,
             },
           });
         });
@@ -134,5 +145,70 @@ export async function recibirVenta(req: Request, res: Response): Promise<void> {
       message: "Ocurrió un error en el servidor",
     });
     return;
+  }
+}
+
+export async function obtenerVentas(
+  req: Request,
+  res: Response
+): Promise<void> {
+  try {
+    const ventas = await prisma.ventas.findMany({
+      include: {
+        detalles: {
+          include: {
+            curso: true,
+          },
+        },
+        usuario: true,
+      },
+    });
+    res.status(200).json({
+      ventas,
+    });
+    return;
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Ocurrió un error en el servidor",
+    });
+    return;
+  }
+}
+
+export async function obtenerCursosComprados(
+  req: any,
+  res: Response
+): Promise<void> {
+  try {
+    const userId = req.user.id;
+
+    const cursos = await prisma.curso.findMany({
+      include: {
+        categoria: true,
+        detalles: true,
+        PorcentajeCurso: {
+          select: {
+            porcentaje: true,
+          },
+        },
+      },
+      where: {
+        ventas_detalles: {
+          some: {
+            venta: {
+              usuarioId: userId,
+            },
+          },
+        },
+      },
+    });
+
+    res.status(200).json({ cursos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Ocurrió un error en el servidor",
+    });
   }
 }

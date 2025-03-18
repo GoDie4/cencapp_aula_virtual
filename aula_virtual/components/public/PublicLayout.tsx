@@ -1,13 +1,7 @@
-import { Outlet } from 'react-router-dom'
-import { Header } from './estructura/Header'
-import { Footer } from './estructura/Footer'
+import React from 'react'
 
-export const PublicLayout = (): JSX.Element => {
+export const PublicLayout = () => {
   return (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-    </>
+    <div>PublicLayout</div>
   )
 }
