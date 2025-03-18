@@ -33,6 +33,7 @@ model Curso {
     PorcentajeCurso PorcentajeCurso[]
     ventas_detalles VentasDetalles[]
     test            Test[]
+    Certificados    Certificados[]
 
     @@map("cursos")
 }
@@ -169,26 +170,27 @@ model Usuario {
     PorcentajeCurso    PorcentajeCurso[]
     ventas             Ventas[]
     examenesResueltos  TestResuelto[]
+    Certificados       Certificados[]
 
     @@map("usuarios")
 }
 
 model CardVenta {
-  id                         Int              @id @default(autoincrement())
-  cardId                     String           
-  country                    String
-  date_created               DateTime
-  date_last_updated          DateTime
-  expiration_month           Int
-  expiration_year            Int
-  first_six_digits           String
-  last_four_digits           String
+    id                Int      @id @default(autoincrement())
+    cardId            String
+    country           String
+    date_created      DateTime
+    date_last_updated DateTime
+    expiration_month  Int
+    expiration_year   Int
+    first_six_digits  String
+    last_four_digits  String
 }
 
 model MethodVenta {
-  id                         Int              @id @default(autoincrement())
-  methodId                   String
-  tipo                       String
+    id       Int    @id @default(autoincrement())
+    methodId String
+    tipo     String
 }
 
 model Categorias {
@@ -285,7 +287,7 @@ model Test {
     fecha_fin         DateTime
     estado            EstadoTest     @default(Pendiente)
     tiempo_limite     Int?
-    tipo_prueba       TipoPrueba    
+    tipo_prueba       TipoPrueba
     puntaje_maxima    Decimal
     activo            Boolean
     curso             Curso?         @relation(fields: [cursoId], references: [id], onDelete: Cascade)
@@ -298,22 +300,22 @@ model Test {
 }
 
 enum EstadoTest {
-  Pendiente
-  EnRevision
-  Finalizado
+    Pendiente
+    EnRevision
+    Finalizado
 }
 
 model TestResuelto {
-    id                    String            @id @default(cuid())
+    id                    String     @id @default(cuid())
     examenId              String
     userId                String
     url_archivo_resultado String
     puntaje_final         String
-    estado                EstadoTest        @default(EnRevision)
-    examen                Test              @relation(fields: [examenId], references: [id], onDelete: Cascade)
-    usuario               Usuario           @relation(fields: [userId], references: [id], onDelete: Cascade)
-    createdAt             DateTime          @default(now())
-    updatedAt             DateTime          @updatedAt
+    estado                EstadoTest @default(EnRevision)
+    examen                Test       @relation(fields: [examenId], references: [id], onDelete: Cascade)
+    usuario               Usuario    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt             DateTime   @default(now())
+    updatedAt             DateTime   @updatedAt
 
     @@map("examen_resueltos")
 }
@@ -334,4 +336,24 @@ model Materiales {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
     clase        Clases   @relation(fields: [claseId], references: [id], onDelete: Cascade)
+}
+
+model Certificados {
+    id          String   @id @default(uuid())
+    nombre      String
+    emitido_en  DateTime
+    url_archivo String
+    size        Int
+    mime_type   String
+
+    usuario   Usuario @relation(fields: [usuarioId], references: [id])
+    usuarioId String
+
+    curso   Curso  @relation(fields: [cursoId], references: [id])
+    cursoId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    
 }

@@ -1,15 +1,16 @@
-import { NextPage } from "next";
 import Tabs, {
   TabContent,
   TabTitle,
 } from "../../../../components/navigation/Tabs";
 import { TitleAula } from "../../@components/estructura/TitleAula";
 import { TareasMetadata } from "@/seo/aula/TareasMetaData";
+import { TareasColumna } from "./@components/TareasColumna";
+import { getServerSideProps } from "@/server/getServerSideProps";
 export function generateMetadata() {
   const metadata = TareasMetadata;
   return metadata;
 }
-const Page: NextPage = () => {
+export default async function page() {
   const tareasPendientes = [
     {
       id: "T001",
@@ -50,6 +51,9 @@ const Page: NextPage = () => {
       calificacion: "18/20",
     },
   ];
+
+    const data = await getServerSideProps("user/yo");
+  
   return (
     <div>
       <TitleAula titulo="Mis Tareas" />
@@ -82,34 +86,7 @@ const Page: NextPage = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {tareasPendientes.map((tarea) => (
-                      <tr key={tarea.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {tarea.id}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {tarea.nombre}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-black-700">
-                          {tarea.curso}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-black-700">
-                          {tarea.fechaLimite}
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                            Pendiente
-                          </span>
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
-                          <button className="text-primary-main hover:text-primary-900">
-                            Comenzar tarea
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+                  <TareasColumna data={data}/>
                 </table>
               </div>
 
@@ -249,4 +226,3 @@ const Page: NextPage = () => {
   );
 };
 
-export default Page;
