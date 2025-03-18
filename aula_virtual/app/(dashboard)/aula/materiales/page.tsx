@@ -7,6 +7,7 @@ export function generateMetadata() {
   return metadata;
 }
 const Page: NextPage = () => {
+  
   return (
     <div>
       <TitleAula titulo="Materiales por Curso" />

@@ -119,6 +119,7 @@ import {
   showAllMateriales,
   uploadArchivo
 } from "../controllers/materiales.controller";
+import { colocarPuntaje, obtenerExamenResueltoDocumento } from "../controllers/testResueltos.controller";
 
 const router = Router();
 
@@ -217,9 +218,13 @@ router.get("/ejercicios/documento/:id", verifyUser, obtenerEjerciciosPorProfesor
 router.get("/examenes/cargo/:id", verifyProfesor, obtenerExamenesPorProfesor);
 router.get("/materiales/cargo/:id", verifyProfesor, obtenerMaterialesPorProfesor);
 router.get("/ejercicios/cargo/:id", verifyProfesor, obtenerEjerciciosPorProfesor);
-router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);
 router.post("/examenes/enviar", verifyAlumnoNoCookie, uploadArchivoRes, enviarExamen);
 router.get('/obtenerExamenesAsignados', verifyAlumno, obtenerExamenesAsignados)
+
+// Test Resueltos
+router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);
+router.post("/testsResuelto/documento", verifyProfesor, obtenerExamenResueltoDocumento)
+router.post("/colocarPuntaje", verifyProfesor, colocarPuntaje)
 
 // Materiales
 router.get("/materiales", verifyAdminOrProfesor, showAllMateriales);

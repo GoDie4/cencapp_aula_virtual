@@ -4,12 +4,13 @@ import { cookies } from "next/headers";
 export async function getServerSideProps(url: string) {
   const cookieStore = await cookies(); 
   const token = cookieStore.get("token")?.value;
-
+  console.log(token)
   try {
     const res = await fetch(`${config.apiUrl}/${url}`, {
       cache: "no-store",
 
       headers: {
+        // 'Authorization': `Bearer ${localStorage.getItem('token')}`,
         Cookie: `token=${token}`,
       },
     });

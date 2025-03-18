@@ -68,7 +68,7 @@ const uploadArchivo = multer({
     const extname = filetypes.test(
       path.extname(file.originalname).toLowerCase()
     );
-
+    
     if (mimetype && extname) {
       return cb(null, true);
     }
@@ -472,11 +472,16 @@ export async function obtenerExamenesPendientes(req: Request, res: Response) {
                 examenesResueltos: {
                   every: {
                     estado: "EnRevision"
-                  }
+                  },
                 }
               },
               include: {
-                examenesResueltos: true
+                examenesResueltos: {
+                  include: {
+                    usuario: true
+                  }
+                },
+                curso: true
               }
             }
           }
@@ -533,6 +538,7 @@ export async function obtenerExamenesAsignados(req: Request, res: Response) {
 export async function enviarExamen(req: Request, res: Response) {
   const user = (req as any).user;
   const { examenId } = req.body 
+
   try {
     if (!req.file) {
       res
@@ -547,7 +553,8 @@ export async function enviarExamen(req: Request, res: Response) {
         userId: user.id,
         puntaje_final: "0",
         estado: 'EnRevision',
-        url_archivo_resultado: rutaArchivo ?? ""
+        url_archivo_resultado: rutaArchivo ?? "",
+        mime_type: req.file.mimetype
       }
     })
     res.status(201).json({
@@ -559,4 +566,4 @@ export async function enviarExamen(req: Request, res: Response) {
     })
     return
   }
-} 
+}
