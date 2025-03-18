@@ -85,7 +85,8 @@ async function main() {
     });
 }
 async function registrarRoles() {
-    roles.map(async (nombre) => {
+    const roles = ["administrador", "estudiante", "profesor", "prueba"];
+    for (const nombre of roles) {
         const rolExiste = await prisma.rol.findUnique({
             where: { nombre },
         });
@@ -95,7 +96,7 @@ async function registrarRoles() {
             });
             console.log(`Rol '${nombre}' registrado.`);
         }
-    });
+    }
 }
 async function registrarAdministrador() {
     const hashPassword = await bcrypt.hash("administrador", 10);
@@ -282,7 +283,7 @@ async function registrarVentaYDetalles(cursoId) {
             ultimo_caracteres: "1234",
         },
     });
-    console.log('Categoría Creada');
+    console.log('Venta creada');
     await prisma.ventasDetalles.create({
         data: {
             ventaId: venta.id,
