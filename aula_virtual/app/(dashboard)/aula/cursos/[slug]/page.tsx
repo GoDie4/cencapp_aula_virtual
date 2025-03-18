@@ -153,8 +153,15 @@ export default async function page({
     return <p>No tienes acceso a este curso</p>;
   }
   const clasesPlanas = dataCurso?.Seccion
-    ? dataCurso.Seccion.flatMap((seccion: Seccion) => seccion?.clases)
+    ? dataCurso.Seccion.sort(
+        (a: any, b: any) => a.posicion - b.posicion
+      ).flatMap((seccion: Seccion) => seccion?.clases)
     : [];
+
+  const seccionConPosicionUno = dataCurso?.Seccion?.find(
+    (sec: Seccion) => sec.posicion === 1
+  );
+  const primeraClase = seccionConPosicionUno?.clases?.[0];
   return (
     <>
       <div className="w-full p-3 md:p-5 space-y-16">
@@ -215,7 +222,7 @@ export default async function page({
               {(dataCurso?.PorcentajeCurso[0]?.porcentaje === 0 ||
                 !dataCurso.PorcentajeCurso[0]?.porcentaje) && (
                 <Link
-                  href={`/aula/cursos/${dataCurso.slug}/${dataCurso?.Seccion[0]?.clases[0].slug}`}
+                  href={`/aula/cursos/${dataCurso.slug}/${primeraClase.slug}`}
                   className="bg-secondary-main hover:bg-secondary-700 transition-all duration-300 ease-out  rounded-main text-lg text-white-main font-bold px-5 py-3 flex w-fit items-center"
                 >
                   Empezar curso
