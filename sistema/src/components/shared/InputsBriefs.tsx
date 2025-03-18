@@ -1,7 +1,7 @@
 interface inputs {
   name: string
   type: string
-  value: string | number | readonly string[] | undefined
+  value?: string | number | readonly string[] | undefined
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   onBlur: (event: React.ChangeEvent<HTMLInputElement>) => void
   disabled?: boolean

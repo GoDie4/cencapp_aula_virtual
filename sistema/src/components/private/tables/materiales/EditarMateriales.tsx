@@ -21,7 +21,7 @@ export default function EditarMateriales (): JSX.Element {
   const [documento, setDocumento] = useState<File | null>(null)
   const [pathArchivo, setPathArchivo] = useState('')
   const [mimeType, setMimeType] = useState('')
-  const [size, setSize] = useState('')
+  const [, setSize] = useState('')
   const [content, setContent] = useState('')
 
   const handleDocumentoChange = (event: React.ChangeEvent<HTMLInputElement>): void => {

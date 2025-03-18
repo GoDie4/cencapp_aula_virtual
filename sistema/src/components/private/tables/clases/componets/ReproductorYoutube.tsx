@@ -47,7 +47,7 @@ const ReproductorYoutube = ({
 
   return (
     <div>
-      <YouTube videoId={videoId} opts={opts} onReady={onReady} />
+      <YouTube videoId={videoId ?? ''} opts={opts} onReady={onReady} />
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import YouTube from 'react-youtube'
 import { type ClasesInterface } from '../../../../interfaces/ClasesInterface'
 import { parseDate } from '../../../../logic/parseDate'
 import '@justinribeiro/lite-youtube'
@@ -37,7 +38,7 @@ export default function VerClases ({ clase }: { clase: ClasesInterface }): JSX.E
       </div>
       <div className='space-y-3'>
         <h5 className='text-black font-bold'>Video</h5>
-        <lite-youtube videoid={clase.url_video}></lite-youtube>
+        <YouTube videoId={clase.url_video ?? ''}></YouTube>
       </div>
     </div>
   )

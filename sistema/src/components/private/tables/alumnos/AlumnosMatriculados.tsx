@@ -69,7 +69,7 @@ export default function AlumnosMatriculados (): JSX.Element {
 
             </div>
             {filterDate().map((alum: CursosUsuarios) => (
-              <AlumnosMatriculadosColumna key={alum.id} alum={alum} cantidadRegistros={cantidadRegistros} token={token ?? ''} getAlumnos={getAlumnos} totalPosts={totalPosts} paginaActual={paginaActual} setpaginaActual={setpaginaActual} />
+              <AlumnosMatriculadosColumna key={alum.id} alum={alum} />
             ))}
 
             <div className="flex flex-col md:flex-row gap-5 md:gap-0 justify-between content_buttons ">

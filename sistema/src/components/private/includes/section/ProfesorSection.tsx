@@ -5,7 +5,7 @@ import useAuth from '../../../../hooks/useAuth'
 
 export default function ProfesorSection (): JSX.Element {
   const { auth } = useAuth()
-  const [showMenu, setShowMenu] = useState(false)
+  const [, setShowMenu] = useState(false)
   const [showSubmenu, setShowSubmenu] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
   const handleItemClick = (itemId: number): void => {

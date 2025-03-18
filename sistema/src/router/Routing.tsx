@@ -1,7 +1,7 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from '../context/AuthProvider'
 import { PrivateLayout } from '../components/private/PrivateLayout'
-import { ListaBanners } from '../components/private/tables/banners/ListaBanners'
+// import { ListaBanners } from '../components/private/tables/banners/ListaBanners'
 import { ListaCategorias } from '../components/private/tables/categorias/ListaCategorias'
 import { CrearCategoria } from '../components/private/tables/categorias/CrearCategoria'
 import { EditarCategoria } from '../components/private/tables/categorias/EditarCategoria'
@@ -67,7 +67,6 @@ export const Routing = (): JSX.Element => {
             <Route path="/" element={<Auth />} />
             <Route path="login" element={<Auth />} />
             <Route path="admin" element={<PrivateLayout />}>
-              <Route element={<ListaBanners />} />
 
               {/** Alumnos */}
               <Route path="alumnos/editar/:id" element={<EditarAlumno />} />
