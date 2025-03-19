@@ -11,7 +11,7 @@ import { ExamenesCargoColumna } from './ExamenesCargoColumna'
 export default function ExamenesCargoRevisar (): JSX.Element {
   const { loadingComponents, setLoadingComponents } = useAuth()
   const token = localStorage.getItem('token')
-  const [examenes, setExamenes] = useState([])
+  const [examenes, setExamenes] = useState<CursosUsuarios[]>([])
   const [totalRegistros, setTotalRegistros] = useState(0)
   const [paginaActual, setpaginaActual] = useState(1)
   const [cantidadRegistros] = useState(4)
@@ -25,25 +25,25 @@ export default function ExamenesCargoRevisar (): JSX.Element {
         }
       })
       setExamenes(data.examenes)
-      setTotalRegistros(data.examenes.length)
+      setTotalRegistros(filterDate().length)
     } catch (error) {
       console.log(error)
     } finally {
       setLoadingComponents(false)
     }
   }
-  /*
-  const filterDate = (): CursosUsuarios[] => {
-    return examenes.slice(indexOfFirstPost, indexOfLastPost)
+
+  const filterDate = (): TestInterface[] => {
+    return examenes.flatMap((curUs) => curUs.curso?.test ?? []) ?? []
   }
-  */
   useEffect(() => {
     getExamenes()
   }, [])
-
-  // const indexOfLastPost = paginaActual * cantidadRegistros
-  // const indexOfFirstPost = indexOfLastPost - cantidadRegistros
-  let totalPosts = 0
+  /*
+  const indexOfLastPost = paginaActual * cantidadRegistros
+  const indexOfFirstPost = indexOfLastPost - cantidadRegistros
+  */
+  const totalPosts = totalRegistros
 
   return (
     <>
@@ -65,8 +65,6 @@ export default function ExamenesCargoRevisar (): JSX.Element {
               examenes.map((cursoUsuario: CursosUsuarios) => {
                 return cursoUsuario.curso?.test.map((test: TestInterface) => {
                   return test.examenesResueltos?.map((examenResuelto: TestResuelto) => {
-                    totalPosts++
-
                     return (
                       <>
                         <ExamenesCargoColumna

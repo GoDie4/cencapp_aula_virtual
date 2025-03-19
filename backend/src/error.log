@@ -468,3 +468,4 @@
 2025-03-19T20:13:24.942Z [ERROR] GET /api/examenes/resueltos | Status: 401 | Time: 0.861 ms | IP: ::1 | User-Agent: "node"
 2025-03-19T20:15:52.859Z [ERROR] GET /api/obtenerExamenesAsignados | Status: 401 | Time: 0.594 ms | IP: ::1 | User-Agent: "node"
 2025-03-19T20:15:52.864Z [ERROR] GET /api/examenes/resueltos | Status: 401 | Time: 1.044 ms | IP: ::1 | User-Agent: "node"
+2025-03-19T22:26:50.254Z [ERROR] GET /api/user | Status: 404 | Time: 38.153 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
