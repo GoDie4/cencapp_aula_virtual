@@ -17,7 +17,7 @@ export interface Curso {
   dolar?: number;
   PorcentajeCurso?: PorcentajeCurso[];
   descuento?: number;
-  Seccion: SeccionInterface[]
+  Seccion?: SeccionInterface[]
 }
 
 export interface PorcentajeCurso {
