@@ -15,6 +15,9 @@ exports.obtenerDocumentoTestPorId = obtenerDocumentoTestPorId;
 exports.obtenerExamenesPendientes = obtenerExamenesPendientes;
 exports.obtenerExamenesAsignados = obtenerExamenesAsignados;
 exports.enviarExamen = enviarExamen;
+exports.obtenerEjerciciosAsignados = obtenerEjerciciosAsignados;
+exports.obtenerEjerciciosPendientes = obtenerEjerciciosPendientes;
+exports.enviarEjercicio = enviarEjercicio;
 const client_1 = require("@prisma/client");
 const multer_1 = __importDefault(require("multer"));
 const node_path_1 = __importDefault(require("node:path"));
@@ -145,7 +148,7 @@ async function showAllEjercicios(req, res) {
 }
 async function createTest(req, res) {
     const { titulo, descripcion, claseId, cursoId, fecha_fin, fecha_inicio, puntaje_maxima, tiempo_limite, tipo_prueba, } = req.body;
-    console.log(req.body['titulo']);
+    console.log(req.body["titulo"]);
     if (!titulo ||
         !descripcion ||
         !fecha_fin ||
@@ -167,7 +170,7 @@ async function createTest(req, res) {
     try {
         const nuevoTest = await prisma.test.create({
             data: {
-                estado: 'Pendiente',
+                estado: "Pendiente",
                 url_archivo: rutaArchivo ?? "",
                 titulo: titulo,
                 descripcion: descripcion,
@@ -195,9 +198,9 @@ async function createTest(req, res) {
     }
 }
 async function createEjercicio(req, res) {
-    const { titulo, descripcion, claseId, fecha_fin, fecha_inicio, puntaje_maxima, tiempo_limite, tipo_prueba, cursoId } = req.body;
+    const { titulo, descripcion, claseId, fecha_fin, fecha_inicio, puntaje_maxima, tiempo_limite, tipo_prueba, cursoId, } = req.body;
     console.log(req.body);
-    console.log('Aya');
+    console.log("Aya");
     if (!titulo ||
         !descripcion ||
         !fecha_fin ||
@@ -221,7 +224,7 @@ async function createEjercicio(req, res) {
     try {
         const nuevoEjercicio = await prisma.test.create({
             data: {
-                estado: 'Pendiente',
+                estado: "Pendiente",
                 url_archivo: rutaArchivo ?? "",
                 titulo: titulo,
                 descripcion: descripcion,
@@ -237,9 +240,7 @@ async function createEjercicio(req, res) {
                 tiempo_limite: Number(tiempo_limite),
             },
         });
-        res
-            .status(201)
-            .json({
+        res.status(201).json({
             message: "Ejercicio creado con éxito",
             ejercicio: nuevoEjercicio,
         });
@@ -254,7 +255,7 @@ async function actualizarTest(req, res) {
     const { id } = req.params;
     const { titulo, descripcion, activo, fecha_fin, fecha_inicio, puntaje_maxima, tiempo_limite, tipo_prueba, } = req.body;
     console.log(req.body);
-    console.log(req.body['titulo']);
+    console.log(req.body["titulo"]);
     if (!titulo ||
         !descripcion ||
         !activo ||
@@ -268,7 +269,7 @@ async function actualizarTest(req, res) {
         return;
     }
     const Test = await prisma.test.findUnique({
-        where: { id: id }
+        where: { id: id },
     });
     if (!Test) {
         res.status(404).json({ message: "Test no encontrado" });
@@ -306,9 +307,7 @@ async function actualizarTest(req, res) {
                     console.error(`Error al eliminar archivo: ${rutaArchivoNuevo}`, unlinkError);
                 }
             }
-            res
-                .status(200)
-                .json({
+            res.status(200).json({
                 message: "Ejercicio actualizado con éxito",
                 ejercicio: nuevoTest,
             });
@@ -396,7 +395,7 @@ async function obtenerDocumentoTestPorId(req, res) {
     const { id } = req.params;
     try {
         const test = await prisma.test.findUnique({
-            where: { id: id }
+            where: { id: id },
         });
         if (!test) {
             res.status(404).json({ message: "Test no encontrado" });
@@ -405,8 +404,8 @@ async function obtenerDocumentoTestPorId(req, res) {
         res.status(200).sendFile(process.cwd() + test.url_archivo, {
             headers: {
                 "Content-Type": test.mime_type,
-                "nombre": test.titulo,
-            }
+                nombre: test.titulo,
+            },
         });
     }
     catch (e) {
@@ -420,39 +419,40 @@ async function obtenerExamenesPendientes(req, res) {
     try {
         const examenes = await prisma.cursoUsuario.findMany({
             where: {
-                userId: user.id
+                userId: user.id,
             },
             include: {
                 curso: {
                     include: {
                         test: {
                             where: {
+                                tipo_prueba: "EXAMEN",
                                 examenesResueltos: {
                                     every: {
-                                        estado: "EnRevision"
+                                        estado: "EnRevision",
                                     },
-                                }
+                                },
                             },
                             include: {
                                 examenesResueltos: {
                                     include: {
-                                        usuario: true
-                                    }
+                                        usuario: true,
+                                    },
                                 },
-                                curso: true
-                            }
-                        }
-                    }
-                }
-            }
+                                curso: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
         res.status(200).json({
-            examenes
+            examenes,
         });
     }
     catch (error) {
         res.status(500).json({
-            message: 'Ocurrió un error en el servidor'
+            message: "Ocurrió un error en el servidor",
         });
     }
 }
@@ -461,38 +461,39 @@ async function obtenerExamenesAsignados(req, res) {
     try {
         const examenes = await prisma.cursoUsuario.findMany({
             where: {
-                userId: user.id
+                userId: user.id,
             },
             include: {
                 curso: {
                     include: {
                         test: {
                             where: {
+                                tipo_prueba: "EXAMEN",
                                 examenesResueltos: {
                                     none: {
-                                        userId: user.id
-                                    }
-                                }
+                                        userId: user.id,
+                                    },
+                                },
                             },
-                            include: { curso: true }
-                        }
-                    }
-                }
-            }
+                            include: { curso: true },
+                        },
+                    },
+                },
+            },
         });
         res.status(200).json({
-            examenes
+            examenes,
         });
     }
     catch (error) {
         res.status(500).json({
-            message: 'Ocurrió un error en el servidor'
+            message: "Ocurrió un error en el servidor",
         });
     }
 }
 async function enviarExamen(req, res) {
     const user = req.user;
-    const { examenId } = req.body;
+    const { testId } = req.body;
     try {
         if (!req.file) {
             res
@@ -503,21 +504,152 @@ async function enviarExamen(req, res) {
         const rutaArchivo = "/" + req.file.path.replace(/\\/g, "/");
         await prisma.testResuelto.create({
             data: {
-                examenId: examenId,
+                examenId: testId,
                 userId: user.id,
                 puntaje_final: "0",
-                estado: 'EnRevision',
+                estado: "EnRevision",
                 url_archivo_resultado: rutaArchivo ?? "",
-                mime_type: req.file.mimetype
-            }
+                mime_type: req.file.mimetype,
+                tipo_prueba: "EXAMEN",
+            },
         });
         res.status(201).json({
-            message: 'El examen ha sido enviado a revisión'
+            message: "El examen ha sido enviado a revisión",
         });
     }
     catch (error) {
         res.status(500).json({
-            message: 'Ocurrió un error en el servidor'
+            message: "Ocurrió un error en el servidor",
+        });
+        return;
+    }
+}
+async function obtenerEjerciciosAsignados(req, res) {
+    const user = req.user;
+    try {
+        const examenes = await prisma.cursoUsuario.findMany({
+            where: {
+                userId: user.id,
+                tipo: "MATRICULADO"
+            },
+            include: {
+                curso: {
+                    include: {
+                        Seccion: {
+                            include: {
+                                clases: {
+                                    include: {
+                                        test: {
+                                            where: {
+                                                tipo_prueba: "EJERCICIOS",
+                                                examenesResueltos: {
+                                                    none: {
+                                                        userId: user.id,
+                                                    },
+                                                },
+                                            },
+                                            include: { curso: true },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        console.log(examenes);
+        res.status(200).json({
+            examenes,
+        });
+        return;
+    }
+    catch (error) {
+        res.status(500).json({
+            message: "Ocurrió un error en el servidor",
+        });
+    }
+}
+async function obtenerEjerciciosPendientes(req, res) {
+    const user = req.user;
+    try {
+        const ejercicios = await prisma.cursoUsuario.findMany({
+            where: {
+                userId: user.id,
+            },
+            include: {
+                curso: {
+                    include: {
+                        Seccion: {
+                            include: {
+                                clases: {
+                                    include: {
+                                        test: {
+                                            where: {
+                                                tipo_prueba: "EJERCICIOS",
+                                                examenesResueltos: {
+                                                    every: {
+                                                        estado: "EnRevision",
+                                                    },
+                                                },
+                                            },
+                                            include: {
+                                                examenesResueltos: {
+                                                    include: {
+                                                        usuario: true,
+                                                    },
+                                                },
+                                                curso: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        res.status(200).json({
+            ejercicios,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: "Ocurrió un error en el servidor",
+        });
+    }
+}
+async function enviarEjercicio(req, res) {
+    const user = req.user;
+    const { testId } = req.body;
+    try {
+        if (!req.file) {
+            res
+                .status(400)
+                .json({ message: "Falta el archivo para crear el ejercicio" });
+            return;
+        }
+        const rutaArchivo = "/" + req.file.path.replace(/\\/g, "/");
+        await prisma.testResuelto.create({
+            data: {
+                examenId: testId,
+                userId: user.id,
+                puntaje_final: "0",
+                estado: "EnRevision",
+                url_archivo_resultado: rutaArchivo ?? "",
+                mime_type: req.file.mimetype,
+                tipo_prueba: "EJERCICIOS",
+            },
+        });
+        res.status(201).json({
+            message: "El examen ha sido enviado a revisión",
+        });
+        return;
+    }
+    catch (error) {
+        res.status(500).json({
+            message: "Ocurrió un error en el servidor",
         });
         return;
     }
