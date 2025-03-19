@@ -22,11 +22,11 @@ export default function FormRespuestaTarea({ id }: { id: string }) {
       toast.error("Debes mandar un archivo");
       return;
     }
-    formData.append("examenId", id);
+    formData.append("testId", id);
 
     const token = localStorage.getItem("token");
     const response = await axios.postForm(
-      `${config.apiUrl}/examenes/enviar`,
+      `${config.apiUrl}/ejercicios/enviar`,
       formData,
       {
         headers: {

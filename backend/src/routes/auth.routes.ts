@@ -100,8 +100,11 @@ import {
   actualizarTest,
   createTest,
   deleteTest,
+  enviarEjercicio,
   enviarExamen,
   obtenerDocumentoTestPorId,
+  obtenerEjerciciosAsignados,
+  obtenerEjerciciosPendientes,
   obtenerExamenesAsignados,
   obtenerExamenesPendientes,
   obtenerTestPorId,
@@ -119,7 +122,7 @@ import {
   showAllMateriales,
   uploadArchivo
 } from "../controllers/materiales.controller";
-import { colocarPuntaje, obtenerExamenesResueltos, obtenerExamenResueltoDocumento } from "../controllers/testResueltos.controller";
+import { colocarPuntaje, obtenerEjerciciosResueltos, obtenerExamenesResueltos, obtenerExamenResueltoDocumento } from "../controllers/testResueltos.controller";
 
 const router = Router();
 
@@ -217,9 +220,17 @@ router.get("/tests/documento/:id", verifyUser, obtenerDocumentoTestPorId);
 router.get("/ejercicios/documento/:id", verifyUser, obtenerEjerciciosPorProfesor);
 router.get("/examenes/cargo/:id", verifyProfesor, obtenerExamenesPorProfesor);
 router.get("/materiales/cargo/:id", verifyProfesor, obtenerMaterialesPorProfesor);
-router.get("/ejercicios/cargo/:id", verifyProfesor, obtenerEjerciciosPorProfesor);
 router.post("/examenes/enviar", verifyAlumnoNoCookie, uploadArchivoRes, enviarExamen);
 router.get('/obtenerExamenesAsignados', verifyAlumno, obtenerExamenesAsignados)
+
+//Ejercicios
+router.post("/ejercicios/enviar", verifyAlumnoNoCookie, uploadArchivoRes, enviarEjercicio);
+router.get("/ejercicios/cargo/:id", verifyProfesor, obtenerEjerciciosPorProfesor);
+router.get("/obtenerEjerciciosAsignados", verifyAlumno, obtenerEjerciciosAsignados)
+
+// Ejercicios Resueltos
+router.get("/ejercicios/revisar", verifyProfesor, obtenerEjerciciosPendientes);
+router.get("/ejercicios/resueltos", verifyAlumno, obtenerEjerciciosResueltos)
 
 // Test Resueltos
 router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);

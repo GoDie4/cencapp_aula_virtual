@@ -135,7 +135,7 @@ export default function CargoCurso (): JSX.Element {
                     <option value="">Seleccionar</option>
                     {profesores.map((profesor: ProfesorInterface) => (
                       <option value={profesor.id} key={profesor.id}>
-                        {profesor.nombres}
+                        {profesor.nombres} - {profesor.email}
                       </option>
                     ))}
                   </select>

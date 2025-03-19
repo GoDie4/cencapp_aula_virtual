@@ -66,13 +66,13 @@ export default function ExamenesCargoRevisar (): JSX.Element {
                 return cursoUsuario.curso?.test.map((test: TestInterface) => {
                   return test.examenesResueltos?.map((examenResuelto: TestResuelto) => {
                     totalPosts++
-                    
+
                     return (
                       <>
-                        <ExamenesCargoColumna 
-                          key={examenResuelto.id} 
-                          curso={test.curso} 
-                          examenResuelto={examenResuelto}  
+                        <ExamenesCargoColumna
+                          key={examenResuelto.id}
+                          curso={test.curso}
+                          examenResuelto={examenResuelto}
                           test={test}
                           getExamenes={getExamenes}
                         />

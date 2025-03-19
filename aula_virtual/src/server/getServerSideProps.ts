@@ -17,6 +17,10 @@ export async function getServerSideProps(url: string) {
     if (!res.ok) {
       return;
     }
+    if (res.status === 401) {
+      window.location.pathname = "/login";
+      return;
+    }
 
     const contentType = res.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -26,6 +30,7 @@ export async function getServerSideProps(url: string) {
     console.log("DATA: ", data);
     return data;
   } catch (error) {
+    console.log("error")
     console.log(error);
   }
 }

@@ -1,3 +1,4 @@
+import { SeccionInterface } from "@/interfaces/SeccionInterface"
 import { TestInterface } from "@/interfaces/TestInterface"
 
 export interface ResponseFetchMaterial {
@@ -12,6 +13,7 @@ export interface Curso {
   tipo: string
   curso: Curso2
   test?: TestInterface[]
+  Seccion: SeccionInterface[]
 }
 
 export interface Curso2 {
