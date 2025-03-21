@@ -9,11 +9,7 @@ import userRoutes from "../src/routes/user.routes";
 import comentariosRoutes from "../src/routes/comentarios.routes";
 import beneficiosRoutes from "../src/routes/beneficios.routes";
 import certificadosRoutes from "../src/routes/certificados.routes";
-
-/*
-import userRoutes from "../src/routes/user.routes";
-import categoryRoutes from "../src/routes/category.routes"
-*/
+import respuestasRoutes from "../src/routes/respuestas.routes";
 
 app.use(express.static("public"));
 
@@ -33,6 +29,7 @@ prisma
 
 app.use("/api", authRoutes);
 app.use("/api/comentarios", comentariosRoutes);
+app.use("/api/respuestas", respuestasRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/beneficios", beneficiosRoutes);
 app.use("/api/certificados", certificadosRoutes);

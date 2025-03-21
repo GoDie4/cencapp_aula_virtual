@@ -2,6 +2,7 @@
 import { AulaMetadata } from "@/seo/aula/AulaMetaData";
 import { FaBook, FaClipboardCheck, FaMedal } from "react-icons/fa";
 import { AulaMain } from "../@components/estructura/AulaMain";
+import { getServerSideProps } from "@/server/getServerSideProps";
 /*
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -19,31 +20,32 @@ interface StatCard {
   icon: React.ReactNode;
   color: string;
 }
-export default function Aula() {
+export default async function Aula() {
+
+  const data = await getServerSideProps("alumno/dataGeneral");
   const stats: StatCard[] = [
     {
       title: "Total de Cursos",
-      value: 4,
+      value: data.data.totalCursos,
       titleSeccion: "Cursos",
       icon: <FaBook size={24} />,
       color: "bg-primary-900",
     },
     {
       title: "Exámenes Pendientes",
-      value: 2,
+      value: data.data.totalExamenes,
       titleSeccion: "Exámenes",
       icon: <FaClipboardCheck size={24} />,
       color: "bg-primary-900",
     },
     {
       title: "Certificados",
-      value: 3,
+      value: data.data.totalCertificados,
       titleSeccion: "Certificados",
       icon: <FaMedal size={24} />,
       color: "bg-primary-900",
     },
   ];
-
   return (
     <>
       <header className="bg-white rounded-lg shadow-lg p-6 mb-6">
