@@ -11,6 +11,7 @@ CREATE TABLE `cursos` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `cursos_slug_key`(`slug`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -183,6 +184,19 @@ CREATE TABLE `comentarios` (
     `userId` VARCHAR(191) NOT NULL,
     `claseId` VARCHAR(191) NOT NULL,
     `comentario` TEXT NOT NULL,
+    `estado` ENUM('pendiente', 'respondido') NOT NULL DEFAULT 'pendiente',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `respuestas_comentarios` (
+    `id` CHAR(36) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `comentarioId` VARCHAR(191) NOT NULL,
+    `respuesta` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -273,6 +287,7 @@ CREATE TABLE `examen_resueltos` (
     `userId` VARCHAR(191) NOT NULL,
     `url_archivo_resultado` VARCHAR(191) NOT NULL,
     `puntaje_final` VARCHAR(191) NOT NULL,
+    `tipo_prueba` ENUM('EXAMEN', 'EJERCICIOS') NOT NULL,
     `estado` ENUM('Pendiente', 'EnRevision', 'Finalizado') NOT NULL DEFAULT 'EnRevision',
     `mime_type` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -344,6 +359,12 @@ ALTER TABLE `comentarios` ADD CONSTRAINT `comentarios_userId_fkey` FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE `comentarios` ADD CONSTRAINT `comentarios_claseId_fkey` FOREIGN KEY (`claseId`) REFERENCES `clases`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `respuestas_comentarios` ADD CONSTRAINT `respuestas_comentarios_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `respuestas_comentarios` ADD CONSTRAINT `respuestas_comentarios_comentarioId_fkey` FOREIGN KEY (`comentarioId`) REFERENCES `comentarios`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `password_reset_tokens` ADD CONSTRAINT `password_reset_tokens_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
