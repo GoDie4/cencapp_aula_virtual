@@ -76,7 +76,8 @@ export const FormEditarPerfil = () => {
         email: user.email || "",
       }));
     }
-  }, [setValues, user, values]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     if (errors && isSubmitting) {

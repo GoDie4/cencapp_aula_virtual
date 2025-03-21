@@ -2,13 +2,22 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ReproductorClase } from "./ReproductorClase";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { useAuth } from "@/context/AuthContext";
 
 export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
-  const [porcentaje, setPorcentaje] = useState<number>(0);
+    const porcentajeRaw = dataClase?.clase?.seccion?.curso?.PorcentajeCurso?.[0]?.porcentaje;
+    const [porcentaje, setPorcentaje] = useState<number>(Number(porcentajeRaw) || 0);
+    useEffect(() => {
+        if (dataClase?.clase?.seccion?.curso?.PorcentajeCurso?.length > 0) {
+          const porcentajeRaw = dataClase.clase.seccion.curso.PorcentajeCurso[0].porcentaje;
+          setPorcentaje(Number(porcentajeRaw) || 0);
+        } else {
+          setPorcentaje(0); // o dejarlo como está si quieres que sea 0 por defecto
+        }
+      }, [dataClase]);
   const { user } = useAuth();
   return (
     <>
@@ -74,7 +83,7 @@ export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
                 <Link
                   href={`/aula/cursos/${dataClase.clase.seccion.curso.slug}/${dataClase.siguienteClase?.slug}`}
                   className={`flex p-2 sm:p-3 border-2 text-primary-main  rounded-main border-primary-main text-2xl transition-all duration-200 hover:bg-primary-main hover:text-white-main ${
-                    !dataClase.siguienteClase || porcentaje < 90
+                    !dataClase.siguienteClase || isNaN(porcentaje) || porcentaje < 90
                       ? "pointer-events-none opacity-50"
                       : ""
                   }`}

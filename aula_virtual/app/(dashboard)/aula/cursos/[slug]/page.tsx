@@ -188,7 +188,7 @@ export default async function page({
               <span className="text-secondary-main text-2xl">
                 <IoPlay />
               </span>
-              {dataCurso?.PorcentajeCurso[0]?.porcentaje > 0 ? (
+              {dataCurso?.PorcentajeCurso[0]?.porcentaje && dataCurso.PorcentajeCurso[0].porcentaje > 0 ? (
                 <>
                   {dataCurso?.PorcentajeCurso[0]?.ultimaClase.clase} -{" "}
                   {dataCurso?.PorcentajeCurso[0]?.ultimaClase.seccion}

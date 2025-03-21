@@ -110,22 +110,19 @@ export default function CargoCurso (): JSX.Element {
   return (
     <>
       {loadingComponents
-        ?
-        (<Loading />)
+        ? (<Loading />)
         : (
           <>
             <form
-              className="bg-secondary-100 p-8 rounded-xl mt-4"
+              className="p-8 mt-4 bg-secondary-100 rounded-xl"
               onSubmit={handleSubmit}
             >
-              <div className="w-full lg:relative mb-5 flex flex-col lg:flex-row justify-between gap-4 lg:gap-2">
+              <div className="flex flex-col justify-between w-full gap-4 mb-5 lg:relative lg:flex-row lg:gap-2">
                 <div className='w-full'>
                   <TitleBriefs titulo="Asignar profesor" />
                   <select
                     title='Selecciona una profesor'
-                    className="border border-black  placeholder-gray-400 outline-none focus:outline-none
-                                                                      focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-secondary-900
-                                                                      rounded-md transition-all"
+                    className="block w-full pt-4 pb-4 pl-4 pr-4 mt-2 mb-0 ml-0 mr-0 text-base placeholder-gray-400 transition-all border border-black rounded-md outline-none focus:outline-none focus:border-black bg-secondary-900"
                     name="profesorId"
                     value={values.profesorId}
                     autoComplete="off"
@@ -145,23 +142,23 @@ export default function CargoCurso (): JSX.Element {
                   />
                 </div>
               </div>
-              <div className="flex gap-2 w-full justify-end">
+              <div className="flex justify-end w-full gap-2">
                 <input type="hidden" name="oculto" value="1" />
                 <Link
                   to="/admin/cursos"
-                  className="bg-red-500 px-4 py-2 rounded-md text-white"
+                  className="px-4 py-2 text-white bg-red-500 rounded-md"
                 >
                   Cancelar
                 </Link>
                 <input
                   type="submit"
-                  className="bg-green-500 text-black hover:bg-green-600 flex items-center gap-2 py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2 text-black transition-colors bg-green-500 rounded-lg cursor-pointer hover:bg-green-600"
                   value="Registrar"
                 />
               </div>
             </form>
-            <div className='w-full bg-secondary-100 p-8 rounded-xl mt-4'>
-              <div className="hidden md:grid grid-cols-1 md:grid-cols-6 gap-4 mb-10 p-4">
+            <div className='w-full p-8 mt-4 bg-secondary-100 rounded-xl'>
+              <div className="hidden grid-cols-1 gap-4 p-4 mb-10 md:grid md:grid-cols-6">
                 <h5 className="md:text-center">ID</h5>
                 <h5 className="md:text-center">Nombres</h5>
                 <h5 className="md:text-center">Apellidos</h5>
@@ -171,14 +168,14 @@ export default function CargoCurso (): JSX.Element {
               </div>
               {filterDate().map((pro: CursosUsuarios) => (
                 <div
-                  className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
+                  className="grid items-center grid-cols-1 gap-4 p-4 mb-4 md:grid-cols-6 bg-secondary-900 rounded-xl"
                   key={pro.id}
                 >
                   <CargoCursoColumna key={pro.id} pro={pro} cantidadRegistros={cantidadRegistros} token={token ?? ''} getListaProfesores={getListaProfesores} totalPosts={totalPosts} paginaActual={paginaActual} setpaginaActual={setpaginaActual} />
                 </div>
               ))}
-              <div className="flex flex-col md:flex-row gap-5 mt-8 md:gap-0 justify-between content_buttons ">
-                <p className="text-md ml-1"> {totalRegistros} Registros </p>
+              <div className="flex flex-col justify-between gap-5 mt-8 md:flex-row md:gap-0 content_buttons ">
+                <p className="ml-1 text-md"> {totalRegistros} Registros </p>
                 <Paginacion
                   totalPosts={totalPosts}
                   cantidadRegistros={cantidadRegistros}
@@ -188,7 +185,7 @@ export default function CargoCurso (): JSX.Element {
               </div>
             </div>
           </>
-        )
+          )
       }
     </>
   )

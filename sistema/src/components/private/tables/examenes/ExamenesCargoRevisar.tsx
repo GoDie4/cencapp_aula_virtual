@@ -51,8 +51,8 @@ export default function ExamenesCargoRevisar (): JSX.Element {
         ? (
           <Loading />)
         : (
-          <div className="bg-secondary-100 p-8 rounded-xl mt-4">
-            <div className="hidden md:grid grid-cols-1 md:grid-cols-6 gap-4 mb-10 p-4">
+          <div className="p-8 mt-4 bg-secondary-100 rounded-xl">
+            <div className="hidden grid-cols-1 gap-4 p-4 mb-10 md:grid md:grid-cols-6">
               <h5 className="md:text-center">Curso</h5>
               <h5 className="md:text-center">Estudiante</h5>
               <h5 className="md:text-center">Examen</h5>
@@ -65,6 +65,11 @@ export default function ExamenesCargoRevisar (): JSX.Element {
               examenes.map((cursoUsuario: CursosUsuarios) => {
                 return cursoUsuario.curso?.test.map((test: TestInterface) => {
                   return test.examenesResueltos?.map((examenResuelto: TestResuelto) => {
+<<<<<<< HEAD
+=======
+                    totalPosts++
+
+>>>>>>> d8ae0ad177d74b31a85489a5035c937f280000bb
                     return (
                       <>
                         <ExamenesCargoColumna
@@ -80,8 +85,8 @@ export default function ExamenesCargoRevisar (): JSX.Element {
                 })
               })
             }
-            <div className="flex flex-col md:flex-row gap-5 md:gap-0 justify-between content_buttons ">
-                  <p className="text-md ml-1"> {totalRegistros} Registros </p>
+            <div className="flex flex-col justify-between gap-5 md:flex-row md:gap-0 content_buttons ">
+                  <p className="ml-1 text-md"> {totalRegistros} Registros </p>
                   <Paginacion
                     totalPosts={totalPosts}
                     cantidadRegistros={cantidadRegistros}
