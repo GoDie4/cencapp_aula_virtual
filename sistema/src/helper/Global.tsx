@@ -1,3 +1,4 @@
+
 export const Global = {
   url: 'http://localhost:4000/api',
   urlImages: 'http://localhost:4000'
@@ -10,7 +11,6 @@ export const Global = {
   urlImages: 'https://cencapp.agritecbol.com'
 }
 */
-
 /*
 // Alternativa: Producción Cencapperu
 export const Global = {

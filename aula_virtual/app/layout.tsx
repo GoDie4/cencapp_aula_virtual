@@ -18,6 +18,7 @@ async function getUser() {
 
   if (!token) {
     console.log("No hay token");
+    
     return;
   }
 
@@ -49,6 +50,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUser();
+
   return (
     <html lang="en">
       <body className={`${montserrat.variable} antialiased`}>

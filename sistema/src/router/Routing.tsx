@@ -60,6 +60,7 @@ import ExamenesCargoRevisar from '../components/private/tables/examenes/Examenes
 import ListaCertificados from '../components/private/tables/certificados/ListarCertificados'
 import CrearCertificado from '../components/private/tables/certificados/AgregarCertificado'
 import EditarCertificado from '../components/private/tables/certificados/EditarCertificado'
+import ListaTareasCargo from '../components/private/tables/tareas/ListaTareasCargo'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -158,6 +159,10 @@ export const Routing = (): JSX.Element => {
               <Route
                 path="ejercicios/cargo/crear"
                 element={<EjerciciosCargoCrear />}
+              />
+              <Route
+                path='tareas/cargo/revisar'
+                element={<ListaTareasCargo />}
               />
 
               {/** Materiales */}
