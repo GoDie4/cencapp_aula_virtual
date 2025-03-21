@@ -10,10 +10,12 @@ import { Errors } from "../../../../components/form/Errors";
 import { config } from "@/config/config";
 import { InputForm } from "../../../../components/form/InputForm";
 import { ButtonSubmit } from "../../../../components/form/ButtonSubmit";
+import { useSearchParams } from "next/navigation";
 
-const FormCambiarContrasena = ({ token }: { token: string }) => {
+const FormCambiarContrasena = () => {
   const [loading, setLoading] = useState<boolean>(false);
-
+  const urlParams = useSearchParams();
+  const token = urlParams.get("token");
   const cambiarContrasena = async (
     values: CambiarContrasenaInterface
   ): Promise<void> => {

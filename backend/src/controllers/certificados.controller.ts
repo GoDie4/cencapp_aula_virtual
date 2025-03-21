@@ -68,6 +68,33 @@ export async function traerCertificados(req: Request, res: Response) {
   }
 }
 
+export async function traerCertificadosByUser(req: Request, res: Response) {
+  const { id } = req.params;
+
+  console.log(id)
+  try {
+    const certificados = await prisma.certificados.findMany({
+      where: {
+        usuarioId: id,
+      },
+      include: {
+        curso: true,
+        usuario: true,
+      },
+    });
+
+  console.log(certificados)
+
+    res.status(200).json({ certificados });
+  } catch (e) {
+    console.error(e);
+    res
+      .status(500)
+      .json({ message: "Error interno al obtener los certificados" });
+    return;
+  }
+}
+
 export async function obtenerCertificadosPorUsuario(req: any, res: Response) {
   const userId = req.user.id;
 
@@ -357,15 +384,33 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     const fontSizeCurso = 18;
     const textWidthCurso = font.widthOfTextAtSize(curso.nombre, fontSizeCurso);
     const xCurso = (page.getWidth() - textWidthCurso) / 2;
+
     page.drawText(curso.nombre, {
       x: xCurso,
-      y: 275,
+      y: 273,
       size: fontSizeCurso,
       font,
     });
 
-    // Generar QR
-    const qrDataUrl = await QRCode.toDataURL(`Certificado ID: ${userId}`);
+    const horas = curso.horas;
+    const fontSizeHoras = 14;
+    const textWidthHoras = font.widthOfTextAtSize(
+      horas.toString(),
+      fontSizeHoras
+    );
+
+    const xHoras = (page.getWidth() - textWidthHoras) / 2;
+
+    page.drawText(horas.toString(), {
+      x: xHoras,
+      y: 245,
+      size: fontSizeHoras,
+      font,
+    });
+
+    const qrDataUrl = await QRCode.toDataURL(
+      `http://192.168.0.100:3000/certificados/${userId}`
+    );
     const qrImageBytes = Buffer.from(qrDataUrl.split(",")[1], "base64");
     const qrImage = await pdfDoc.embedPng(qrImageBytes);
     page.drawImage(qrImage, { x: 600, y: 60, width: 135, height: 135 });

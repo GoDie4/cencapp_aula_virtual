@@ -7,6 +7,7 @@ import {
   obtenerCertificadosPorUsuario,
   obtenerDataCertificadoPorId,
   traerCertificados,
+  traerCertificadosByUser,
   uploadArchivoCertificado,
 } from "../controllers/certificados.controller";
 import { Router } from "express";
@@ -16,6 +17,7 @@ const router = Router();
 
 
 router.get("/", verifyAdmin, traerCertificados);
+router.get("/certificadosByUser/:id", traerCertificadosByUser);
 router.get("/mios", verifyAlumno, obtenerCertificadosPorUsuario);
 router.post("/", verifyAdmin, uploadArchivoCertificado, createCertificado);
 router.get("/documento/:id", verifyAdmin, obtenerCertificadoPorId);
