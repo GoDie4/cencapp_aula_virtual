@@ -16,7 +16,7 @@ datasource db {
 model Curso {
     id              String            @id @default(cuid())
     nombre          String            @db.VarChar(255)
-    slug            String            @default("") @db.VarChar(255)
+    slug            String            @unique @default("") @db.VarChar(255)
     imagen          String            @db.VarChar(255)
     banner          String            @db.VarChar(255)
     horas           Int
@@ -306,19 +306,19 @@ enum EstadoTest {
 }
 
 model TestResuelto {
-  id                     String     @id @default(cuid())
-  examenId               String
-  userId                 String
-  url_archivo_resultado  String
-  puntaje_final          String
-  estado                 EstadoTest @default(EnRevision)
-  examen                 Test       @relation(fields: [examenId], references: [id], onDelete: Cascade)
-  usuario                Usuario    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  mime_type              String
-  createdAt              DateTime   @default(now())
-  updatedAt              DateTime   @updatedAt
+    id                    String     @id @default(cuid())
+    examenId              String
+    userId                String
+    url_archivo_resultado String
+    puntaje_final         String
+    estado                EstadoTest @default(EnRevision)
+    examen                Test       @relation(fields: [examenId], references: [id], onDelete: Cascade)
+    usuario               Usuario    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    mime_type             String
+    createdAt             DateTime   @default(now())
+    updatedAt             DateTime   @updatedAt
 
-  @@map("examen_resueltos")
+    @@map("examen_resueltos")
 }
 
 enum TipoPrueba {
@@ -355,6 +355,4 @@ model Certificados {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    
 }
