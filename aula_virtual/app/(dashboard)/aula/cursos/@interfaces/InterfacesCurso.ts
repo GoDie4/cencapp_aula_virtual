@@ -2,6 +2,7 @@ import { UserInterface } from "@/interfaces/AuthInteface";
 import { MaterialInterface } from "../../materiales/@interfaces/InterfacesMaterial";
 import { Curso } from "@/interfaces/CursoInterface";
 import { MaterialDataBase } from "@/interfaces/MaterialInterface";
+import { Usuario } from "@/interfaces/UsuarioInterface";
 
 export interface CursoMaterial {
   id: string;
@@ -10,16 +11,17 @@ export interface CursoMaterial {
   materiales: MaterialInterface[];
 }
 
-// Comentario
 export interface Comentario {
   id: string;
   userId: string;
   claseId: string;
   comentario: string;
+  estado: string;
   createdAt: Date;
   updatedAt: Date;
   clase: Clase;
   usuario: UserInterface;
+  respuestas: RespuestaComentario[]
 }
 
 export interface ComentarioListar {
@@ -28,6 +30,18 @@ export interface ComentarioListar {
   comentario: string;
   createdAt: Date;
   usuario: UserInterface;
+  respuestas?: RespuestaComentario[];
+}
+
+export interface RespuestaComentario {
+  id: string;
+  userId: string;
+  comentarioId: string;
+  respuesta: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user: Usuario;
+  comentario: Comentario;
 }
 
 // Clase
@@ -42,7 +56,7 @@ export interface Clase {
   seccion: Seccion;
   createdAt: Date;
   updatedAt: Date;
-  materiales: MaterialDataBase[]
+  materiales: MaterialDataBase[];
   Comentarios: Comentario[];
   Seccion: Seccion[];
 }

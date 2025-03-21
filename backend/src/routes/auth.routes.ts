@@ -61,20 +61,21 @@ import {
   obtenerExamenesPorProfesor,
   obtenerMaterialesPorProfesor,
   obtenerProfesorPorId,
-  showAllProfesores
+  showAllProfesores,
 } from "../controllers/profesor.controller";
 import {
   actualizarAlumno,
   crearAlumno,
   deleteAlumno,
   obtenerAlumnoPorId,
-  showAllAlumnos
+  obtenerTotalDataPorAlumno,
+  showAllAlumnos,
 } from "../controllers/alumno.controller";
 import {
   enviarVenta,
   obtenerCursosComprados,
   obtenerVentas,
-  recibirVenta
+  recibirVenta,
 } from "../controllers/mercadopago.controller";
 import {
   actualizarSeccion,
@@ -83,7 +84,7 @@ import {
   obtenerSecciones,
   obtenerSeccionesCurso,
   obtenerSeccionPorId,
-  showAllSecciones
+  showAllSecciones,
 } from "../controllers/seccion.controller";
 import {
   actualizarClase,
@@ -94,7 +95,7 @@ import {
   obtenerClasePorSlug,
   obtenerClases,
   obtenerClasesPorSeccion,
-  showAllClases
+  showAllClases,
 } from "../controllers/clase.controller";
 import {
   actualizarTest,
@@ -108,7 +109,7 @@ import {
   showAllEjercicios,
   showAllTests,
   uploadArchivoRes,
-  uploadArchivoTest
+  uploadArchivoTest,
 } from "../controllers/test.controller";
 import {
   actualizarMaterial,
@@ -117,9 +118,13 @@ import {
   obtenerDocumentoPorId,
   obtenerMaterialPorId,
   showAllMateriales,
-  uploadArchivo
+  uploadArchivo,
 } from "../controllers/materiales.controller";
-import { colocarPuntaje, obtenerExamenesResueltos, obtenerExamenResueltoDocumento } from "../controllers/testResueltos.controller";
+import {
+  colocarPuntaje,
+  obtenerExamenesResueltos,
+  obtenerExamenResueltoDocumento,
+} from "../controllers/testResueltos.controller";
 
 const router = Router();
 
@@ -129,23 +134,37 @@ router.get("/user", verifyAdminOrProfesor, getDecodedUser);
 router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/recuperar", validateSchema(recuperarSchema), recuperarContrasena);
-router.post("/cambiarContrasena", validateSchema(cambiarContrasenaSchema), cambiarContrasena);
+router.post(
+  "/cambiarContrasena",
+  validateSchema(cambiarContrasenaSchema),
+  cambiarContrasena
+);
 router.post("/logout", logout);
 router.get("/alumno", verifyAlumno, getDecodedUser);
 router.get("/profesor", verifyProfesor, getDecodedUser);
+router.get("/alumno/dataGeneral", verifyAlumno, obtenerTotalDataPorAlumno);
 
 // Categorias
-router.post("/categorias", upload.fields([
-  { name: "url_imagen", maxCount: 1 },
-  { name: "url_icono", maxCount: 1 },
-]), createCategoriaMemory);
+router.post(
+  "/categorias",
+  upload.fields([
+    { name: "url_imagen", maxCount: 1 },
+    { name: "url_icono", maxCount: 1 },
+  ]),
+  createCategoriaMemory
+);
 router.get("/categorias", showAllCategorias);
 router.get("/categorias/:id", obtenerCategoriaPorId);
 router.get("/categoriasBuscar/:slug", obtenerCategoriaPorSlug);
-router.post("/categorias/:id", verifyAdmin, upload.fields([
-  { name: "url_imagen", maxCount: 1 },
-  { name: "url_icono", maxCount: 1 },
-]), actualizarCategoria);
+router.post(
+  "/categorias/:id",
+  verifyAdmin,
+  upload.fields([
+    { name: "url_imagen", maxCount: 1 },
+    { name: "url_icono", maxCount: 1 },
+  ]),
+  actualizarCategoria
+);
 router.post("/borrarCategoria/:id", verifyAdmin, deleteCategoria);
 
 // Cursos
@@ -153,7 +172,12 @@ router.post("/cursos", verifyAdmin, uploadImageCurso, createCurso);
 router.get("/cursos", showAllCursos);
 router.get("/cursos/:id", obtenerCursoPorId);
 router.get("/cursosBuscar/:nombre", buscarPorNombre);
-router.get("/cursoPorSlug/:slug", verifyAlumno, verificarCompraCurso, cursoPorSlug);
+router.get(
+  "/cursoPorSlug/:slug",
+  verifyAlumno,
+  verificarCompraCurso,
+  cursoPorSlug
+);
 router.post("/cursos/:id", verifyAdmin, uploadImageCurso, actualizarCurso);
 router.post("/borrarCurso/:id", verifyAdmin, deleteCurso);
 router.post("/porcentajeCurso", registrarOActualizarPorcentajeCurso);
@@ -173,10 +197,20 @@ router.get("/cursosDelProfesor/:id", verifyProfesor, getAllCoursesDelProfesor);
 router.get("/alumno/matriculado/:id", verifyProfesor, getAlumnoMatriculado);
 
 // Alumnos
-router.post("/alumnos", validateSchema(registerSchema), verifyAdmin, crearAlumno);
+router.post(
+  "/alumnos",
+  validateSchema(registerSchema),
+  verifyAdmin,
+  crearAlumno
+);
 router.get("/alumnos", showAllAlumnos);
 router.get("/alumnos/:id", verifyAdmin, obtenerAlumnoPorId);
-router.post("/alumnos/:id", validateSchema(registerSchema), verifyAdmin, actualizarAlumno);
+router.post(
+  "/alumnos/:id",
+  validateSchema(registerSchema),
+  verifyAdmin,
+  actualizarAlumno
+);
 router.post("/borrarAlumno/:id", verifyAdmin, deleteAlumno);
 router.get("/matriculadoCurso/:id", verifyAdmin, obtenerCursosPorAlumno);
 
@@ -203,35 +237,80 @@ router.get("/clases/:id", verifyAdminOrProfesor, obtenerClasePorId);
 router.post("/clases/:id", verifyAdminOrProfesor, actualizarClase);
 router.post("/borrarClase/:id", verifyAdminOrProfesor, deleteClase);
 router.get("/clasesBuscar/:nombre", verifyAdminOrProfesor, obtenerClases);
-router.get("/clasePorSlug/:slug", verifyAlumno, verificarCompraCurso, obtenerClasePorSlug);
-router.get("/clasesSeccion/:id", verifyAdminOrProfesor, obtenerClasesPorSeccion);
+router.get(
+  "/clasePorSlug/:slug",
+  verifyAlumno,
+  verificarCompraCurso,
+  obtenerClasePorSlug
+);
+router.get(
+  "/clasesSeccion/:id",
+  verifyAdminOrProfesor,
+  obtenerClasesPorSeccion
+);
 
 // Tests
 router.post("/tests", verifyAdminOrProfesor, uploadArchivoTest, createTest);
 router.get("/tests", showAllTests);
 router.get("/ejercicios", showAllEjercicios);
 router.get("/tests/:id", verifyAdminOrProfesor, obtenerTestPorId);
-router.post("/tests/:id", verifyAdminOrProfesor, uploadArchivoTest, actualizarTest);
+router.post(
+  "/tests/:id",
+  verifyAdminOrProfesor,
+  uploadArchivoTest,
+  actualizarTest
+);
 router.post("/borrarTest/:id", verifyAdminOrProfesor, deleteTest);
 router.get("/tests/documento/:id", verifyUser, obtenerDocumentoTestPorId);
-router.get("/ejercicios/documento/:id", verifyUser, obtenerEjerciciosPorProfesor);
+router.get(
+  "/ejercicios/documento/:id",
+  verifyUser,
+  obtenerEjerciciosPorProfesor
+);
 router.get("/examenes/cargo/:id", verifyProfesor, obtenerExamenesPorProfesor);
-router.get("/materiales/cargo/:id", verifyProfesor, obtenerMaterialesPorProfesor);
-router.get("/ejercicios/cargo/:id", verifyProfesor, obtenerEjerciciosPorProfesor);
-router.post("/examenes/enviar", verifyAlumnoNoCookie, uploadArchivoRes, enviarExamen);
-router.get('/obtenerExamenesAsignados', verifyAlumno, obtenerExamenesAsignados)
+router.get(
+  "/materiales/cargo/:id",
+  verifyProfesor,
+  obtenerMaterialesPorProfesor
+);
+router.get(
+  "/ejercicios/cargo/:id",
+  verifyProfesor,
+  obtenerEjerciciosPorProfesor
+);
+router.post(
+  "/examenes/enviar",
+  verifyAlumnoNoCookie,
+  uploadArchivoRes,
+  enviarExamen
+);
+router.get("/obtenerExamenesAsignados", verifyAlumno, obtenerExamenesAsignados);
 
 // Test Resueltos
 router.get("/examenes/revisar", verifyProfesor, obtenerExamenesPendientes);
-router.post("/testsResuelto/documento", verifyProfesor, obtenerExamenResueltoDocumento)
-router.post("/colocarPuntaje", verifyProfesor, colocarPuntaje)
-router.get("/examenes/resueltos", verifyAlumno, obtenerExamenesResueltos)
+router.post(
+  "/testsResuelto/documento",
+  verifyProfesor,
+  obtenerExamenResueltoDocumento
+);
+router.post("/colocarPuntaje", verifyProfesor, colocarPuntaje);
+router.get("/examenes/resueltos", verifyAlumno, obtenerExamenesResueltos);
 
 // Materiales
 router.get("/materiales", verifyAdminOrProfesor, showAllMateriales);
 router.get("/materiales/:id", verifyAdminOrProfesor, obtenerMaterialPorId);
-router.post("/materiales", verifyAdminOrProfesor, uploadArchivo, createMaterial);
-router.post("/materiales/:id", verifyAdminOrProfesor, uploadArchivo, actualizarMaterial);
+router.post(
+  "/materiales",
+  verifyAdminOrProfesor,
+  uploadArchivo,
+  createMaterial
+);
+router.post(
+  "/materiales/:id",
+  verifyAdminOrProfesor,
+  uploadArchivo,
+  actualizarMaterial
+);
 router.post("/borrarMaterial/:id", verifyAdminOrProfesor, deleteMaterial);
 router.get("/materiales/documento/:id", verifyUser, obtenerDocumentoPorId);
 

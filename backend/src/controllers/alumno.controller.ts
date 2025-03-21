@@ -1,11 +1,13 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
+import { Response } from "express";
+
 const prisma = new PrismaClient();
 
 export const crearAlumno = async (req: any, res: any): Promise<void> => {
   const { nombres, apellidos, celular, email, password } = req.body;
 
-  const hashPassword = await bcrypt.hash(password, 10)
+  const hashPassword = await bcrypt.hash(password, 10);
   try {
     const alumno = await prisma.usuario.create({
       data: {
@@ -24,17 +26,27 @@ export const crearAlumno = async (req: any, res: any): Promise<void> => {
     });
   } catch (error: any) {
     console.error("Error al crear alumno:", error);
-    res.status(500).json({ message: "Error al crear alumno", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al crear alumno", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const showAllAlumnos = async (req: any, res: any): Promise<void> => {
   try {
     const alumnos = await prisma.usuario.findMany({
       where: { rolId: 2 },
-      include: { rol: true },
+      include: {
+        rol: true,
+
+        examenesResueltos: {
+          select: {
+            puntaje_final: true,
+          },
+        },
+      },
     });
 
     res.status(200).json({ alumnos });
@@ -68,7 +80,9 @@ export const actualizarAlumno = async (req: any, res: any): Promise<void> => {
     });
   } catch (error: any) {
     console.error("Error al actualizar alumno:", error);
-    res.status(500).json({ message: "Error al actualizar alumno", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al actualizar alumno", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
@@ -88,7 +102,9 @@ export const deleteAlumno = async (req: any, res: any): Promise<void> => {
     });
   } catch (error: any) {
     console.error("Error al eliminar alumno:", error);
-    res.status(500).json({ message: "Error al eliminar alumno", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al eliminar alumno", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
@@ -109,8 +125,55 @@ export const obtenerAlumnoPorId = async (req: any, res: any): Promise<void> => {
     });
   } catch (error: any) {
     console.error("Error al obtener alumno por ID:", error);
-    res.status(500).json({ message: "Error al obtener alumno", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error al obtener alumno", error: error.message });
   } finally {
     await prisma.$disconnect();
   }
-}; 
+};
+
+export const obtenerTotalDataPorAlumno = async (req: any, res: Response) => {
+  const userId = req.user.id;
+
+  try {
+    const totalCursosComprados = await prisma.ventasDetalles.count({
+      where: {
+        venta: {
+          usuarioId: userId,
+        },
+      },
+    });
+
+    const totalExamenes = await prisma.testResuelto.count({
+      where: {
+        puntaje_final: {
+          gt: "13",
+        },
+        userId: userId,
+      },
+    });
+
+    const totalCertificados = await prisma.certificados.count({
+      where: {
+        usuarioId: userId,
+      },
+    });
+
+    res.status(200).json({
+      data: {
+        totalCursos: totalCursosComprados,
+        totalExamenes: totalExamenes,
+        totalCertificados: totalCertificados,
+      },
+    });
+  } catch (error: any) {
+    console.error(
+      "Error al traer total de cursos, éxamenes y certificados:",
+      error
+    );
+    res
+      .status(500)
+      .json({ message: "Error al obtener alumno", error: error.message });
+  }
+};
