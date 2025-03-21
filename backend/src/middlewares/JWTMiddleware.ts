@@ -13,7 +13,6 @@ export const verifyAdmin = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  console.log(req.headers.authorization);
   if (!req.headers.authorization) {
     res.status(401).json({ message: "Token no proporcionado." });
     return;
@@ -59,6 +58,9 @@ export const verifyAlumno = async (
   const tokenFromCookie = req.cookies?.token;
   const token = tokenFromCookie;
 
+    console.log("Cookies:" , req.cookies?.token)
+
+  console.log("BODY: ", req.body)
   if (!token) {
     res.status(401).json({ message: "Token no proporcionado." });
     return;
@@ -69,7 +71,6 @@ export const verifyAlumno = async (
       token ?? "",
       ENV.TOKEN_SECRET as string
     ) as JwtPayload;
-    console.log(decoded);
 
     const user = await prisma.usuario.findUnique({
       where: { id: decoded.id },

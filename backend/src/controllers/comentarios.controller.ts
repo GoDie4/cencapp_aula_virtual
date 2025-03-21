@@ -74,6 +74,7 @@ export const traerComentarioDeAlumno = async (
         userId: userId,
       },
       include: {
+        respuestas: true,
         clase: {
           select: {
             nombre: true,
@@ -96,6 +97,137 @@ export const traerComentarioDeAlumno = async (
     res.json({ comentarios: comentarios });
   } catch (error) {
     console.error("Error al obtener los comentarios del usuario:", error);
+    res.status(500).json({ error: "Error del servidor" });
+  }
+};
+
+export const traerAllComentarios = async (
+  req: any,
+  res: Response
+): Promise<any> => {
+  const { user } = req;
+
+  try {
+    if (user.rolId === 1) {
+      const comentarios = await prisma.comentarios.findMany({
+        include: {
+          clase: {
+            omit: {
+              seccionId: true,
+              id: true,
+              createdAt: true,
+              duracion: true,
+              posicion: true,
+              slug: true,
+              updatedAt: true,
+              url_video: true,
+            },
+            include: {
+              seccion: {
+                omit: {
+                  createdAt: true,
+                  cursoId: true,
+                  id: true,
+                  posicion: true,
+                  slug: true,
+                  updatedAt: true,
+                },
+                include: {
+                  curso: {
+                    select: {
+                      nombre: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          respuestas: true,
+          usuario: {
+            select: {
+              nombres: true,
+              id: true,
+            },
+          },
+        },
+      });
+
+      return res.json({ comentarios });
+    }
+
+    if (user.rolId === 3) {
+      const cursosAsignados = await prisma.cursoUsuario.findMany({
+        where: {
+          userId: user.id,
+          tipo: "CARGO",
+        },
+        select: {
+          cursoId: true,
+        },
+      });
+
+      const cursoIds = cursosAsignados.map((cu) => cu.cursoId);
+
+      const comentarios = await prisma.comentarios.findMany({
+        where: {
+          clase: {
+            seccion: {
+              cursoId: {
+                in: cursoIds,
+              },
+            },
+          },
+        },
+        include: {
+          clase: {
+            omit: {
+              seccionId: true,
+              id: true,
+              createdAt: true,
+              duracion: true,
+              posicion: true,
+              slug: true,
+              updatedAt: true,
+              url_video: true,
+            },
+            include: {
+              seccion: {
+                omit: {
+                  createdAt: true,
+                  cursoId: true,
+                  id: true,
+                  posicion: true,
+                  slug: true,
+                  updatedAt: true,
+                },
+                include: {
+                  curso: {
+                    select: {
+                      nombre: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          respuestas: true,
+          usuario: {
+            select: {
+              nombres: true,
+              id: true,
+            },
+          },
+        },
+      });
+
+      return res.json({ comentarios });
+    }
+
+    return res
+      .status(403)
+      .json({ error: "No tienes permisos para acceder a esta información" });
+  } catch (error) {
+    console.error("Error al obtener los comentarios", error);
     res.status(500).json({ error: "Error del servidor" });
   }
 };

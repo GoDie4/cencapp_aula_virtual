@@ -13,6 +13,8 @@ import { Router } from "express";
 import { verifyAdmin, verifyAlumno } from "../middlewares/JWTMiddleware";
 
 const router = Router();
+
+
 router.get("/", verifyAdmin, traerCertificados);
 router.get("/mios", verifyAlumno, obtenerCertificadosPorUsuario);
 router.post("/", verifyAdmin, uploadArchivoCertificado, createCertificado);
@@ -31,4 +33,7 @@ router.get(
   descargarCertificadoPorId
 );
 
+
+
+  
 export default router;
