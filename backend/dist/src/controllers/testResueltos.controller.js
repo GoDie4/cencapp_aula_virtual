@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.obtenerExamenesResueltos = obtenerExamenesResueltos;
 exports.obtenerExamenResueltoDocumento = obtenerExamenResueltoDocumento;
 exports.colocarPuntaje = colocarPuntaje;
+exports.obtenerEjerciciosResueltos = obtenerEjerciciosResueltos;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 async function obtenerExamenesResueltos(req, res) {
@@ -10,7 +11,8 @@ async function obtenerExamenesResueltos(req, res) {
     try {
         const testResueltos = await prisma.testResuelto.findMany({
             where: {
-                userId: user.id
+                userId: user.id,
+                tipo_prueba: "EXAMEN"
             },
             include: {
                 examen: {
@@ -85,6 +87,33 @@ async function colocarPuntaje(req, res) {
             message: 'Ha ocurrido un error'
         });
         return;
+    }
+}
+async function obtenerEjerciciosResueltos(req, res) {
+    const user = req.user;
+    try {
+        const testResueltos = await prisma.testResuelto.findMany({
+            where: {
+                userId: user.id,
+                tipo_prueba: "EJERCICIOS"
+            },
+            include: {
+                examen: {
+                    include: {
+                        clase: true
+                    }
+                }
+            }
+        });
+        res.status(200).json({
+            testResueltos
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Ha ocurrido un error en el servidor'
+        });
     }
 }
 //# sourceMappingURL=testResueltos.controller.js.map

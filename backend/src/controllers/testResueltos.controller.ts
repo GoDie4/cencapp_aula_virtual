@@ -8,7 +8,8 @@ export async function obtenerExamenesResueltos(req: Request, res: Response) {
   try {
     const testResueltos = await prisma.testResuelto.findMany({
       where: {
-        userId: user.id
+        userId: user.id,
+        tipo_prueba: "EXAMEN"
       },
       include: {
         examen: {
@@ -92,5 +93,32 @@ export async function colocarPuntaje (req: Request, res: Response) {
       message: 'Ha ocurrido un error'
     })
     return
+  }
+}
+
+export async function obtenerEjerciciosResueltos(req: Request, res: Response) {
+  const user = (req as any).user;
+  try {
+    const testResueltos = await prisma.testResuelto.findMany({
+      where: {
+        userId: user.id,
+        tipo_prueba: "EJERCICIOS"
+      },
+      include: {
+        examen: {
+          include: {
+            clase: true
+          }
+        }
+      }
+    })
+    res.status(200).json({
+      testResueltos
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor'
+    })
   }
 }

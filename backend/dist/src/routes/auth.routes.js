@@ -103,9 +103,15 @@ router.get("/tests/documento/:id", JWTMiddleware_1.verifyUser, test_controller_1
 router.get("/ejercicios/documento/:id", JWTMiddleware_1.verifyUser, profesor_controller_1.obtenerEjerciciosPorProfesor);
 router.get("/examenes/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerExamenesPorProfesor);
 router.get("/materiales/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerMaterialesPorProfesor);
-router.get("/ejercicios/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);
 router.post("/examenes/enviar", JWTMiddleware_1.verifyAlumnoNoCookie, test_controller_1.uploadArchivoRes, test_controller_1.enviarExamen);
 router.get('/obtenerExamenesAsignados', JWTMiddleware_1.verifyAlumno, test_controller_1.obtenerExamenesAsignados);
+//Ejercicios
+router.post("/ejercicios/enviar", JWTMiddleware_1.verifyAlumnoNoCookie, test_controller_1.uploadArchivoRes, test_controller_1.enviarEjercicio);
+router.get("/ejercicios/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);
+router.get("/obtenerEjerciciosAsignados", JWTMiddleware_1.verifyAlumno, test_controller_1.obtenerEjerciciosAsignados);
+// Ejercicios Resueltos
+router.get("/ejercicios/revisar", JWTMiddleware_1.verifyProfesor, test_controller_1.obtenerEjerciciosPendientes);
+router.get("/ejercicios/resueltos", JWTMiddleware_1.verifyAlumno, testResueltos_controller_1.obtenerEjerciciosResueltos);
 // Test Resueltos
 router.get("/examenes/revisar", JWTMiddleware_1.verifyProfesor, test_controller_1.obtenerExamenesPendientes);
 router.post("/testsResuelto/documento", JWTMiddleware_1.verifyProfesor, testResueltos_controller_1.obtenerExamenResueltoDocumento);

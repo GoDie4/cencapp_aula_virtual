@@ -398,6 +398,9 @@ export const obtenerEjerciciosPorProfesor = async (req: Request, res: Response) 
                   },
                   include: {
                     test: {
+                      where: {
+                        tipo_prueba: 'EJERCICIOS'
+                      },
                       include: {
                         clase: true
                       }

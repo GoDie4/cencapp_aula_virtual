@@ -6,11 +6,26 @@ import { TitleAula } from "../../@components/estructura/TitleAula";
 import { TareasMetadata } from "@/seo/aula/TareasMetaData";
 import { TareasColumna } from "./@components/TareasColumna";
 import { getServerSideProps } from "@/server/getServerSideProps";
+import { CursosUsuario } from "../materiales/@interfaces/FetchMaterialInterface";
+import { TestResuelto } from "@/interfaces/TestInterface";
+import EjerciciosResueltoColumna from "./@components/EjerciciosResueltoColumna";
 export function generateMetadata() {
   const metadata = TareasMetadata;
   return metadata;
 }
+interface Root {
+  examenes: CursosUsuario[];
+}
+
+interface Root2 {
+  testResueltos: TestResuelto[];
+}
+
 export default async function page() {
+  const data: Root = await getServerSideProps("obtenerEjerciciosAsignados");
+  console.log(data)
+  const dataResueltos: Root2 = await getServerSideProps("ejercicios/resueltos");
+  console.log(dataResueltos)
   const tareasPendientes = [
     {
       id: "T001",
@@ -52,7 +67,7 @@ export default async function page() {
     },
   ];
 
-    const data = await getServerSideProps("user/yo");
+    // const data = await getServerSideProps("user/yo");
   
   return (
     <div>
@@ -73,7 +88,7 @@ export default async function page() {
                         Nombre
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-black-700 uppercase">
-                        Curso
+                        Clase
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-black-700 uppercase">
                         Fecha Límite
@@ -86,7 +101,9 @@ export default async function page() {
                       </th>
                     </tr>
                   </thead>
-                  <TareasColumna data={data}/>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    <TareasColumna data={data} />
+                  </tbody>
                 </table>
               </div>
 
@@ -140,7 +157,7 @@ export default async function page() {
                         Nombre de la Tarea
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-black-700 uppercase">
-                        Curso
+                        Clase
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-black-700 uppercase">
                         Fecha Finalización
@@ -154,32 +171,7 @@ export default async function page() {
                     </tr>
                   </thead>
                   <tbody className="bg-white-main divide-y divide-gray-200">
-                    {tareasTerminadas.map((tarea) => (
-                      <tr key={tarea.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {tarea.id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {tarea.nombre}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-black-700">
-                          {tarea.curso}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-black-700">
-                          {tarea.fechaFinalizacion}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            {tarea.calificacion}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button className="text-primary-main hover:text-primary-900">
-                            Ver Detalles
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    <EjerciciosResueltoColumna dataResueltos={dataResueltos} />
                   </tbody>
                 </table>
               </div>

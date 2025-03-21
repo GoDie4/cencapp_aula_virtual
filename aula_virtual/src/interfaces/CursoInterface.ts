@@ -1,4 +1,5 @@
 import { Categoria } from "./CategoriaInterface";
+import { SeccionInterface } from "./SeccionInterface";
 
 export interface Curso {
   id?: string;
@@ -16,6 +17,7 @@ export interface Curso {
   dolar?: number;
   PorcentajeCurso?: PorcentajeCurso[];
   descuento?: number;
+  Seccion?: SeccionInterface[]
 }
 
 export interface PorcentajeCurso {

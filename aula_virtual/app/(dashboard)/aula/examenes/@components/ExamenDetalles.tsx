@@ -38,21 +38,13 @@ export function ExamenDetalles({ curUs }: { curUs: TestResuelto }) {
           </div>
           <div className='w-full max-lg:flex-col flex gap-4'>
             {
-              curUs.estado === "EnRevision" && (
+              curUs.estado === "Finalizado" && (
                 <div className='w-full'>
                   <h3 className='font-bold'>Puntaje Final</h3>
                   <p className='font-medium'>{curUs.puntaje_final}</p>
                 </div>
               )
             }
-          </div>
-          <div>
-            <h3 className='font-bold'>Fecha de Registro al Sistema</h3>
-            <p className='font-medium'>{parseDate(curUs.createdAt ?? new Date())}</p>
-          </div>
-          <div>
-            <h3 className='font-bold'>Fecha de Última Modificación</h3>
-            <p className='font-medium'>{parseDate(curUs.updatedAt ?? new Date())}</p>
           </div>
         </div>
       </div>

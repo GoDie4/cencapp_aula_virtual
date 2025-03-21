@@ -11,6 +11,8 @@ import { CursosUsuario } from "../materiales/@interfaces/FetchMaterialInterface"
 import { TestResuelto } from "@/interfaces/TestInterface";
 import ExamenColumna from "./@components/ExamenColumna";
 import ExamenResueltoColumna from "./@components/ExamenResueltoColumna";
+import ExmaneResponsiveColumna from "./@components/ExmaneResponsiveColumna";
+import ExamenResueltoResponsiveColumna from "./@components/ExamenResueltoResponsiveColumna";
 
 export function generateMetadata() {
   return ExamenesMetadata();
@@ -28,6 +30,7 @@ const Page: NextPage = async () => {
   const data: Root = await getServerSideProps("obtenerExamenesAsignados");
   const dataResueltos: Root2 = await getServerSideProps("examenes/resueltos");
 
+  /*
   const examenesPendientes = [
     {
       id: "EX001",
@@ -51,7 +54,8 @@ const Page: NextPage = async () => {
       estado: "pendiente",
     },
   ];
-
+  */
+  /*
   const examenesTerminados = [
     {
       id: "EX004",
@@ -68,7 +72,7 @@ const Page: NextPage = async () => {
       calificacion: "18/20",
     },
   ];
-
+  */
   return (
     <div className="w-full">
       <TitleAula titulo="Mis Exámenes" />
@@ -94,33 +98,7 @@ const Page: NextPage = async () => {
               </div>
 
               <div className="space-y-4 sm:hidden">
-                {examenesPendientes.map((examen) => (
-                  <div
-                    key={examen.id}
-                    className="p-4 bg-white border border-gray-200 rounded-lg shadow-md"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-bold text-gray-900">ID: {examen.id}</p>
-                      <span className="px-2 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">
-                        Pendiente
-                      </span>
-                    </div>
-                    <p className="mt-2 text-sm text-gray-900">
-                      <span className="font-semibold">Nombre:</span> {examen.nombre}
-                    </p>
-                    <p className="text-sm text-black-700">
-                      <span className="font-semibold">Curso:</span> {examen.curso}
-                    </p>
-                    <p className="text-sm text-black-700">
-                      <span className="font-semibold">Fecha Límite:</span> {examen.fechaLimite}
-                    </p>
-                    <div className="mt-2">
-                      <button className="text-sm font-medium text-primary-main hover:text-primary-900">
-                        Dar examen
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                <ExmaneResponsiveColumna data={data} />
               </div>
             </div>
           </TabContent>
@@ -147,33 +125,7 @@ const Page: NextPage = async () => {
               </div>
 
               <div className="space-y-4 sm:hidden">
-                {examenesTerminados.map((examen) => (
-                  <div
-                    key={examen.id}
-                    className="p-4 bg-white border border-gray-200 rounded-lg shadow-md"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-bold text-gray-900">ID: {examen.id}</p>
-                      <span className="px-2 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-                        {examen.calificacion}
-                      </span>
-                    </div>
-                    <p className="mt-2 text-sm text-gray-900">
-                      <span className="font-semibold">Nombre:</span> {examen.nombre}
-                    </p>
-                    <p className="text-sm text-black-700">
-                      <span className="font-semibold">Curso:</span> {examen.curso}
-                    </p>
-                    <p className="text-sm text-black-700">
-                      <span className="font-semibold">Fecha Finalización:</span> {examen.fechaFinalizacion}
-                    </p>
-                    <div className="mt-2">
-                      <button className="text-sm font-medium text-primary-main hover:text-primary-900">
-                        Ver Detalles
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                <ExamenResueltoResponsiveColumna dataResueltos={dataResueltos} />
               </div>
             </div>
           </TabContent>
