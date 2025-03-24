@@ -113,7 +113,7 @@ const CommentComponent = ({ claseId, comentarios }: Props) => {
           </button>
         </div>
       </form>
-      <div className="overflow-y-auto px-3  max-h-96   rounded-lg ">
+      <div className="overflow-y-auto px-3  max-h-screen   rounded-lg ">
         {comments.length > 0 ? (
           <ul className="divide-y divide-blue-100">
             {comments.map((comentario: ComentarioListar) => (
@@ -149,11 +149,34 @@ const CommentComponent = ({ claseId, comentarios }: Props) => {
                   <p className="text-gray-800 text-sm leading-relaxed">
                     {comentario.comentario}
                   </p>
-                  <div className="mt-3 text-right">
+                  {/* Respuesta del comentario */}
+                  {comentario.respuestas &&
+                    comentario?.respuestas?.length > 0 && (
+                      <div className="mt-4 pl-2 border-l-2 border-blue-200">
+                        <div className="flex items-center mb-1">
+                          <FaUserCircle
+                            size={22}
+                            className="text-blue-600 mr-2 flex-shrink-0"
+                          />
+                          <span className="text-sm font-semibold text-blue-700">
+                            {comentario.respuestas[0].user.nombres}
+                          </span>
+                        </div>
+                        <p className="text-gray-700 text-sm italic leading-relaxed">
+                          {comentario.respuestas[0].respuesta}
+                        </p>
+                        <span className="block mt-1 text-xs text-blue-500">
+                          {new Date(
+                            comentario.respuestas[0].createdAt
+                          ).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                  {/* <div className="mt-3 text-right">
                     <button className="bg-blue-600 text-white-main text-sm font-medium px-3 py-1 hover:bg-blue-700 rounded transition-colors">
                       Responder
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               </li>
             ))}
