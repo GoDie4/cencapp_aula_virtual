@@ -195,6 +195,7 @@ export interface SeccionValues {
   posicion: string
   nombre: string
   cursoId: string
+  curso: Curso
 }
 
 export interface ClaseValues {
@@ -202,6 +203,7 @@ export interface ClaseValues {
   duracion: string
   posicion: string
   seccionId: string
+  seccion?: SeccionValues
 }
 
 export interface ClaseValuesModificate {

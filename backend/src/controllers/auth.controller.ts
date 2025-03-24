@@ -164,10 +164,10 @@ export const login = async (
     const token = await createAccessToken({ id: usuarioExiste.id });
 
     res.cookie("token", token, {
-      sameSite: "none",
-      secure: true,
+      sameSite: "lax",
+      secure: false,
       httpOnly: true,
-      domain: ".cencapperu.com",
+      //domain: ".cencapperu.com",
       maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 

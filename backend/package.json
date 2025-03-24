@@ -25,6 +25,7 @@
     "@types/multer": "^1.4.12",
     "@types/node": "^22.13.5",
     "@types/nodemailer": "^6.4.17",
+    "@types/qrcode": "^1.5.5",
     "nodemon": "^3.1.9",
     "prisma": "^6.4.1",
     "prisma-erd-generator": "^2.0.4",
@@ -45,6 +46,8 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.0",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
     "tsx": "^4.19.3",
     "zod": "^3.24.2"
   }

@@ -3,7 +3,11 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import FormRegister from "./@components/FormRegister";
-
+import { RegisterMetadata } from "@/seo/auth/RegisterMetaData";
+export function generateMetadata() {
+  const metadata = RegisterMetadata();
+  return metadata;
+}
 const Page: NextPage = ({}) => {
   return (
     <section className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-primary-950 to-primary-main h-dvh lg:flex-row">

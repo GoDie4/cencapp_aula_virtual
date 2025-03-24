@@ -556,6 +556,7 @@ export async function enviarExamen(req: Request, res: Response) {
       message: "El examen ha sido enviado a revisión",
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       message: "Ocurrió un error en el servidor",
     });

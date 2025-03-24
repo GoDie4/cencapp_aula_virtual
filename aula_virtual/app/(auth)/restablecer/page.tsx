@@ -1,13 +1,14 @@
-'use client'
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import FormCambiarContrasena from "./@components/FormCambiarContrasena";
-
+import { RestablecerMetadata } from "@/seo/auth/RestablecerMetaData";
+export function generateMetadata() {
+  const metadata = RestablecerMetadata();
+  return metadata;
+}
 export default function RestablecerPassword() {
-  const urlParams = useSearchParams();
-  const token = urlParams.get("token");
+
   return (
     <>
       <section className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-primary-950 to-primary-main h-dvh lg:flex-row">
@@ -53,7 +54,7 @@ export default function RestablecerPassword() {
             <p className="w-full mb-10 text-3xl font-bold text-center md:text-4xl text-white-main">
               Restablece tu  <span className="text-secondary-main">contraseña</span>
             </p>
-            <FormCambiarContrasena token={token ?? ""} />
+            <FormCambiarContrasena  />
            
           </div>
         </div>

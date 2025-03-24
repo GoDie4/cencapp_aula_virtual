@@ -3,6 +3,12 @@ import { NextPage } from "next";
 import FormLogin from "./@components/FormLogin";
 import Link from "next/link";
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { LoginMetadata } from "@/seo/auth/LoginMetaData";
+
+export function generateMetadata() {
+  const metadata = LoginMetadata();
+  return metadata;
+}
 const Page: NextPage = () => {
   return (
     <section className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-primary-950 to-primary-main h-dvh lg:flex-row">

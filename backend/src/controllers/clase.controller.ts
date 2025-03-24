@@ -118,7 +118,7 @@ export const actualizarClase = async (req: Request, res: Response) => {
         nombre: nombre,
         duracion: duracion,
         posicion: parseInt(posicion),
-        url_video: url_video
+        url_video: url_video,
       },
     });
 
@@ -245,6 +245,11 @@ export const obtenerClasePorSlug = async (
         materiales: true,
         comentarios: {
           include: {
+            respuestas: {
+              include: {
+                user: true,
+              },
+            },
             usuario: {
               select: {
                 nombres: true,
@@ -396,4 +401,3 @@ export const obtenerClasesPorSeccion = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Error al obtener clases" });
   }
 };
-

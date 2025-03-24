@@ -16,7 +16,7 @@ datasource db {
 model Curso {
     id              String            @id @default(cuid())
     nombre          String            @db.VarChar(255)
-    slug            String            @default("") @db.VarChar(255)
+    slug            String            @unique @default("") @db.VarChar(255)
     imagen          String            @db.VarChar(255)
     banner          String            @db.VarChar(255)
     horas           Int
@@ -153,24 +153,25 @@ model Rol {
 }
 
 model Usuario {
-    id                 String               @id @default(cuid()) @db.Char(36)
-    rolId              Int                  @default(1)
-    nombres            String               @db.VarChar(255)
-    apellidos          String               @db.VarChar(255)
-    email              String               @unique
-    celular            String               @db.VarChar(15)
-    password           String
-    activo             Boolean              @default(false)
-    createdAt          DateTime             @default(now())
-    updatedAt          DateTime             @updatedAt
-    rol                Rol                  @relation(fields: [rolId], references: [id], onDelete: Cascade)
-    cursosUsuarios     CursoUsuario[]
-    Comentarios        Comentarios[]
-    PasswordResetToken PasswordResetToken[]
-    PorcentajeCurso    PorcentajeCurso[]
-    ventas             Ventas[]
-    examenesResueltos  TestResuelto[]
-    Certificados       Certificados[]
+    id                    String                  @id @default(cuid()) @db.Char(36)
+    rolId                 Int                     @default(1)
+    nombres               String                  @db.VarChar(255)
+    apellidos             String                  @db.VarChar(255)
+    email                 String                  @unique
+    celular               String                  @db.VarChar(15)
+    password              String
+    activo                Boolean                 @default(false)
+    createdAt             DateTime                @default(now())
+    updatedAt             DateTime                @updatedAt
+    rol                   Rol                     @relation(fields: [rolId], references: [id], onDelete: Cascade)
+    cursosUsuarios        CursoUsuario[]
+    Comentarios           Comentarios[]
+    PasswordResetToken    PasswordResetToken[]
+    PorcentajeCurso       PorcentajeCurso[]
+    ventas                Ventas[]
+    examenesResueltos     TestResuelto[]
+    Certificados          Certificados[]
+    RespuestasComentarios RespuestasComentarios[]
 
     @@map("usuarios")
 }
@@ -207,16 +208,37 @@ model Categorias {
 }
 
 model Comentarios {
-    id         String   @id @default(cuid()) @db.Char(36)
+    id         String                  @id @default(cuid()) @db.Char(36)
     userId     String
     claseId    String
-    comentario String   @db.Text
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    usuario    Usuario  @relation(fields: [userId], references: [id])
-    clase      Clases   @relation(fields: [claseId], references: [id])
+    comentario String                  @db.Text
+    estado     estadoComentario        @default(pendiente)
+    createdAt  DateTime                @default(now())
+    updatedAt  DateTime                @updatedAt
+    usuario    Usuario                 @relation(fields: [userId], references: [id])
+    clase      Clases                  @relation(fields: [claseId], references: [id])
+    respuestas RespuestasComentarios[]
 
     @@map("comentarios")
+}
+
+enum estadoComentario {
+    pendiente
+    respondido
+}
+
+model RespuestasComentarios {
+    id           String   @id @default(cuid()) @db.Char(36)
+    userId       String
+    comentarioId String
+    respuesta    String   @db.Text
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    user       Usuario     @relation(fields: [userId], references: [id])
+    comentario Comentarios @relation(fields: [comentarioId], references: [id])
+
+    @@map("respuestas_comentarios")
 }
 
 model PasswordResetToken {
@@ -306,20 +328,20 @@ enum EstadoTest {
 }
 
 model TestResuelto {
-  id                     String     @id @default(cuid())
-  examenId               String
-  userId                 String
-  url_archivo_resultado  String
-  puntaje_final          String
-  tipo_prueba            TipoPrueba
-  estado                 EstadoTest @default(EnRevision)
-  examen                 Test       @relation(fields: [examenId], references: [id], onDelete: Cascade)
-  usuario                Usuario    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  mime_type              String
-  createdAt              DateTime   @default(now())
-  updatedAt              DateTime   @updatedAt
+    id                    String     @id @default(cuid())
+    examenId              String
+    userId                String
+    url_archivo_resultado String
+    puntaje_final         String
+    tipo_prueba           TipoPrueba
+    estado                EstadoTest @default(EnRevision)
+    examen                Test       @relation(fields: [examenId], references: [id], onDelete: Cascade)
+    usuario               Usuario    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    mime_type             String
+    createdAt             DateTime   @default(now())
+    updatedAt             DateTime   @updatedAt
 
-  @@map("examen_resueltos")
+    @@map("examen_resueltos")
 }
 
 enum TipoPrueba {
@@ -356,6 +378,4 @@ model Certificados {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    
 }

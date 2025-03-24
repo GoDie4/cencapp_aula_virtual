@@ -1,15 +1,15 @@
-import axios from "axios";
-import { TestInterface, type TestResuelto } from "../../../../interfaces/TestInterface";
-import { Global } from "../../../../helper/Global";
-import { Button, Menu, MenuItem } from "@mui/material";
-import { IoMdSettings } from "react-icons/io";
-import { parseDate } from "../../../../logic/parseDate";
-import React, { useContext } from "react";
-import { ModalContext } from "../../../../context/ModalProvider";
-import { Curso } from "../../../../interfaces/CursoInterface";
-import { ColocarPuntaje } from "./ColocarPuntaje";
+import axios from 'axios'
+import { type TestInterface, type TestResuelto } from '../../../../interfaces/TestInterface'
+import { Global } from '../../../../helper/Global'
+import { Button, Menu, MenuItem } from '@mui/material'
+import { IoMdSettings } from 'react-icons/io'
+import { parseDate } from '../../../../logic/parseDate'
+import React, { useContext } from 'react'
+import { ModalContext } from '../../../../context/ModalProvider'
+import { type Curso } from '../../../../interfaces/CursoInterface'
+import { ColocarPuntaje } from './ColocarPuntaje'
 
-export function ExamenesCargoColumna({ examenResuelto, curso, test, getExamenes }: { examenResuelto: TestResuelto, curso?: Curso, test: TestInterface, getExamenes: () => Promise<void> }): JSX.Element {
+export function ExamenesCargoColumna ({ examenResuelto, curso, test, getExamenes }: { examenResuelto: TestResuelto, curso?: Curso, test: TestInterface, getExamenes: () => Promise<void> }): JSX.Element {
   const { setModalContent } = useContext(ModalContext)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -49,14 +49,14 @@ export function ExamenesCargoColumna({ examenResuelto, curso, test, getExamenes 
 
   return (
     <div
-      className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
+      className="grid items-center grid-cols-1 gap-4 p-4 mb-4 md:grid-cols-6 bg-secondary-900 rounded-xl"
     >
       <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">Código</h5>
+        <h5 className="mb-2 font-bold text-white md:hidden">Código</h5>
         <span>{curso?.nombre}</span>
       </div>
       <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">
+        <h5 className="mb-2 font-bold text-white md:hidden">
           Nombre Alumno
         </h5>
         <span>
@@ -65,7 +65,7 @@ export function ExamenesCargoColumna({ examenResuelto, curso, test, getExamenes 
       </div>
 
       <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">
+        <h5 className="mb-2 font-bold text-white md:hidden">
           Examen
         </h5>
         <span className='text-main'>
@@ -74,7 +74,7 @@ export function ExamenesCargoColumna({ examenResuelto, curso, test, getExamenes 
       </div>
 
       <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">
+        <h5 className="mb-2 font-bold text-white md:hidden">
           Estado del Examen
         </h5>
         <span>
@@ -83,7 +83,7 @@ export function ExamenesCargoColumna({ examenResuelto, curso, test, getExamenes 
       </div>
 
       <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">
+        <h5 className="mb-2 font-bold text-white md:hidden">
           Fecha Subido
         </h5>
         <span className=''>
@@ -92,7 +92,7 @@ export function ExamenesCargoColumna({ examenResuelto, curso, test, getExamenes 
       </div>
 
       <div className="md:text-center">
-        <h5 className="md:hidden text-white font-bold mb-2">
+        <h5 className="mb-2 font-bold text-white md:hidden">
           Acciones
         </h5>
         <Button
