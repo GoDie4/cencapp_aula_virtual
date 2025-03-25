@@ -125,6 +125,12 @@ export const register = async (
       maxAge: 2 * 60 * 60 * 1000,
     });
 
+    await sendEmail("anthony10.reyes10@gmail.com", "Registro", `NuevoRegistro.html`, {
+      usuario: nuevoUsuario?.nombres + " " + nuevoUsuario.apellidos,
+      email: nuevoUsuario.email,
+      fecha: nuevoUsuario.createdAt,
+    });
+
     return res.status(201).json({
       message: "Registrado correctamente",
       usuario: {
@@ -211,7 +217,7 @@ export const recuperarContrasena = async (req: any, res: any) => {
 
   const resetLink = `http://localhost:3000/restablecer?token=${token}`;
 
-  await sendEmail(email, "Recuperar contraseña", `RecuperarContrasena.html`, {
+  await sendEmail(user.email, "Recuperar contraseña", `RecuperarContrasena.html`, {
     enlace: resetLink,
     nombre: user.nombres.split(" ")[0],
   });
