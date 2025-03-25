@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { sendEmail } from "./mail.controller";
 
 const prisma = new PrismaClient();
 
@@ -9,6 +10,35 @@ export const registrarComentario = async (
 ): Promise<any> => {
   try {
     const { claseId, userId, comentario } = req.body;
+    const profesor = await prisma.cursoUsuario.findFirst({
+      where: {
+        curso: {
+          Seccion: {
+            some: {
+              clases: {
+                some: {
+                  id: claseId,
+                },
+              },
+            },
+          },
+        },
+        tipo: "CARGO",
+      },
+      include: {
+        usuario: true,
+      },
+    });
+
+    const curso = await prisma.curso.findFirst({
+      where: { id: profesor?.cursoId },
+    });
+
+    const user = await prisma.usuario.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
     const nuevoComentario = await prisma.comentarios.create({
       data: {
@@ -17,6 +47,22 @@ export const registrarComentario = async (
         userId: userId,
       },
     });
+
+    await sendEmail(
+      [
+        "anthony10.reyes10@gmail.com",
+        profesor?.usuario.email !== undefined ? profesor.usuario.email : "",
+      ],
+      "Nuevo comentario",
+      `NuevoComentario.html`,
+      {
+        nombre_estudiante: user?.nombres + " " + user?.apellidos,
+        email: user?.email,
+        curso: curso?.nombre,
+        comentario: comentario,
+        fecha: new Date()
+      }
+    );
 
     res.status(201).json(nuevoComentario);
   } catch (error) {
