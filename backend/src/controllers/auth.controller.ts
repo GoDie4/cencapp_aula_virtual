@@ -125,11 +125,16 @@ export const register = async (
       maxAge: 2 * 60 * 60 * 1000,
     });
 
-    await sendEmail("anthony10.reyes10@gmail.com", "Registro", `NuevoRegistro.html`, {
-      usuario: nuevoUsuario?.nombres + " " + nuevoUsuario.apellidos,
-      email: nuevoUsuario.email,
-      fecha: nuevoUsuario.createdAt,
-    });
+    await sendEmail(
+      "anthony10.reyes10@gmail.com",
+      "Registro",
+      `NuevoRegistro.html`,
+      {
+        usuario: nuevoUsuario?.nombres + " " + nuevoUsuario.apellidos,
+        email: nuevoUsuario.email,
+        fecha: nuevoUsuario.createdAt,
+      }
+    );
 
     return res.status(201).json({
       message: "Registrado correctamente",
@@ -170,10 +175,10 @@ export const login = async (
     const token = await createAccessToken({ id: usuarioExiste.id });
 
     res.cookie("token", token, {
-      sameSite: "lax",
-      secure: false,
+      sameSite: "none",
+      secure: true,
       httpOnly: true,
-      //domain: ".cencapperu.com",
+      domain: ".cencapperu.com",
       maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 
@@ -217,10 +222,15 @@ export const recuperarContrasena = async (req: any, res: any) => {
 
   const resetLink = `http://localhost:3000/restablecer?token=${token}`;
 
-  await sendEmail(user.email, "Recuperar contraseña", `RecuperarContrasena.html`, {
-    enlace: resetLink,
-    nombre: user.nombres.split(" ")[0],
-  });
+  await sendEmail(
+    user.email,
+    "Recuperar contraseña",
+    `RecuperarContrasena.html`,
+    {
+      enlace: resetLink,
+      nombre: user.nombres.split(" ")[0],
+    }
+  );
 
   res.json({
     message: "Te hemos enviado un enlace para restablecer tu contraseña.",

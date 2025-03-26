@@ -561,3 +561,4 @@
 2025-03-24T14:38:07.538Z [ERROR] GET /api/user/yo | Status: 404 | Time: 10.257 ms | IP: ::1 | User-Agent: "axios/1.7.9"
 2025-03-24T14:38:07.541Z [ERROR] GET /api/alumno/dataGeneral | Status: 404 | Time: 8.101 ms | IP: ::1 | User-Agent: "node"
 2025-03-24T14:43:53.275Z [ERROR] GET /api/user | Status: 404 | Time: 6.393 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+2025-03-25T14:43:43.014Z [ERROR] GET /api/user/yo | Status: 401 | Time: 31.993 ms | IP: ::1 | User-Agent: "axios/1.7.9"

@@ -1,10 +1,44 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.descargarCertificadoPorId = exports.uploadArchivoCertificado = void 0;
+exports.registrarCertificadoAutomatico = exports.generarCertificado = exports.descargarCertificadoPorId = exports.uploadArchivoCertificado = void 0;
 exports.traerCertificados = traerCertificados;
+exports.traerCertificadosByUser = traerCertificadosByUser;
 exports.obtenerCertificadosPorUsuario = obtenerCertificadosPorUsuario;
 exports.createCertificado = createCertificado;
 exports.actualizarCertificado = actualizarCertificado;
@@ -16,6 +50,8 @@ const multer_1 = __importDefault(require("multer"));
 const node_path_1 = __importDefault(require("node:path"));
 const fs_1 = __importDefault(require("fs"));
 const promises_1 = __importDefault(require("fs/promises"));
+const pdf_lib_1 = require("pdf-lib");
+const QRCode = __importStar(require("qrcode"));
 const prisma = new client_1.PrismaClient();
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
@@ -62,6 +98,30 @@ async function traerCertificados(req, res) {
                 usuario: true,
             },
         });
+        res.status(200).json({ certificados });
+    }
+    catch (e) {
+        console.error(e);
+        res
+            .status(500)
+            .json({ message: "Error interno al obtener los certificados" });
+        return;
+    }
+}
+async function traerCertificadosByUser(req, res) {
+    const { id } = req.params;
+    console.log(id);
+    try {
+        const certificados = await prisma.certificados.findMany({
+            where: {
+                usuarioId: id,
+            },
+            include: {
+                curso: true,
+                usuario: true,
+            },
+        });
+        console.log(certificados);
         res.status(200).json({ certificados });
     }
     catch (e) {
@@ -303,4 +363,99 @@ const descargarCertificadoPorId = async (req, res) => {
     }
 };
 exports.descargarCertificadoPorId = descargarCertificadoPorId;
+const generarCertificado = async (userId, cursoId) => {
+    try {
+        const user = await prisma.usuario.findUnique({ where: { id: userId } });
+        const curso = await prisma.curso.findUnique({ where: { id: cursoId } });
+        if (!user || !curso)
+            throw new Error("Usuario o curso no encontrado");
+        const pdfDoc = await pdf_lib_1.PDFDocument.create();
+        const page = pdfDoc.addPage([842, 595]);
+        // Cargar imagen de fondo
+        const imagePath = node_path_1.default.resolve(__dirname, "../../public/certificados/plantilla.png");
+        const bgImage = fs_1.default.readFileSync(imagePath);
+        const pngImage = await pdfDoc.embedPng(bgImage);
+        page.drawImage(pngImage, { x: 0, y: 0, width: 842, height: 595 });
+        // Fuente y texto centrado
+        const font = await pdfDoc.embedFont(pdf_lib_1.StandardFonts.HelveticaBold);
+        const fontSize = 24;
+        const text = `${user.nombres} ${user.apellidos}`;
+        const textWidth = font.widthOfTextAtSize(text, fontSize);
+        const x = (page.getWidth() - textWidth) / 2;
+        page.drawText(text, {
+            x,
+            y: 345,
+            size: fontSize,
+            font,
+            color: (0, pdf_lib_1.rgb)(0, 0, 0),
+        });
+        // Nombre del curso
+        const fontSizeCurso = 18;
+        const textWidthCurso = font.widthOfTextAtSize(curso.nombre, fontSizeCurso);
+        const xCurso = (page.getWidth() - textWidthCurso) / 2;
+        page.drawText(curso.nombre, {
+            x: xCurso,
+            y: 273,
+            size: fontSizeCurso,
+            font,
+        });
+        const horas = curso.horas;
+        const fontSizeHoras = 14;
+        const textWidthHoras = font.widthOfTextAtSize(horas.toString(), fontSizeHoras);
+        const xHoras = (page.getWidth() - textWidthHoras) / 2;
+        page.drawText(horas.toString(), {
+            x: xHoras,
+            y: 245,
+            size: fontSizeHoras,
+            font,
+        });
+        const qrDataUrl = await QRCode.toDataURL(`https://aula.cencapperu.com/certificados/${userId}`);
+        const qrImageBytes = Buffer.from(qrDataUrl.split(",")[1], "base64");
+        const qrImage = await pdfDoc.embedPng(qrImageBytes);
+        page.drawImage(qrImage, { x: 600, y: 60, width: 135, height: 135 });
+        // Guardar PDF
+        const pdfBytes = await pdfDoc.save();
+        const outputDir = node_path_1.default.resolve(__dirname, "../../private/curso/certificados");
+        if (!fs_1.default.existsSync(outputDir))
+            fs_1.default.mkdirSync(outputDir, { recursive: true });
+        const fileName = `certificado-${userId}-${cursoId}.pdf`;
+        const outputPath = node_path_1.default.join(outputDir, fileName);
+        fs_1.default.writeFileSync(outputPath, pdfBytes);
+        console.log(`Certificado generado: ${outputPath}`);
+    }
+    catch (err) {
+        console.error("Error generando el certificado:", err);
+    }
+};
+exports.generarCertificado = generarCertificado;
+const registrarCertificadoAutomatico = async ({ userId, cursoId, nombre, emitidoEn, }) => {
+    try {
+        const fileName = `certificado-${userId}-${cursoId}.pdf`;
+        const relativePath = `/private/curso/certificados/${fileName}`;
+        const absolutePath = node_path_1.default.resolve(__dirname, `../../private/curso/certificados/${fileName}`);
+        // Obtener tamaño y mimetype desde el archivo guardado
+        const fs = await Promise.resolve().then(() => __importStar(require("fs")));
+        const stats = fs.statSync(absolutePath);
+        const size = stats.size;
+        const mimeType = "application/pdf";
+        const nuevoCertificado = await prisma.certificados.create({
+            data: {
+                url_archivo: relativePath,
+                nombre: nombre,
+                cursoId,
+                emitido_en: (emitidoEn ?? new Date()).toISOString(),
+                mime_type: mimeType,
+                size: size,
+                usuarioId: userId,
+            },
+        });
+        console.log("Certificado registrado en BD");
+        return nuevoCertificado;
+    }
+    catch (error) {
+        console.error("Error al registrar certificado:", error);
+        throw new Error("Error al guardar en la base de datos");
+    }
+};
+exports.registrarCertificadoAutomatico = registrarCertificadoAutomatico;
 //# sourceMappingURL=certificados.controller.js.map

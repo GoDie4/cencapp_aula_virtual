@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerAlumnoPorId = exports.deleteAlumno = exports.actualizarAlumno = exports.showAllAlumnos = exports.crearAlumno = void 0;
+exports.obtenerTotalDataPorAlumno = exports.obtenerAlumnoPorId = exports.deleteAlumno = exports.actualizarAlumno = exports.showAllAlumnos = exports.crearAlumno = void 0;
 const client_1 = require("@prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma = new client_1.PrismaClient();
@@ -28,7 +28,9 @@ const crearAlumno = async (req, res) => {
     }
     catch (error) {
         console.error("Error al crear alumno:", error);
-        res.status(500).json({ message: "Error al crear alumno", error: error.message });
+        res
+            .status(500)
+            .json({ message: "Error al crear alumno", error: error.message });
     }
     finally {
         await prisma.$disconnect();
@@ -39,7 +41,14 @@ const showAllAlumnos = async (req, res) => {
     try {
         const alumnos = await prisma.usuario.findMany({
             where: { rolId: 2 },
-            include: { rol: true },
+            include: {
+                rol: true,
+                examenesResueltos: {
+                    select: {
+                        puntaje_final: true,
+                    },
+                },
+            },
         });
         res.status(200).json({ alumnos });
     }
@@ -73,7 +82,9 @@ const actualizarAlumno = async (req, res) => {
     }
     catch (error) {
         console.error("Error al actualizar alumno:", error);
-        res.status(500).json({ message: "Error al actualizar alumno", error: error.message });
+        res
+            .status(500)
+            .json({ message: "Error al actualizar alumno", error: error.message });
     }
     finally {
         await prisma.$disconnect();
@@ -93,7 +104,9 @@ const deleteAlumno = async (req, res) => {
     }
     catch (error) {
         console.error("Error al eliminar alumno:", error);
-        res.status(500).json({ message: "Error al eliminar alumno", error: error.message });
+        res
+            .status(500)
+            .json({ message: "Error al eliminar alumno", error: error.message });
     }
     finally {
         await prisma.$disconnect();
@@ -114,11 +127,52 @@ const obtenerAlumnoPorId = async (req, res) => {
     }
     catch (error) {
         console.error("Error al obtener alumno por ID:", error);
-        res.status(500).json({ message: "Error al obtener alumno", error: error.message });
+        res
+            .status(500)
+            .json({ message: "Error al obtener alumno", error: error.message });
     }
     finally {
         await prisma.$disconnect();
     }
 };
 exports.obtenerAlumnoPorId = obtenerAlumnoPorId;
+const obtenerTotalDataPorAlumno = async (req, res) => {
+    const userId = req.user.id;
+    try {
+        const totalCursosComprados = await prisma.ventasDetalles.count({
+            where: {
+                venta: {
+                    usuarioId: userId,
+                },
+            },
+        });
+        const totalExamenes = await prisma.testResuelto.count({
+            where: {
+                puntaje_final: {
+                    gt: "13",
+                },
+                userId: userId,
+            },
+        });
+        const totalCertificados = await prisma.certificados.count({
+            where: {
+                usuarioId: userId,
+            },
+        });
+        res.status(200).json({
+            data: {
+                totalCursos: totalCursosComprados,
+                totalExamenes: totalExamenes,
+                totalCertificados: totalCertificados,
+            },
+        });
+    }
+    catch (error) {
+        console.error("Error al traer total de cursos, éxamenes y certificados:", error);
+        res
+            .status(500)
+            .json({ message: "Error al obtener alumno", error: error.message });
+    }
+};
+exports.obtenerTotalDataPorAlumno = obtenerTotalDataPorAlumno;
 //# sourceMappingURL=alumno.controller.js.map

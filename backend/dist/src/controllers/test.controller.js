@@ -23,6 +23,7 @@ const multer_1 = __importDefault(require("multer"));
 const node_path_1 = __importDefault(require("node:path"));
 const fs_1 = __importDefault(require("fs"));
 const promises_1 = __importDefault(require("fs/promises"));
+const mail_controller_1 = require("./mail.controller");
 const prisma = new client_1.PrismaClient();
 const storageRes = multer_1.default.diskStorage({
     destination(req, file, callback) {
@@ -451,6 +452,7 @@ async function obtenerExamenesPendientes(req, res) {
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
             message: "Ocurrió un error en el servidor",
         });
@@ -502,6 +504,22 @@ async function enviarExamen(req, res) {
             return;
         }
         const rutaArchivo = "/" + req.file.path.replace(/\\/g, "/");
+        const examen = await prisma.test.findUnique({
+            where: { id: testId },
+        });
+        const curso = await prisma.curso.findUnique({
+            where: { id: examen?.cursoId !== null ? examen?.cursoId : "" },
+        });
+        console.log(examen);
+        const profesor = await prisma.cursoUsuario.findFirst({
+            where: {
+                cursoId: examen?.cursoId !== null ? examen?.cursoId : "",
+                tipo: "CARGO",
+            },
+            include: {
+                usuario: true,
+            },
+        });
         await prisma.testResuelto.create({
             data: {
                 examenId: testId,
@@ -513,11 +531,20 @@ async function enviarExamen(req, res) {
                 tipo_prueba: "EXAMEN",
             },
         });
+        await (0, mail_controller_1.sendEmail)([
+            "anthony10.reyes10@gmail.com",
+            profesor?.usuario.email !== undefined ? profesor.usuario.email : "",
+        ], "Nuevo examen subido", `ExamenEnviado.html`, {
+            nombre_estudiante: user?.nombres + " " + user?.apellidos,
+            curso: curso?.nombre,
+            fecha: new Date(),
+        });
         res.status(201).json({
             message: "El examen ha sido enviado a revisión",
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
             message: "Ocurrió un error en el servidor",
         });
@@ -530,7 +557,7 @@ async function obtenerEjerciciosAsignados(req, res) {
         const examenes = await prisma.cursoUsuario.findMany({
             where: {
                 userId: user.id,
-                tipo: "MATRICULADO"
+                tipo: "MATRICULADO",
             },
             include: {
                 curso: {

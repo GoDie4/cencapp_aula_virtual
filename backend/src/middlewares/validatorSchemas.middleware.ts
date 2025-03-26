@@ -4,7 +4,6 @@ export const validateSchema =
   (schema: ZodSchema): RequestHandler =>
   (req: Request, res: Response, next: NextFunction): void => {
 
-    console.log(req.body)
     try {
       schema.parse(req.body);
 

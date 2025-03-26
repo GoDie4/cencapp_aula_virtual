@@ -409,7 +409,7 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     });
 
     const qrDataUrl = await QRCode.toDataURL(
-      `http://192.168.0.100:3000/certificados/${userId}`
+      `https://aula.cencapperu.com/certificados/${userId}`
     );
     const qrImageBytes = Buffer.from(qrDataUrl.split(",")[1], "base64");
     const qrImage = await pdfDoc.embedPng(qrImageBytes);
