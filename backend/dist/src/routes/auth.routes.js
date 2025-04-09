@@ -27,6 +27,7 @@ router.post("/cambiarContrasena", (0, validatorSchemas_middleware_1.validateSche
 router.post("/logout", auth_controller_1.logout);
 router.get("/alumno", JWTMiddleware_1.verifyAlumno, user_controller_1.getDecodedUser);
 router.get("/profesor", JWTMiddleware_1.verifyProfesor, user_controller_1.getDecodedUser);
+router.get("/alumno/dataGeneral", JWTMiddleware_1.verifyAlumno, alumno_controller_1.obtenerTotalDataPorAlumno);
 // Categorias
 router.post("/categorias", categoria_controller_1.upload.fields([
     { name: "url_imagen", maxCount: 1 },
@@ -103,8 +104,9 @@ router.get("/tests/documento/:id", JWTMiddleware_1.verifyUser, test_controller_1
 router.get("/ejercicios/documento/:id", JWTMiddleware_1.verifyUser, profesor_controller_1.obtenerEjerciciosPorProfesor);
 router.get("/examenes/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerExamenesPorProfesor);
 router.get("/materiales/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerMaterialesPorProfesor);
+router.get("/ejercicios/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);
 router.post("/examenes/enviar", JWTMiddleware_1.verifyAlumnoNoCookie, test_controller_1.uploadArchivoRes, test_controller_1.enviarExamen);
-router.get('/obtenerExamenesAsignados', JWTMiddleware_1.verifyAlumno, test_controller_1.obtenerExamenesAsignados);
+router.get("/obtenerExamenesAsignados", JWTMiddleware_1.verifyAlumno, test_controller_1.obtenerExamenesAsignados);
 //Ejercicios
 router.post("/ejercicios/enviar", JWTMiddleware_1.verifyAlumnoNoCookie, test_controller_1.uploadArchivoRes, test_controller_1.enviarEjercicio);
 router.get("/ejercicios/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);

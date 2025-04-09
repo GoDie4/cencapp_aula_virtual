@@ -4,7 +4,9 @@ import {
   generarCertificado,
   registrarCertificadoAutomatico,
 } from "./certificados.controller";
+
 import { sendEmail } from "./mail.controller";
+import { registrarError } from "../utils/registerError";
 
 const prisma = new PrismaClient();
 
@@ -169,6 +171,8 @@ export async function colocarPuntaje(req: Request, res: Response) {
     });
     return;
   } catch (e) {
+    registrarError(`Se genero un error ${e}`);
+
     console.error("Error al colocar puntaje:", e);
     res.status(500).json({
       message: "Ha ocurrido un error",

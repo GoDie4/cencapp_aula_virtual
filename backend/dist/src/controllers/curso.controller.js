@@ -457,11 +457,9 @@ exports.buscarPorNombre = buscarPorNombre;
 const cursoPorSlug = async (req, res) => {
     const { slug } = req.params;
     try {
-        const curso = await prisma.curso.findFirst({
+        const curso = await prisma.curso.findUnique({
             where: {
-                slug: {
-                    contains: slug,
-                },
+                slug: slug
             },
             include: {
                 detalles: true,

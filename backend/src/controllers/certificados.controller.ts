@@ -6,6 +6,7 @@ import fs from "fs";
 import fsPromise from "fs/promises";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import * as QRCode from "qrcode";
+import { registrarError } from "../utils/registerError";
 const prisma = new PrismaClient();
 
 const storage = multer.diskStorage({
@@ -71,7 +72,7 @@ export async function traerCertificados(req: Request, res: Response) {
 export async function traerCertificadosByUser(req: Request, res: Response) {
   const { id } = req.params;
 
-  console.log(id)
+  console.log(id);
   try {
     const certificados = await prisma.certificados.findMany({
       where: {
@@ -83,7 +84,7 @@ export async function traerCertificadosByUser(req: Request, res: Response) {
       },
     });
 
-  console.log(certificados)
+    console.log(certificados);
 
     res.status(200).json({ certificados });
   } catch (e) {
@@ -357,11 +358,16 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([842, 595]);
 
-    // Cargar imagen de fondo
+    // Cargar imagen de fondo usando la raíz del proyecto
     const imagePath = path.resolve(
-      __dirname,
-      "../../public/certificados/plantilla.png"
+      process.cwd(),
+      "public/certificados/plantilla.png"
     );
+    console.log(`Ruta de la plantilla: ${imagePath}`);
+    if (!fs.existsSync(imagePath)) {
+      throw new Error(`La plantilla de certificado no existe en: ${imagePath}`);
+    }
+
     const bgImage = fs.readFileSync(imagePath);
     const pngImage = await pdfDoc.embedPng(bgImage);
     page.drawImage(pngImage, { x: 0, y: 0, width: 842, height: 595 });
@@ -384,7 +390,6 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     const fontSizeCurso = 18;
     const textWidthCurso = font.widthOfTextAtSize(curso.nombre, fontSizeCurso);
     const xCurso = (page.getWidth() - textWidthCurso) / 2;
-
     page.drawText(curso.nombre, {
       x: xCurso,
       y: 273,
@@ -392,15 +397,14 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
       font,
     });
 
+    // Horas del curso
     const horas = curso.horas;
     const fontSizeHoras = 14;
     const textWidthHoras = font.widthOfTextAtSize(
       horas.toString(),
       fontSizeHoras
     );
-
     const xHoras = (page.getWidth() - textWidthHoras) / 2;
-
     page.drawText(horas.toString(), {
       x: xHoras,
       y: 245,
@@ -408,28 +412,39 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
       font,
     });
 
+    // QR con enlace de verificación
     const qrDataUrl = await QRCode.toDataURL(
-      `http://192.168.0.100:3000/certificados/${userId}`
+      `https://aula.cencapperu.com/certificados/${userId}`
     );
     const qrImageBytes = Buffer.from(qrDataUrl.split(",")[1], "base64");
     const qrImage = await pdfDoc.embedPng(qrImageBytes);
     page.drawImage(qrImage, { x: 600, y: 60, width: 135, height: 135 });
 
-    // Guardar PDF
+    // Guardar PDF en la raíz del proyecto
     const pdfBytes = await pdfDoc.save();
-    const outputDir = path.resolve(
-      __dirname,
-      "../../private/curso/certificados"
-    );
-    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    const outputDir = path.resolve(process.cwd(), "private/curso/certificados");
+    console.log(`Ruta de guardado: ${outputDir}`);
+
+    if (!fs.existsSync(outputDir)) {
+      console.log("La carpeta no existe. Creándola...");
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
 
     const fileName = `certificado-${userId}-${cursoId}.pdf`;
     const outputPath = path.join(outputDir, fileName);
-    fs.writeFileSync(outputPath, pdfBytes);
+    console.log(`Guardando el certificado en: ${outputPath}`);
 
-    console.log(`Certificado generado: ${outputPath}`);
+    try {
+      fs.writeFileSync(outputPath, pdfBytes);
+      console.log(`Certificado guardado exitosamente en: ${outputPath}`);
+    } catch (err) {
+      console.error("Error al guardar el archivo PDF:", err);
+      throw new Error(`Error al guardar el certificado en: ${outputPath}`);
+    }
   } catch (err) {
+    registrarError(`Error al guardar certificado generado: ${err}`);
     console.error("Error generando el certificado:", err);
+    throw err;
   }
 };
 
@@ -445,15 +460,26 @@ export const registrarCertificadoAutomatico = async ({
   emitidoEn?: Date;
 }) => {
   try {
-    const fileName = `certificado-${userId}-${cursoId}.pdf`;
-    const relativePath = `/private/curso/certificados/${fileName}`;
-    const absolutePath = path.resolve(
-      __dirname,
-      `../../private/curso/certificados/${fileName}`
-    );
-
-    // Obtener tamaño y mimetype desde el archivo guardado
     const fs = await import("fs");
+
+    // Generar nombre de archivo y rutas
+    const fileName = `certificado-${userId}-${cursoId}.pdf`;
+
+    // Ruta relativa desde el raíz del proyecto
+    const relativePath = `/private/curso/certificados/${fileName}`;
+
+    // Usar process.cwd() para obtener la raíz del proyecto
+    const rootPath = process.cwd();
+    const absolutePath = path.join(rootPath, relativePath);
+
+    console.log(`Ruta absoluta del certificado: ${absolutePath}`);
+
+    // Verificar si el archivo existe
+    if (!fs.existsSync(absolutePath)) {
+      throw new Error(`El archivo ${absolutePath} no existe.`);
+    }
+
+    // Obtener tamaño y tipo MIME desde el archivo guardado
     const stats = fs.statSync(absolutePath);
     const size = stats.size;
     const mimeType = "application/pdf";
@@ -474,6 +500,7 @@ export const registrarCertificadoAutomatico = async ({
     return nuevoCertificado;
   } catch (error) {
     console.error("Error al registrar certificado:", error);
+    registrarError(`Error al registrar certificado: ${error}`);
     throw new Error("Error al guardar en la base de datos");
   }
 };

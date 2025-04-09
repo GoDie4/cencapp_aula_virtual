@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateSchema = void 0;
 const zod_1 = require("zod");
 const validateSchema = (schema) => (req, res, next) => {
+    console.log(req.body);
     try {
         schema.parse(req.body);
         next();

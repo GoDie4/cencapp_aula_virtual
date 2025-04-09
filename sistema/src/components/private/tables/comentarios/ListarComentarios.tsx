@@ -167,7 +167,10 @@ export const ListaComentarios = (): JSX.Element => {
                       <h5 className="text-sm text-center text-gray-500 lowercase line-clamp-1">
                         {pro.clase?.seccion?.nombre +
                           ' ' +
-                          pro.clase?.seccion?.curso.nombre}
+                          String(pro.clase?.seccion?.curso !==
+                        undefined
+                            ? pro.clase?.seccion?.curso.nombre
+                            : '')}
                       </h5>
                     )}
                   </div>

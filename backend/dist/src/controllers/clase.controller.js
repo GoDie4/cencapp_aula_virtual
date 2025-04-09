@@ -118,7 +118,7 @@ const actualizarClase = async (req, res) => {
                 nombre: nombre,
                 duracion: duracion,
                 posicion: parseInt(posicion),
-                url_video: url_video
+                url_video: url_video,
             },
         });
         res.status(200).json({
@@ -245,6 +245,11 @@ const obtenerClasePorSlug = async (req, res) => {
                 materiales: true,
                 comentarios: {
                     include: {
+                        respuestas: {
+                            include: {
+                                user: true,
+                            },
+                        },
                         usuario: {
                             select: {
                                 nombres: true,

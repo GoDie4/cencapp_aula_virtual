@@ -11,7 +11,6 @@ const config_1 = require("../config/config");
 dotenv_1.default.config();
 const prisma = new client_1.PrismaClient();
 const verifyAdmin = async (req, res, next) => {
-    console.log(req.headers.authorization);
     if (!req.headers.authorization) {
         res.status(401).json({ message: "Token no proporcionado." });
         return;
@@ -44,13 +43,14 @@ exports.verifyAdmin = verifyAdmin;
 const verifyAlumno = async (req, res, next) => {
     const tokenFromCookie = req.cookies?.token;
     const token = tokenFromCookie;
+    console.log("Cookies:", req.cookies?.token);
+    console.log("BODY: ", req.body);
     if (!token) {
         res.status(401).json({ message: "Token no proporcionado." });
         return;
     }
     try {
         const decoded = jsonwebtoken_1.default.verify(token ?? "", config_1.ENV.TOKEN_SECRET);
-        console.log(decoded);
         const user = await prisma.usuario.findUnique({
             where: { id: decoded.id },
             include: { rol: true },

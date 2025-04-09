@@ -18,7 +18,7 @@ export const AdminContext = React.createContext<AdminContextProps>({
 })
 
 export default function AdminProvider ({ children }: { children: React.ReactNode }): JSX.Element {
-  const [user, setUser] = React.useState<Usuario>({
+  const [user] = React.useState<Usuario>({
     id: '',
     nombres: '',
     apellidos: '',

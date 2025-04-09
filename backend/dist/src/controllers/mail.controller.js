@@ -9,7 +9,16 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const handlebars_1 = __importDefault(require("handlebars"));
 const config_1 = require("../config/config");
-const uploadDir = path_1.default.join(__dirname, "../..", "src/mail");
+// Usar process.cwd() para obtener la raíz del proyecto
+const rootDir = process.cwd();
+const uploadDir = path_1.default.join(rootDir, "src/mail");
+const logFilePath = path_1.default.join(rootDir, "src", "error.log");
+// Función para escribir en el log
+const writeLog = (message) => {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
+    fs_1.default.appendFileSync(logFilePath, logMessage, "utf8");
+};
 const transporter = nodemailer_1.default.createTransport({
     //@ts-ignore
     host: config_1.ENV.EMAIL_HOST,
@@ -25,7 +34,11 @@ const transporter = nodemailer_1.default.createTransport({
 });
 const sendEmail = async (to, subject, templateName, replacements) => {
     try {
-        const templatePath = path_1.default.join(uploadDir, `${templateName}`);
+        const templatePath = path_1.default.join(uploadDir, templateName);
+        console.log(`Ruta de la plantilla de correo: ${templatePath}`);
+        if (!fs_1.default.existsSync(templatePath)) {
+            throw new Error(`La plantilla de correo no existe en: ${templatePath}`);
+        }
         const source = fs_1.default.readFileSync(templatePath, "utf-8").toString();
         const template = handlebars_1.default.compile(source);
         const htmlToSend = template(replacements);
@@ -38,10 +51,12 @@ const sendEmail = async (to, subject, templateName, replacements) => {
             subject,
             html: htmlToSend,
         });
+        writeLog(`Correo enviado a: ${to} | Asunto: ${subject}`);
         return true;
     }
     catch (error) {
-        console.log(error);
+        writeLog(`Error al enviar correo a: ${to} | Asunto: ${subject} | Detalle: ${error.message}`);
+        console.error("Error enviando correo:", error);
         return false;
     }
 };

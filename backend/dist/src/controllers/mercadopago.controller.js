@@ -11,6 +11,7 @@ const config_1 = require("../config/config");
 const mercadopago_1 = require("mercadopago");
 const crypto_1 = __importDefault(require("crypto"));
 const client_1 = require("@prisma/client");
+const mail_controller_1 = require("./mail.controller");
 const client = new mercadopago_1.MercadoPagoConfig({
     accessToken: config_1.ENV.ACCESS_TOKEN,
 });
@@ -67,11 +68,8 @@ async function recibirVenta(req, res) {
         const parts = xSignature?.split(",");
         let ts;
         let hash;
-        /** Cuando el pago se ha realizado correctamente  */
-        if (action === 'payment.created') {
-            // Parts
+        if (action === "payment.created") {
             parts.forEach((part) => {
-                // Split each part into key and value
                 const [key, value] = part.split("=");
                 if (key && value) {
                     const trimmedKey = key.trim();
@@ -89,9 +87,7 @@ async function recibirVenta(req, res) {
             hmac.update(manifest);
             const sha = hmac.digest("hex");
             if (sha === hash) {
-                // HMAC verification passed
                 const datos = await payment.get({ id: data.id });
-                console.log(datos);
                 const ventaAprovada = await prisma.ventas.create({
                     data: {
                         pedidoMercadoId: data.id,
@@ -104,24 +100,26 @@ async function recibirVenta(req, res) {
                         fecha_aprobada: datos.date_approved ?? "",
                     },
                 });
+                const user = await prisma.usuario.findUnique({
+                    where: { id: datos.metadata.user_id_con },
+                });
+                console.log("ID USUARIO: ", datos.metadata.user_id_con);
+                console.log(" USUARIO: ", user);
+                console.log("Datos del pago: ", datos.additional_info);
                 if (!datos.additional_info) {
-                    res.status(404).json({
-                        message: 'Faltó información adicional'
-                    });
+                    res.status(404).json({ message: "Faltó información adicional" });
                     return;
                 }
                 if (!datos.additional_info.items || datos.additional_info.items.length === 0) {
-                    res.status(404).json({
-                        message: 'Faltaron cursos para pedir'
-                    });
+                    res.status(404).json({ message: "Faltaron cursos para pedir" });
                     return;
                 }
                 datos.additional_info.items.map(async (item) => {
                     const matriculaEncontrada = await prisma.cursoUsuario.findFirst({
                         where: {
                             userId: datos.metadata.user_id_con,
-                            cursoId: item.id
-                        }
+                            cursoId: item.id,
+                        },
                     });
                     if (!matriculaEncontrada) {
                         await prisma.cursoUsuario.create({
@@ -142,28 +140,48 @@ async function recibirVenta(req, res) {
                         });
                     }
                 });
+                const htmlProductos = datos.additional_info.items
+                    .map((prod) => `
+    <tr>
+      <td align="left" style="padding: 10px 20px;">
+        <table width="100%" role="presentation">
+          <tr>
+            <td style="font-family: Poppins, sans-serif; color: #666; font-size: 14px;">
+              <b>${prod.title}</b>
+            </td>
+            <td style="text-align: center; font-family: Poppins, sans-serif; color: #666; font-size: 14px;">
+              ${prod.quantity}
+            </td>
+            <td style="text-align: center; font-family: Poppins, sans-serif; color: #666; font-size: 14px;">
+              S/ ${prod.unit_price}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  `)
+                    .join("");
+                await (0, mail_controller_1.sendEmail)("anthony10.reyes10@gmail.com", "Nueva compra", `NuevaCompra.html`, {
+                    transaccionId: datos.id,
+                    usuario: user?.email,
+                    total: datos.transaction_details?.total_paid_amount ?? 0,
+                    fecha: datos.date_approved ?? "",
+                    htmlProductos: htmlProductos,
+                });
             }
             else {
-                // HMAC verification failed
                 console.log("HMAC verification failed");
                 throw new Error("error");
             }
-            res.status(200).json({
-                message: 'Orden Guardada'
-            });
+            res.status(200).json({ message: "Orden Guardada" });
             return;
         }
-        /** Cuando no ha sido permitido el pago  */
-        res.status(200).json({
-            message: "Orden Guardada",
-        });
+        res.status(200).json({ message: "Orden Guardada" });
         return;
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({
-            message: "Ocurrió un error en el servidor",
-        });
+        res.status(500).json({ message: "Ocurrió un error en el servidor" });
         return;
     }
 }

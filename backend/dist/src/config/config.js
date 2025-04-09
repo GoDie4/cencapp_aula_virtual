@@ -8,6 +8,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, "../../.env") });
 exports.ENV = {
+    WEB_URL: process.env.WEB_URL,
     PORT: process.env.SERVER_PORT || "5000",
     DATABASE_URL: process.env.DATABASE_URL || "",
     TOKEN_SECRET: process.env.TOKEN_SECRET || "",

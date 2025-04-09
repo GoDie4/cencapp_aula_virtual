@@ -95,11 +95,11 @@ export default function CrearSeccion (): JSX.Element {
           ? (<Loading />)
           : (
             <form
-              className="bg-secondary-100 p-8 rounded-xl mt-4"
+              className="p-8 mt-4 bg-secondary-100 rounded-xl"
               onSubmit={handleSubmit}
             >
-              <div className="w-full flex flex-col gap-5 lg:flex-row">
-                <div className="w-full lg:w-1/3 mb-5">
+              <div className="flex flex-col w-full gap-5 lg:flex-row">
+                <div className="w-full mb-5 lg:w-1/3">
                   <TitleBriefs titulo=" Nombre de la sección" />
                   <InputsBriefs
                     name="nombre"
@@ -110,7 +110,7 @@ export default function CrearSeccion (): JSX.Element {
                   />
                   <Errors errors={errors.nombre} touched={touched.nombre} />
                 </div>
-                <div className="w-full lg:w-1/3 mb-5">
+                <div className="w-full mb-5 lg:w-1/3">
                   <TitleBriefs titulo="Posición de la sección" />
                   <InputsBriefs
                     name="posicion"
@@ -125,9 +125,7 @@ export default function CrearSeccion (): JSX.Element {
                   <TitleBriefs titulo="Asignar curso" />
                   <select
                     title='Selecciona una curso'
-                    className="border border-black  placeholder-gray-400 outline-none focus:outline-none
-                                                                      focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-secondary-900
-                                                                      rounded-md transition-all"
+                    className="block w-full pt-4 pb-4 pl-4 pr-4 mt-2 mb-0 ml-0 mr-0 text-base placeholder-gray-400 transition-all border border-black rounded-md outline-none focus:outline-none focus:border-black bg-secondary-900"
                     name="cursoId"
                     value={values.cursoId}
                     autoComplete="off"
@@ -148,17 +146,17 @@ export default function CrearSeccion (): JSX.Element {
                 </div>
               </div>
 
-              <div className="flex gap-2 w-full justify-end">
+              <div className="flex justify-end w-full gap-2">
                 <input type="hidden" name="oculto" value="1" />
                 <Link
                   to="/admin/secciones"
-                  className="bg-red-500 px-4 py-2 rounded-md text-white"
+                  className="px-4 py-2 text-white bg-red-500 rounded-md"
                 >
                   Cancelar
                 </Link>
                 <input
                   type="submit"
-                  className="bg-green-500 text-black hover:bg-green-600 flex items-center gap-2 py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2 text-black transition-colors bg-green-500 rounded-lg cursor-pointer hover:bg-green-600"
                   value="Registrar"
                 />
               </div>

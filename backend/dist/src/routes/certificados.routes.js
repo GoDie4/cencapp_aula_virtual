@@ -5,6 +5,7 @@ const express_1 = require("express");
 const JWTMiddleware_1 = require("../middlewares/JWTMiddleware");
 const router = (0, express_1.Router)();
 router.get("/", JWTMiddleware_1.verifyAdmin, certificados_controller_1.traerCertificados);
+router.get("/certificadosByUser/:id", certificados_controller_1.traerCertificadosByUser);
 router.get("/mios", JWTMiddleware_1.verifyAlumno, certificados_controller_1.obtenerCertificadosPorUsuario);
 router.post("/", JWTMiddleware_1.verifyAdmin, certificados_controller_1.uploadArchivoCertificado, certificados_controller_1.createCertificado);
 router.get("/documento/:id", JWTMiddleware_1.verifyAdmin, certificados_controller_1.obtenerCertificadoPorId);
