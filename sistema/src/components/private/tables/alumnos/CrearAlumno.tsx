@@ -11,7 +11,7 @@ import axios from "axios"
 import { Usuario } from "../../../../interfaces/UserInterface"
 import { useState } from "react"
 
-export function CrearAlumno () {
+export function CrearAlumno() {
   const navigate = useNavigate()
   const [loadingComponents, setLoadingComponents] = useState(false)
 
@@ -79,7 +79,7 @@ export function CrearAlumno () {
       {loadingComponents
         ? (
           <Loading />
-          )
+        )
         : (
           <form
             className="bg-secondary-100 p-8 rounded-xl mt-4"
@@ -146,25 +146,6 @@ export function CrearAlumno () {
                 <Errors errors={errors.password} touched={touched.password} />
               </div>
             </div>
-            {/* <div className="flex flex-col md:flex-row md:items-center gap-2 mb-8">
-              <div className="w-full ">
-                <div className="w-full ">
-                  <p>
-                    Fondo<span className="text-red-500">*</span>
-                  </p>
-                </div>
-                <div className="flex-1 flex  items-center gap-4">
-                  <ImageUploader
-                    url={url1}
-                    setUrl={setUrl1}
-                    boton={boton1}
-                    setBoton={setBoton1}
-                    setImagen={setImagen1}
-                    clase="1"
-                  />
-                </div>
-              </div>
-            </div> */ }
 
             <div className="flex gap-2 w-full justify-end">
               <input type="hidden" name="oculto" value="1" />
@@ -181,7 +162,7 @@ export function CrearAlumno () {
               />
             </div>
           </form>
-          )}
+        )}
     </>
   )
 }

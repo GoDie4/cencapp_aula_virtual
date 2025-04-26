@@ -6,7 +6,7 @@ import fs from "fs";
 import fsPromise from "fs/promises";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import * as QRCode from "qrcode";
-import { registrarError } from "utils/registerError";
+import { registrarError } from "../utils/registerError";
 const prisma = new PrismaClient();
 
 const storage = multer.diskStorage({

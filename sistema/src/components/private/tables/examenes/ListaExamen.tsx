@@ -55,7 +55,7 @@ export default function ListaExamen (): JSX.Element {
           <Loading />)
         : (
           <div className="bg-secondary-100 p-8 rounded-xl mt-4">
-            <div className="w-full flex justify-end">
+            <div className="w-full flex justify-end gap-4">
               <button
                 className="bg-main text-white hover:bg-main_dark w-fit flex items-center gap-2 py-2 px-4 rounded-lg transition-colors"
                 onClick={() => {
@@ -63,6 +63,14 @@ export default function ListaExamen (): JSX.Element {
                 }}
               >
                 Registrar Examen
+              </button>
+              <button
+                className="bg-main text-white hover:bg-main_dark w-fit flex items-center gap-2 py-2 px-4 rounded-lg transition-colors"
+                onClick={() => {
+                  navigate('/admin/examenes/todos/revisar')
+                }}
+              >
+                Ver Examenes Resueltos
               </button>
             </div>
             <div className="hidden md:grid grid-cols-1 md:grid-cols-6 gap-4 mb-10 p-4">

@@ -27,6 +27,11 @@ export function AlumnoColumnas ({ alum, token, getAlumnos, totalPosts, cantidadR
     navigate(`/admin/alumnos/editar/${alum.id ?? ''}`)
   }
 
+  const handleAsignar = (): void => {
+    navigate(`/admin/alumnos/asignar/${alum.id ?? ''}`)
+  }
+
+
   const preguntar = (id: string): void => {
     DeleteItems({
       ruta: 'borrarAlumno',
@@ -122,7 +127,7 @@ export function AlumnoColumnas ({ alum, token, getAlumnos, totalPosts, cantidadR
           <MenuItem onClick={() => { setModalContent({ title: 'Datos del Alumno', content: <VerAlumno alum={alum} /> }) }}>Ver</MenuItem>
           <MenuItem onClick={handleEditar}>Editar</MenuItem>
           <MenuItem onClick={() => { preguntar(alum.id ?? '') }}>Eliminar</MenuItem>
-          <MenuItem >Ver cursos matriculados</MenuItem>
+          <MenuItem onClick={handleAsignar}>Asignarle un Curso</MenuItem>
         </Menu>
       </div>
 

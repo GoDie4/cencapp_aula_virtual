@@ -62,6 +62,8 @@ import CrearCertificado from '../components/private/tables/certificados/AgregarC
 import EditarCertificado from '../components/private/tables/certificados/EditarCertificado'
 import ListaTareasCargo from '../components/private/tables/tareas/ListaTareasCargo'
 import { ListaComentarios } from '../components/private/tables/comentarios/ListarComentarios'
+import AsignarCurso from '../components/private/tables/alumnos/AsignarCurso'
+import ExamenesTodosRevisar from '../components/private/tables/examenes/ExamenesTodosRevisar'
 
 export const Routing = (): JSX.Element => {
   return (
@@ -77,8 +79,9 @@ export const Routing = (): JSX.Element => {
               <Route path="alumnos/agregar" element={<CrearAlumno />} />
               <Route path="alumnos" element={<ListaAlumnos />} />
 
-               {/** Alumnos */}
-               <Route path="alumnos/editar/:id" element={<EditarAlumno />} />
+              {/** Alumnos */}
+              <Route path="alumnos/editar/:id" element={<EditarAlumno />} />
+              <Route path="alumnos/asignar/:id" element={<AsignarCurso />} />
               <Route path="alumnos/agregar" element={<CrearAlumno />} />
               <Route path="comentarios" element={<ListaComentarios />} />
 
@@ -143,6 +146,10 @@ export const Routing = (): JSX.Element => {
               <Route
                 path="examenes/cargo/revisar"
                 element={<ExamenesCargoRevisar />}
+              />
+              <Route
+                path='examenes/todos/revisar'
+                element={<ExamenesTodosRevisar />}
               />
 
               {/* CERTIFICADOS */}

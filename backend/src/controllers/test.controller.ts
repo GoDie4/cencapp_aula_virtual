@@ -495,6 +495,66 @@ export async function obtenerExamenesPendientes(req: Request, res: Response) {
   }
 }
 
+export async function obtenerExamenesPendientesAdministrador(req: Request, res: Response) {
+  try {
+    const examenes = await prisma.test.findMany({
+      where: {
+        tipo_prueba: "EXAMEN",
+        examenesResueltos: {
+          every: {
+            estado: "EnRevision",
+          },
+        },
+      },
+      include: {
+        examenesResueltos: {
+          include: {
+            usuario: true,
+          },
+        },
+        curso: true,
+      },
+    })
+    /*
+    const examenes = await prisma.cursoUsuario.findMany({
+      include: {
+        curso: {
+          include: {
+            test: {
+              where: {
+                tipo_prueba: "EXAMEN",
+                examenesResueltos: {
+                  every: {
+                    estado: "EnRevision",
+                  },
+                },
+              },
+              include: {
+                examenesResueltos: {
+                  include: {
+                    usuario: true,
+                  },
+                },
+                curso: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    */
+   console.log(examenes)
+    res.status(200).json({
+      examenes,
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Ocurrió un error en el servidor",
+    });
+  }
+}
+
 export async function obtenerExamenesAsignados(req: Request, res: Response) {
   const user = (req as any).user;
 

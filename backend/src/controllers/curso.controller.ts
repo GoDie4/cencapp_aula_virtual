@@ -161,6 +161,41 @@ export const createCurso = async (
   }
 };
 
+export const AsignarCursoManualmente = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { cursoId } = req.body;
+  try {
+    const curso = await prisma.curso.findUnique({
+      where: { id: cursoId },
+      include: {
+        detalles: true,
+      },
+    });
+
+    if (!curso) {
+      res.status(404).json({ message: "Curso no encontrado" });
+      return;
+    }
+
+    await prisma.cursoUsuario.create({
+      data: {
+        cursoId: cursoId,
+        tipo: "MATRICULADO",
+        userId: id,
+      },
+    });
+
+    res.status(200).json({ message: "Curso asignado" });
+  } catch (error) {
+    console.error("Error al asignar curso manualmente:", error);
+    res.status(500).json({
+      message: "Error al asignar curso manualmente",
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 export const showAllCursos = async (
   req: Request,
   res: Response

@@ -37,6 +37,7 @@ import {
   obtenerCursoMateriales,
   getAllCoursesDelProfesor,
   getAlumnoMatriculado,
+  AsignarCursoManualmente,
 } from "../controllers/curso.controller";
 import {
   verificarCompraCurso,
@@ -108,6 +109,7 @@ import {
   obtenerEjerciciosPendientes,
   obtenerExamenesAsignados,
   obtenerExamenesPendientes,
+  obtenerExamenesPendientesAdministrador,
   obtenerTestPorId,
   showAllEjercicios,
   showAllTests,
@@ -167,6 +169,7 @@ router.post(
 router.post("/borrarCategoria/:id", verifyAdmin, deleteCategoria);
 
 // Cursos
+router.post("/cursos/asignarManualmente/:id", AsignarCursoManualmente);
 router.post("/cursos", verifyAdmin, uploadImageCurso, createCurso);
 router.get("/cursos", showAllCursos);
 router.get("/cursos/:id", obtenerCursoPorId);
@@ -266,6 +269,7 @@ router.get(
   verifyUser,
   obtenerEjerciciosPorProfesor
 );
+router.get("/examenes/resueltos/todos", obtenerExamenesPendientesAdministrador)
 router.get("/examenes/cargo/:id", verifyProfesor, obtenerExamenesPorProfesor);
 router.get(
   "/materiales/cargo/:id",
