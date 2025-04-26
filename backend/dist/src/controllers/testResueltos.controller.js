@@ -7,7 +7,10 @@ exports.obtenerEjerciciosResueltos = obtenerEjerciciosResueltos;
 const client_1 = require("@prisma/client");
 const certificados_controller_1 = require("./certificados.controller");
 const mail_controller_1 = require("./mail.controller");
+<<<<<<< HEAD
 const registerError_1 = require("../utils/registerError");
+=======
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
 const prisma = new client_1.PrismaClient();
 async function obtenerExamenesResueltos(req, res) {
     const user = req.user;
@@ -146,7 +149,10 @@ async function colocarPuntaje(req, res) {
         return;
     }
     catch (e) {
+<<<<<<< HEAD
         (0, registerError_1.registrarError)(`Se genero un error ${e}`);
+=======
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
         console.error("Error al colocar puntaje:", e);
         res.status(500).json({
             message: "Ha ocurrido un error",

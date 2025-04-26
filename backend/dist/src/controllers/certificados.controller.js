@@ -52,7 +52,10 @@ const fs_1 = __importDefault(require("fs"));
 const promises_1 = __importDefault(require("fs/promises"));
 const pdf_lib_1 = require("pdf-lib");
 const QRCode = __importStar(require("qrcode"));
+<<<<<<< HEAD
 const registerError_1 = require("../utils/registerError");
+=======
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
 const prisma = new client_1.PrismaClient();
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
@@ -372,24 +375,37 @@ const generarCertificado = async (userId, cursoId) => {
             throw new Error("Usuario o curso no encontrado");
         const pdfDoc = await pdf_lib_1.PDFDocument.create();
         const page = pdfDoc.addPage([842, 595]);
+<<<<<<< HEAD
         // Cargar imagen de fondo usando la raíz del proyecto
         const imagePath = node_path_1.default.resolve(process.cwd(), "public/certificados/plantilla.png");
         console.log(`Ruta de la plantilla: ${imagePath}`);
         if (!fs_1.default.existsSync(imagePath)) {
             throw new Error(`La plantilla de certificado no existe en: ${imagePath}`);
         }
+=======
+        // Cargar imagen de fondo
+        const imagePath = node_path_1.default.resolve(__dirname, "../../public/certificados/plantilla.png");
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
         const bgImage = fs_1.default.readFileSync(imagePath);
         const pngImage = await pdfDoc.embedPng(bgImage);
         page.drawImage(pngImage, { x: 0, y: 0, width: 842, height: 595 });
         // Fuente y texto centrado
         const font = await pdfDoc.embedFont(pdf_lib_1.StandardFonts.HelveticaBold);
         const fontSize = 24;
+<<<<<<< HEAD
         const text = `${user.nombres.toUpperCase()} ${user.apellidos.toUpperCase()}`;
+=======
+        const text = `${user.nombres} ${user.apellidos}`;
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
         const textWidth = font.widthOfTextAtSize(text, fontSize);
         const x = (page.getWidth() - textWidth) / 2;
         page.drawText(text, {
             x,
+<<<<<<< HEAD
             y: 400,
+=======
+            y: 345,
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
             size: fontSize,
             font,
             color: (0, pdf_lib_1.rgb)(0, 0, 0),
@@ -400,6 +416,7 @@ const generarCertificado = async (userId, cursoId) => {
         const xCurso = (page.getWidth() - textWidthCurso) / 2;
         page.drawText(curso.nombre, {
             x: xCurso,
+<<<<<<< HEAD
             y: 313,
             size: fontSizeCurso,
             font,
@@ -446,11 +463,44 @@ const generarCertificado = async (userId, cursoId) => {
         (0, registerError_1.registrarError)(`Error al guardar certificado generado: ${err}`);
         console.error("Error generando el certificado:", err);
         throw err;
+=======
+            y: 273,
+            size: fontSizeCurso,
+            font,
+        });
+        const horas = curso.horas;
+        const fontSizeHoras = 14;
+        const textWidthHoras = font.widthOfTextAtSize(horas.toString(), fontSizeHoras);
+        const xHoras = (page.getWidth() - textWidthHoras) / 2;
+        page.drawText(horas.toString(), {
+            x: xHoras,
+            y: 245,
+            size: fontSizeHoras,
+            font,
+        });
+        const qrDataUrl = await QRCode.toDataURL(`https://aula.cencapperu.com/certificados/${userId}`);
+        const qrImageBytes = Buffer.from(qrDataUrl.split(",")[1], "base64");
+        const qrImage = await pdfDoc.embedPng(qrImageBytes);
+        page.drawImage(qrImage, { x: 600, y: 60, width: 135, height: 135 });
+        // Guardar PDF
+        const pdfBytes = await pdfDoc.save();
+        const outputDir = node_path_1.default.resolve(__dirname, "../../private/curso/certificados");
+        if (!fs_1.default.existsSync(outputDir))
+            fs_1.default.mkdirSync(outputDir, { recursive: true });
+        const fileName = `certificado-${userId}-${cursoId}.pdf`;
+        const outputPath = node_path_1.default.join(outputDir, fileName);
+        fs_1.default.writeFileSync(outputPath, pdfBytes);
+        console.log(`Certificado generado: ${outputPath}`);
+    }
+    catch (err) {
+        console.error("Error generando el certificado:", err);
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
     }
 };
 exports.generarCertificado = generarCertificado;
 const registrarCertificadoAutomatico = async ({ userId, cursoId, nombre, emitidoEn, }) => {
     try {
+<<<<<<< HEAD
         const fs = await Promise.resolve().then(() => __importStar(require("fs")));
         // Generar nombre de archivo y rutas
         const fileName = `certificado-${userId}-${cursoId}.pdf`;
@@ -465,6 +515,13 @@ const registrarCertificadoAutomatico = async ({ userId, cursoId, nombre, emitido
             throw new Error(`El archivo ${absolutePath} no existe.`);
         }
         // Obtener tamaño y tipo MIME desde el archivo guardado
+=======
+        const fileName = `certificado-${userId}-${cursoId}.pdf`;
+        const relativePath = `/private/curso/certificados/${fileName}`;
+        const absolutePath = node_path_1.default.resolve(__dirname, `../../private/curso/certificados/${fileName}`);
+        // Obtener tamaño y mimetype desde el archivo guardado
+        const fs = await Promise.resolve().then(() => __importStar(require("fs")));
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
         const stats = fs.statSync(absolutePath);
         const size = stats.size;
         const mimeType = "application/pdf";
@@ -484,7 +541,10 @@ const registrarCertificadoAutomatico = async ({ userId, cursoId, nombre, emitido
     }
     catch (error) {
         console.error("Error al registrar certificado:", error);
+<<<<<<< HEAD
         (0, registerError_1.registrarError)(`Error al registrar certificado: ${error}`);
+=======
+>>>>>>> ca60c47c16a9731a165cdf69796a26e570d7d3fd
         throw new Error("Error al guardar en la base de datos");
     }
 };

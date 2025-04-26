@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
-  if (req.nextUrl.pathname.startsWith("/sistema")) {
+  if (req.nextUrl.pathname.startsWith("/aula")) {
     if (!token) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
@@ -12,5 +12,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/sistema/:path*", ],
+  matcher: ["/aula/:path*", ],
 };

@@ -12,7 +12,9 @@ export const Global = {
 }
 */
 
-// Alternativa: Producción Cencapperu
+/*
+Alternativa: Producción Cencapperu
+*/
 export const Global = {
   url: 'https://api.cencapperu.com/api',
   urlImages: 'https://api.cencapperu.com'

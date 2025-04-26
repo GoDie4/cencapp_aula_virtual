@@ -6,7 +6,7 @@ import fs from "fs";
 import fsPromise from "fs/promises";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import * as QRCode from "qrcode";
-import { registrarError } from "../utils/registerError";
+import { registrarError } from "utils/registerError";
 const prisma = new PrismaClient();
 
 const storage = multer.diskStorage({
@@ -72,7 +72,7 @@ export async function traerCertificados(req: Request, res: Response) {
 export async function traerCertificadosByUser(req: Request, res: Response) {
   const { id } = req.params;
 
-  console.log(id);
+  console.log(id)
   try {
     const certificados = await prisma.certificados.findMany({
       where: {
@@ -84,7 +84,6 @@ export async function traerCertificadosByUser(req: Request, res: Response) {
       },
     });
 
-    console.log(certificados);
 
     res.status(200).json({ certificados });
   } catch (e) {
@@ -367,6 +366,7 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     if (!fs.existsSync(imagePath)) {
       throw new Error(`La plantilla de certificado no existe en: ${imagePath}`);
     }
+
 
     const bgImage = fs.readFileSync(imagePath);
     const pngImage = await pdfDoc.embedPng(bgImage);
