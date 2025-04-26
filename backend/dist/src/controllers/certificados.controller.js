@@ -384,12 +384,12 @@ const generarCertificado = async (userId, cursoId) => {
         // Fuente y texto centrado
         const font = await pdfDoc.embedFont(pdf_lib_1.StandardFonts.HelveticaBold);
         const fontSize = 24;
-        const text = `${user.nombres} ${user.apellidos}`;
+        const text = `${user.nombres.toUpperCase()} ${user.apellidos.toUpperCase()}`;
         const textWidth = font.widthOfTextAtSize(text, fontSize);
         const x = (page.getWidth() - textWidth) / 2;
         page.drawText(text, {
             x,
-            y: 345,
+            y: 400,
             size: fontSize,
             font,
             color: (0, pdf_lib_1.rgb)(0, 0, 0),
@@ -400,18 +400,19 @@ const generarCertificado = async (userId, cursoId) => {
         const xCurso = (page.getWidth() - textWidthCurso) / 2;
         page.drawText(curso.nombre, {
             x: xCurso,
-            y: 273,
+            y: 313,
             size: fontSizeCurso,
             font,
         });
         // Horas del curso
         const horas = curso.horas;
         const fontSizeHoras = 14;
-        const textWidthHoras = font.widthOfTextAtSize(horas.toString(), fontSizeHoras);
+        const textWidthHoras = 10;
+        console.log("Ancho horas: ", textWidthHoras);
         const xHoras = (page.getWidth() - textWidthHoras) / 2;
         page.drawText(horas.toString(), {
             x: xHoras,
-            y: 245,
+            y: 260,
             size: fontSizeHoras,
             font,
         });
@@ -419,7 +420,8 @@ const generarCertificado = async (userId, cursoId) => {
         const qrDataUrl = await QRCode.toDataURL(`https://aula.cencapperu.com/certificados/${userId}`);
         const qrImageBytes = Buffer.from(qrDataUrl.split(",")[1], "base64");
         const qrImage = await pdfDoc.embedPng(qrImageBytes);
-        page.drawImage(qrImage, { x: 600, y: 60, width: 135, height: 135 });
+        const xQr = (page.getWidth() - 105) / 2;
+        page.drawImage(qrImage, { x: xQr, y: 95, width: 105, height: 105 });
         // Guardar PDF en la raíz del proyecto
         const pdfBytes = await pdfDoc.save();
         const outputDir = node_path_1.default.resolve(process.cwd(), "private/curso/certificados");

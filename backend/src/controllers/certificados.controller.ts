@@ -375,12 +375,12 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     // Fuente y texto centrado
     const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
     const fontSize = 24;
-    const text = `${user.nombres} ${user.apellidos}`;
+    const text = `${user.nombres.toUpperCase()} ${user.apellidos.toUpperCase()}`;
     const textWidth = font.widthOfTextAtSize(text, fontSize);
     const x = (page.getWidth() - textWidth) / 2;
     page.drawText(text, {
       x,
-      y: 345,
+      y: 400,
       size: fontSize,
       font,
       color: rgb(0, 0, 0),
@@ -392,7 +392,7 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     const xCurso = (page.getWidth() - textWidthCurso) / 2;
     page.drawText(curso.nombre, {
       x: xCurso,
-      y: 273,
+      y: 313,
       size: fontSizeCurso,
       font,
     });
@@ -400,14 +400,12 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     // Horas del curso
     const horas = curso.horas;
     const fontSizeHoras = 14;
-    const textWidthHoras = font.widthOfTextAtSize(
-      horas.toString(),
-      fontSizeHoras
-    );
+    const textWidthHoras = 10;
+    console.log("Ancho horas: ", textWidthHoras);
     const xHoras = (page.getWidth() - textWidthHoras) / 2;
     page.drawText(horas.toString(), {
       x: xHoras,
-      y: 245,
+      y: 260,
       size: fontSizeHoras,
       font,
     });
@@ -418,7 +416,8 @@ export const generarCertificado = async (userId: string, cursoId: string) => {
     );
     const qrImageBytes = Buffer.from(qrDataUrl.split(",")[1], "base64");
     const qrImage = await pdfDoc.embedPng(qrImageBytes);
-    page.drawImage(qrImage, { x: 600, y: 60, width: 135, height: 135 });
+    const xQr = (page.getWidth() - 105) / 2;
+    page.drawImage(qrImage, { x: xQr, y: 95, width: 105, height: 105 });
 
     // Guardar PDF en la raíz del proyecto
     const pdfBytes = await pdfDoc.save();

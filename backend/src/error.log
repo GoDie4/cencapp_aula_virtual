@@ -1,1 +1,28 @@
 [2025-03-28T22:46:42.742Z] Correo enviado a: anthony10.reyes10@gmail.com, profesor1@gmail.com | Asunto: Nuevo comentario
+2025-04-25T20:56:11.679Z [ERROR] GET /api/alumno/dataGeneral | Status: 401 | Time: 1.402 ms | IP: ::1 | User-Agent: "node"
+2025-04-25T21:01:55.275Z [ERROR] GET /api/alumno/dataGeneral | Status: 401 | Time: 1.571 ms | IP: ::1 | User-Agent: "node"
+2025-04-25T21:02:00.825Z [ERROR] GET /api/alumno/dataGeneral | Status: 401 | Time: 1.359 ms | IP: ::1 | User-Agent: "node"
+2025-04-25T21:25:14.810Z [ERROR] GET /api/user | Status: 404 | Time: 3.915 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+[2025-04-25T21:26:35.531Z] Correo enviado a: anthony10.reyes10@gmail.com, profesor1@gmail.com | Asunto: Nuevo examen subido
+[2025-04-25T21:27:06.779Z] Error al guardar certificado generado: Error: La plantilla de certificado no existe en: D:\REACT\cencapp_aula\backend\public\certificados\plantilla.png
+[2025-04-25T21:27:06.787Z] Se genero un error Error: La plantilla de certificado no existe en: D:\REACT\cencapp_aula\backend\public\certificados\plantilla.png
+2025-04-25T21:27:06.788Z [ERROR] POST /api/colocarPuntaje | Status: 500 | Time: 87.295 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+[2025-04-25T21:27:42.592Z] Error al guardar certificado generado: The input is not a PNG file!
+[2025-04-25T21:27:42.592Z] Se genero un error The input is not a PNG file!
+2025-04-25T21:27:42.594Z [ERROR] POST /api/colocarPuntaje | Status: 500 | Time: 70.109 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+[2025-04-25T21:29:43.439Z] Error al guardar certificado generado: The input is not a PNG file!
+[2025-04-25T21:29:43.439Z] Se genero un error The input is not a PNG file!
+2025-04-25T21:29:43.440Z [ERROR] POST /api/colocarPuntaje | Status: 500 | Time: 37.354 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+[2025-04-25T21:33:14.815Z] Error al guardar certificado generado: The input is not a PNG file!
+[2025-04-25T21:33:14.816Z] Se genero un error The input is not a PNG file!
+2025-04-25T21:33:14.818Z [ERROR] POST /api/colocarPuntaje | Status: 500 | Time: 55.067 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+[2025-04-25T21:34:43.571Z] Correo enviado a: anthony10.reyes10@gmail.com, anthony10.reyes10@gmail.com | Asunto: Examen calificado
+2025-04-25T21:58:50.362Z [ERROR] POST /api/examenes/enviar | Status: 400 | Time: 8.473 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+[2025-04-25T21:58:57.952Z] Correo enviado a: anthony10.reyes10@gmail.com, profesor1@gmail.com | Asunto: Nuevo examen subido
+[2025-04-25T21:59:41.909Z] Correo enviado a: anthony10.reyes10@gmail.com, anthony10.reyes10@gmail.com | Asunto: Examen calificado
+[2025-04-25T22:04:18.250Z] Correo enviado a: anthony10.reyes10@gmail.com, profesor1@gmail.com | Asunto: Nuevo examen subido
+[2025-04-25T22:04:29.213Z] Correo enviado a: anthony10.reyes10@gmail.com, anthony10.reyes10@gmail.com | Asunto: Examen calificado
+[2025-04-25T22:07:41.694Z] Correo enviado a: anthony10.reyes10@gmail.com, profesor1@gmail.com | Asunto: Nuevo examen subido
+[2025-04-25T22:07:51.844Z] Correo enviado a: anthony10.reyes10@gmail.com, anthony10.reyes10@gmail.com | Asunto: Examen calificado
+[2025-04-25T22:09:21.238Z] Correo enviado a: anthony10.reyes10@gmail.com, profesor1@gmail.com | Asunto: Nuevo examen subido
+[2025-04-25T22:09:31.764Z] Correo enviado a: anthony10.reyes10@gmail.com, anthony10.reyes10@gmail.com | Asunto: Examen calificado
