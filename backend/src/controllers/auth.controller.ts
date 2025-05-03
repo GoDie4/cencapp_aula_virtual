@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import createAccessToken from "../utils/jwt";
 import { sendEmail } from "./mail.controller";
+import { ENV } from "../config/config";
 const prisma = new PrismaClient();
 
 export const crearAdmin = async (
@@ -121,7 +122,7 @@ export const register = async (
       sameSite: "none",
       secure: true,
       httpOnly: true,
-      domain: ".cencapperu.com",
+      domain: ENV.COOKIE_DOMAIN,
       maxAge: 2 * 60 * 60 * 1000,
     });
 
@@ -178,7 +179,7 @@ export const login = async (
       sameSite: "none",
       secure: true,
       httpOnly: true,
-      domain: ".cencapperu.com",
+      domain: ENV.COOKIE_DOMAIN,
       maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 

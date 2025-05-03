@@ -23,6 +23,9 @@ interface StatCard {
 export default async function Aula() {
 
   const data = await getServerSideProps("alumno/dataGeneral");
+
+  console.log('DATA: ', data);
+
   const stats: StatCard[] = [
     {
       title: "Total de Cursos",

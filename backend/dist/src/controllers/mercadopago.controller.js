@@ -224,13 +224,12 @@ async function obtenerCursosComprados(req, res) {
                 },
             },
             where: {
-                ventas_detalles: {
+                cursosUsuarios: {
                     some: {
-                        venta: {
-                            usuarioId: userId,
-                        },
-                    },
-                },
+                        userId: userId,
+                        tipo: "MATRICULADO",
+                    }
+                }
             },
         });
         res.status(200).json({ cursos });

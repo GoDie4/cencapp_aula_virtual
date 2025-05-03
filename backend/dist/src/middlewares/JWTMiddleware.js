@@ -263,12 +263,11 @@ const verificarCompraCurso = async (req, res, next) => {
         if (!curso) {
             return res.status(404).json({ message: "Curso no encontrado" });
         }
-        const compra = await prisma.ventasDetalles.findFirst({
+        const compra = await prisma.cursoUsuario.findFirst({
             where: {
-                productoId: curso.id,
-                venta: {
-                    usuarioId: userId,
-                },
+                usuario: {
+                    id: userId,
+                }
             },
         });
         if (!compra) {

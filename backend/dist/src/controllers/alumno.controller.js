@@ -139,10 +139,10 @@ exports.obtenerAlumnoPorId = obtenerAlumnoPorId;
 const obtenerTotalDataPorAlumno = async (req, res) => {
     const userId = req.user.id;
     try {
-        const totalCursosComprados = await prisma.ventasDetalles.count({
+        const totalCursosComprados = await prisma.cursoUsuario.count({
             where: {
-                venta: {
-                    usuarioId: userId,
+                usuario: {
+                    id: userId,
                 },
             },
         });

@@ -257,13 +257,12 @@ export async function obtenerCursosComprados(
         },
       },
       where: {
-        ventas_detalles: {
+        cursosUsuarios: {
           some: {
-            venta: {
-              usuarioId: userId,
-            },
-          },
-        },
+            userId: userId,
+            tipo: "MATRICULADO",
+          }
+        }
       },
     });
 
