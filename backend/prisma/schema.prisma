@@ -352,7 +352,7 @@ enum TipoPrueba {
 model Materiales {
     id           Int      @id @default(autoincrement())
     nombre       String   @db.VarChar(255)
-    descripcion  String   @db.Text
+    descripcion  String   @db.LongText
     path_archivo String   @db.VarChar(255)
     mime_type    String   @db.VarChar(255)
     size         Int

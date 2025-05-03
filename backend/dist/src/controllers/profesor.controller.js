@@ -139,8 +139,8 @@ const obtenerProfesorPorId = async (req, res) => {
 exports.obtenerProfesorPorId = obtenerProfesorPorId;
 const darleCargoCurso = async (req, res) => {
     const { cursoId, profesorId } = req.body;
-    console.log("cursoId: ", cursoId);
-    console.log("profesorId: ", profesorId);
+    console.log('Curso', cursoId);
+    console.log('Profesor', profesorId);
     if (!cursoId && !profesorId) {
         res.status(404).json({
             message: 'Faltan datos'
@@ -162,6 +162,7 @@ const darleCargoCurso = async (req, res) => {
         return;
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
             message: 'Ha ocurrido un error en el servidor'
         });
@@ -183,11 +184,16 @@ const obtenerCargoCurso = async (req, res) => {
     try {
         const profesores = await prisma.cursoUsuario.findMany({
             where: {
-                cursoId: cursoId,
+                userId: cursoId,
                 tipo: 'CARGO'
             },
             include: {
-                usuario: true
+                usuario: true,
+                curso: {
+                    include: {
+                        categoria: true
+                    }
+                }
             }
         });
         res.status(200).json({

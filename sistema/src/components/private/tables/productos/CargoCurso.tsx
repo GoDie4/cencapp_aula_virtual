@@ -5,15 +5,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Global } from '../../../../helper/Global'
 import axios from 'axios'
 import { toast } from 'sonner'
-import { type ProfesorInterface } from '../../../../interfaces/ProfesoresInterface'
+// import { type ProfesorInterface } from '../../../../interfaces/ProfesoresInterface'
 import { TitleBriefs } from '../../../shared/TitleBriefs'
 import { Errors } from '../../../shared/Errors'
 import { Paginacion } from '../../../shared/Paginacion'
-import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
+import type { Curso, CursosUsuarios } from '../../../../interfaces/CursoInterface'
 import CargoCursoColumna from './CargoCursoColumna'
 
 interface CursoCargoValues {
-  profesorId: string
+  cursoId: string
 }
 
 export default function CargoCurso (): JSX.Element {
@@ -30,13 +30,13 @@ export default function CargoCurso (): JSX.Element {
   const getCurso = async (): Promise<void> => {
     try {
       setLoadingComponents(true)
-      const { data } = await axios.get(`${Global.url}/profesores`, {
+      const { data } = await axios.get(`${Global.url}/cursos`, {
         headers: {
           Authorization: `Bearer ${token !== null && token !== '' ? token : ''
             }`
         }
       })
-      setProfesores(data.profesores)
+      setProfesores(data.cursos)
     } catch (error) {
       toast.error('Error al traer datos del producto')
       console.log(error)
@@ -64,8 +64,8 @@ export default function CargoCurso (): JSX.Element {
   const cursoCargo = async (values: CursoCargoValues): Promise<void> => {
     try {
       const body = {
-        profesorId: values.profesorId,
-        cursoId: id
+        cursoId: values.cursoId,
+        profesorId: String(id)
       }
       const { status } = await axios.post(`${Global.url}/cargoCurso`, body, {
         headers: {
@@ -75,7 +75,7 @@ export default function CargoCurso (): JSX.Element {
       })
       if (status === 200) {
         toast.success('Registro exitoso')
-        navigate('/admin/cursos')
+        navigate('/admin/profesores')
       }
     } catch (error) {
       toast.error('Error al subir producto')
@@ -91,7 +91,7 @@ export default function CargoCurso (): JSX.Element {
     handleBlur
   } = useFormik({
     initialValues: {
-      profesorId: ''
+      cursoId: ''
     },
     onSubmit: cursoCargo
   })
@@ -119,26 +119,26 @@ export default function CargoCurso (): JSX.Element {
             >
               <div className="flex flex-col justify-between w-full gap-4 mb-5 lg:relative lg:flex-row lg:gap-2">
                 <div className='w-full'>
-                  <TitleBriefs titulo="Asignar profesor" />
+                  <TitleBriefs titulo="Asignar Curso" />
                   <select
                     title='Selecciona una profesor'
                     className="block w-full pt-4 pb-4 pl-4 pr-4 mt-2 mb-0 ml-0 mr-0 text-base placeholder-gray-400 transition-all border border-black rounded-md outline-none focus:outline-none focus:border-black bg-secondary-900"
-                    name="profesorId"
-                    value={values.profesorId}
+                    name="cursoId"
+                    value={values.cursoId}
                     autoComplete="off"
                     onChange={handleChange}
                     onBlur={handleBlur}
                   >
                     <option value="">Seleccionar</option>
-                    {profesores.map((profesor: ProfesorInterface) => (
+                    {profesores.map((profesor: Curso) => (
                       <option value={profesor.id} key={profesor.id}>
-                        {profesor.nombres} - {profesor.email}
+                        {profesor.nombre}
                       </option>
                     ))}
                   </select>
                   <Errors
-                    errors={errors.profesorId}
-                    touched={touched.profesorId}
+                    errors={errors.cursoId}
+                    touched={touched.cursoId}
                   />
                 </div>
               </div>
@@ -160,10 +160,10 @@ export default function CargoCurso (): JSX.Element {
             <div className='w-full p-8 mt-4 bg-secondary-100 rounded-xl'>
               <div className="hidden grid-cols-1 gap-4 p-4 mb-10 md:grid md:grid-cols-6">
                 <h5 className="md:text-center">ID</h5>
-                <h5 className="md:text-center">Nombres</h5>
-                <h5 className="md:text-center">Apellidos</h5>
-                <h5 className="md:text-center">Email</h5>
-                <h5 className="md:text-center">Celular</h5>
+                <h5 className="md:text-center">Curso</h5>
+                <h5 className="md:text-center">Categoría</h5>
+                <h5 className="md:text-center">Horas</h5>
+                <h5 className="md:text-center">Creado en</h5>
                 <h5 className="md:text-center">Acciones</h5>
               </div>
               {filterDate().map((pro: CursosUsuarios) => (
@@ -185,7 +185,7 @@ export default function CargoCurso (): JSX.Element {
               </div>
             </div>
           </>
-          )
+        )
       }
     </>
   )

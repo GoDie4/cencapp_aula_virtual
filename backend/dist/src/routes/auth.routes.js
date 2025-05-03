@@ -42,6 +42,9 @@ router.post("/categorias/:id", JWTMiddleware_1.verifyAdmin, categoria_controller
 ]), categoria_controller_1.actualizarCategoria);
 router.post("/borrarCategoria/:id", JWTMiddleware_1.verifyAdmin, categoria_controller_1.deleteCategoria);
 // Cursos
+router.post("/cursos/asignarManualmente/:id", curso_controller_1.AsignarCursoManualmente);
+router.get("/cursos/asignados/alumno/:id", curso_controller_1.VerCursosAsignadosAlumno);
+router.post("/cursos/eliminarManualmente/:id", curso_controller_1.eliminarCursoMatriculado);
 router.post("/cursos", JWTMiddleware_1.verifyAdmin, curso_controller_1.uploadImageCurso, curso_controller_1.createCurso);
 router.get("/cursos", curso_controller_1.showAllCursos);
 router.get("/cursos/:id", curso_controller_1.obtenerCursoPorId);
@@ -102,6 +105,7 @@ router.post("/tests/:id", JWTMiddleware_1.verifyAdminOrProfesor, test_controller
 router.post("/borrarTest/:id", JWTMiddleware_1.verifyAdminOrProfesor, test_controller_1.deleteTest);
 router.get("/tests/documento/:id", JWTMiddleware_1.verifyUser, test_controller_1.obtenerDocumentoTestPorId);
 router.get("/ejercicios/documento/:id", JWTMiddleware_1.verifyUser, profesor_controller_1.obtenerEjerciciosPorProfesor);
+router.get("/examenes/resueltos/todos", test_controller_1.obtenerExamenesPendientesAdministrador);
 router.get("/examenes/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerExamenesPorProfesor);
 router.get("/materiales/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerMaterialesPorProfesor);
 router.get("/ejercicios/cargo/:id", JWTMiddleware_1.verifyProfesor, profesor_controller_1.obtenerEjerciciosPorProfesor);

@@ -43,6 +43,10 @@ export default function ProfesoresColumnas ({ pro, token, getProfesores, totalPo
     })
   }
 
+  const handleCursoCargo = (id: string): void => {
+    navigate(`/admin/cursos/cargo/${id}`)
+  }
+
   return (
     <div
       className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
@@ -126,6 +130,7 @@ export default function ProfesoresColumnas ({ pro, token, getProfesores, totalPo
           <MenuItem onClick={() => { setModalContent({ title: 'Datos del Profesor', content: <VerProfesor pro={pro} /> }) }}>Ver</MenuItem>
           <MenuItem onClick={handleEditar}>Editar</MenuItem>
           <MenuItem onClick={() => { preguntar(pro.id ?? '') }}>Eliminar</MenuItem>
+          <MenuItem onClick={() => { handleCursoCargo(pro.id ?? '') }}>Asignarle un Curso</MenuItem>
         </Menu>
       </div>
 

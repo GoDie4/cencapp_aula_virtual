@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
@@ -6,11 +7,6 @@ import {
   FiSettings,
   FiAward,
   FiDollarSign,
-  FiVideo,
-  FiMessageCircle,
-  FiClock,
-  FiClipboard,
-  FiTool,
 } from "react-icons/fi";
 import Banner from "../../../../components/public/Banner";
 import { BsWhatsapp } from "react-icons/bs";
@@ -42,29 +38,31 @@ const ViewCurso = async ({
   const nombre = (await params).nombre;
   const curso: Curso = await getCurso(revertUrl(nombre));
 
+  console.log("curso: ", curso);
+
   if (!curso) {
     return <div>Curso no encontrado</div>;
   }
 
-  const renderIcon = (icono: any): any => {
-    switch (icono) {
-      case "video":
-        return <FiVideo className="benefit-icon" />;
-      case "award":
-        return <FiAward className="benefit-icon" />;
-      case "message":
-        return <FiMessageCircle className="benefit-icon" />;
-      case "clock":
-        return <FiClock className="benefit-icon" />;
-      case "clipboard":
-        return <FiClipboard className="benefit-icon" />;
-      case "tool":
-        return <FiTool className="benefit-icon" />;
-      // Agregar más casos según los íconos necesarios
-      default:
-        return null;
-    }
-  };
+//   const renderIcon = (icono: any): any => {
+//     switch (icono) {
+//       case "video":
+//         return <FiVideo className="benefit-icon" />;
+//       case "award":
+//         return <FiAward className="benefit-icon" />;
+//       case "message":
+//         return <FiMessageCircle className="benefit-icon" />;
+//       case "clock":
+//         return <FiClock className="benefit-icon" />;
+//       case "clipboard":
+//         return <FiClipboard className="benefit-icon" />;
+//       case "tool":
+//         return <FiTool className="benefit-icon" />;
+//       // Agregar más casos según los íconos necesarios
+//       default:
+//         return null;
+//     }
+//   };
 
   return (
     <>
@@ -149,18 +147,21 @@ const ViewCurso = async ({
 
           <div className="space-y-8">
             <h2 className="text-2xl font-semibold">Beneficios</h2>
-            {curso?.detalles?.beneficios && (
+            {curso?.beneficios && (
               <section className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {curso.detalles?.beneficios.map((beneficio, index) => (
+                <div className="grid grid-cols-1  gap-4">
+                  {curso.beneficios.map((beneficio, index) => (
                     <div
                       key={index}
                       className="p-4 shadow-lg rounded-lg flex flex-col items-center"
                     >
-                      {renderIcon(beneficio.icono)}
-                      <p className="text-center mt-2">
-                        {beneficio.texto}
-                      </p>
+                      <img
+                        src={`${config.imagesUrl}${beneficio.icono ?? ""}`}
+                       // src="https://api.cencapperu.com/public/beneficios/iconos/icono-1746032087570-620464914.png"
+                        alt=""
+                        className="h-[350px]"
+                      />
+                      <p className="text-center mt-4">{beneficio.texto}</p>
                     </div>
                   ))}
                   {/* Comentarios de beneficios omitidos */}

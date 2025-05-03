@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Categoria } from "./CategoriaInterface";
 import { SeccionInterface } from "./SeccionInterface";
 
@@ -18,6 +19,7 @@ export interface Curso {
   PorcentajeCurso?: PorcentajeCurso[];
   descuento?: number;
   Seccion?: SeccionInterface[]
+  beneficios?: any[];
 }
 
 export interface PorcentajeCurso {
