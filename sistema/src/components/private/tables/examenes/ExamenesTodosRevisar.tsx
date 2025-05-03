@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import { ExamenesCargoColumna } from './ExamenesCargoColumna'
-import type { TestInterface, TestResuelto } from '../../../../interfaces/TestInterface'
-import { type CursosUsuarios } from '../../../../interfaces/CursoInterface'
+import type { TestInterface } from '../../../../interfaces/TestInterface'
 import useAuth from '../../../../hooks/useAuth'
 import axios from 'axios'
 import { Global } from '../../../../helper/Global'
 import { Loading } from '../../../shared/Loading'
 import { Paginacion } from '../../../shared/Paginacion'
 
-export default function ExamenesTodosRevisar(): JSX.Element {
+export default function ExamenesTodosRevisar (): JSX.Element {
   const { loadingComponents, setLoadingComponents } = useAuth()
   const token = localStorage.getItem('token')
   const [examenes, setExamenes] = useState<TestInterface[]>([])
@@ -50,7 +49,7 @@ export default function ExamenesTodosRevisar(): JSX.Element {
       {loadingComponents
         ? (
           <Loading />
-        )
+          )
         : (
           <div className="p-8 mt-4 bg-secondary-100 rounded-xl">
             <div className="hidden grid-cols-1 gap-4 p-4 mb-10 md:grid md:grid-cols-6">
@@ -111,7 +110,7 @@ export default function ExamenesTodosRevisar(): JSX.Element {
               />
             </div>
           </div>
-        )}
+          )}
     </>
   )
 }

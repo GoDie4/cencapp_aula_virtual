@@ -103,7 +103,7 @@ const register = async (req, res) => {
             sameSite: "none",
             secure: true,
             httpOnly: true,
-            domain: ".cencapperu.com",
+            domain: "localhost",
             maxAge: 2 * 60 * 60 * 1000,
         });
         await (0, mail_controller_1.sendEmail)("anthony10.reyes10@gmail.com", "Registro", `NuevoRegistro.html`, {
@@ -145,7 +145,7 @@ const login = async (req, res) => {
             sameSite: "none",
             secure: true,
             httpOnly: true,
-            domain: ".cencapperu.com",
+            domain: "localhost",
             maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
         });
         const primerNombre = usuarioExiste.nombres.split(" ");

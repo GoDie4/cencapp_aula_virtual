@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerCursosPorMatriculado = exports.getAllCoursesDelProfesor = exports.obtenerCursoMateriales = exports.obtenerCursosPorAlumno = exports.registrarOActualizarPorcentajeCurso = exports.cursoPorSlug = exports.buscarPorNombre = exports.deleteCurso = exports.obtenerCursoPorId = exports.actualizarCurso = exports.showAllCursos = exports.createCurso = exports.uploadImageCurso = void 0;
+exports.obtenerCursosPorMatriculado = exports.getAllCoursesDelProfesor = exports.obtenerCursoMateriales = exports.obtenerCursosPorAlumno = exports.registrarOActualizarPorcentajeCurso = exports.cursoPorSlug = exports.buscarPorNombre = exports.deleteCurso = exports.obtenerCursoPorId = exports.actualizarCurso = exports.showAllCursos = exports.AsignarCursoManualmente = exports.createCurso = exports.uploadImageCurso = void 0;
 exports.getAlumnoMatriculado = getAlumnoMatriculado;
 const client_1 = require("@prisma/client");
 const promises_1 = __importDefault(require("fs/promises"));
@@ -141,6 +141,40 @@ const createCurso = async (req, res) => {
     }
 };
 exports.createCurso = createCurso;
+const AsignarCursoManualmente = async (req, res) => {
+    const { id } = req.params;
+    const { cursoId } = req.body;
+    try {
+        const curso = await prisma.curso.findUnique({
+            where: { id: cursoId },
+            include: {
+                detalles: true,
+            },
+        });
+        if (!curso) {
+            res.status(404).json({ message: "Curso no encontrado" });
+            return;
+        }
+        await prisma.cursoUsuario.create({
+            data: {
+                cursoId: cursoId,
+                tipo: "MATRICULADO",
+                userId: id,
+            },
+        });
+        res.status(200).json({ message: "Curso asignado" });
+    }
+    catch (error) {
+        console.error("Error al asignar curso manualmente:", error);
+        res.status(500).json({
+            message: "Error al asignar curso manualmente",
+        });
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+};
+exports.AsignarCursoManualmente = AsignarCursoManualmente;
 const showAllCursos = async (req, res) => {
     try {
         // Utiliza prisma.curso.findMany() para obtener todas las categorías de la base de datos
@@ -439,6 +473,7 @@ const buscarPorNombre = async (req, res) => {
             },
             include: {
                 detalles: true,
+                beneficios: true,
                 Seccion: {
                     include: {
                         clases: true,

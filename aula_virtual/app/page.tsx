@@ -25,7 +25,10 @@ export function generateMetadata() {
 export default async function page() {
   const dataCursos = await getServerSideProps("cursos");
   const dataCategorias = await getServerSideProps("categorias");
-
+  if (!dataCursos || !dataCursos.cursos) {
+    console.error("No se encontraron categorías en la respuesta", dataCursos);
+  }
+  console.log("DATA CURSOS: ", dataCursos);
   return (
     <>
       <Header />
@@ -42,19 +45,21 @@ export default async function page() {
               </h2>
             </div>
             <div className="grid w-full gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {dataCursos.cursos.map((cur: Curso) => {
-                return (
-                  <div className="w-full" key={cur.id}>
-                    <CardCurso
-                      id={cur.id ?? ""}
-                      horas={String(cur.horas)}
-                      img={`${config.imagesUrl}${cur.imagen}`}
-                      precio={String(cur.precio)}
-                      titulo={cur.nombre}
-                    />
-                  </div>
-                );
-              })}
+              {dataCursos &&
+                dataCursos.length > 0 &&
+                dataCursos.cursos.map((cur: Curso) => {
+                  return (
+                    <div className="w-full" key={cur.id}>
+                      <CardCurso
+                        id={cur.id ?? ""}
+                        horas={String(cur.horas)}
+                        img={`${config.imagesUrl}${cur.imagen}`}
+                        precio={String(cur.precio)}
+                        titulo={cur.nombre}
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </ContentMain>
         </section>

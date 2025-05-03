@@ -13,6 +13,7 @@ exports.deleteTest = deleteTest;
 exports.obtenerTestPorId = obtenerTestPorId;
 exports.obtenerDocumentoTestPorId = obtenerDocumentoTestPorId;
 exports.obtenerExamenesPendientes = obtenerExamenesPendientes;
+exports.obtenerExamenesPendientesAdministrador = obtenerExamenesPendientesAdministrador;
 exports.obtenerExamenesAsignados = obtenerExamenesAsignados;
 exports.enviarExamen = enviarExamen;
 exports.obtenerEjerciciosAsignados = obtenerEjerciciosAsignados;
@@ -447,6 +448,66 @@ async function obtenerExamenesPendientes(req, res) {
                 },
             },
         });
+        res.status(200).json({
+            examenes,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Ocurrió un error en el servidor",
+        });
+    }
+}
+async function obtenerExamenesPendientesAdministrador(req, res) {
+    try {
+        const examenes = await prisma.test.findMany({
+            where: {
+                tipo_prueba: "EXAMEN",
+                examenesResueltos: {
+                    every: {
+                        estado: "EnRevision",
+                    },
+                },
+            },
+            include: {
+                examenesResueltos: {
+                    include: {
+                        usuario: true,
+                    },
+                },
+                curso: true,
+            },
+        });
+        /*
+        const examenes = await prisma.cursoUsuario.findMany({
+          include: {
+            curso: {
+              include: {
+                test: {
+                  where: {
+                    tipo_prueba: "EXAMEN",
+                    examenesResueltos: {
+                      every: {
+                        estado: "EnRevision",
+                      },
+                    },
+                  },
+                  include: {
+                    examenesResueltos: {
+                      include: {
+                        usuario: true,
+                      },
+                    },
+                    curso: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+        */
+        console.log(examenes);
         res.status(200).json({
             examenes,
         });

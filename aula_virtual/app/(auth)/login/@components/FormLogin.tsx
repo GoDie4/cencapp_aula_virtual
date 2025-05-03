@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../../src/context/AuthContext";
 import { toast } from "sonner";
 import { Errors } from "../../../../components/form/Errors";
-import { config } from "@/config/config";
 import { useRouter } from "next/navigation";
 import { InputForm } from "../../../../components/form/InputForm";
 import { CheckInput } from "../../../../components/form/CheckInput";
@@ -33,7 +32,7 @@ const FormLogin = () => {
     };
 
     try {
-      const response = await axios.post(`${config.apiUrl}/login`, data, {
+      const response = await axios.post(`https://api.cencapperu.com/api/login`, data, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

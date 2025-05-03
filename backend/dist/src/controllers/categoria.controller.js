@@ -9,6 +9,7 @@ const prisma = new client_1.PrismaClient();
 const promises_1 = __importDefault(require("fs/promises"));
 const multer_1 = __importDefault(require("multer"));
 const node_path_1 = __importDefault(require("node:path"));
+const generadorSlug_1 = require("../utils/generadorSlug");
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
         let folder = "public/";
@@ -56,6 +57,7 @@ const createCategoriaMemory = async (req, res) => {
         const nuevaCategoria = await prisma.categorias.create({
             data: {
                 nombre: nombre,
+                slug: (0, generadorSlug_1.generarSlug)(nombre),
                 url_imagen: urlImagenPath ?? "",
                 url_icono: urlIconoPath ?? "",
             },
@@ -136,6 +138,7 @@ const actualizarCategoria = async (req, res) => {
             where: { id: id },
             data: {
                 nombre: req.body.nombre,
+                slug: (0, generadorSlug_1.generarSlug)(req.body.nombre),
                 url_imagen: urlImagenPath !== null
                     ? urlImagenPath
                     : categoriaExistente.url_imagen,

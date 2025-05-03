@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 import fs from "fs/promises";
 import multer from "multer";
 import path from "node:path";
+import { generarSlug } from "../utils/generadorSlug";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -61,6 +62,7 @@ export const createCategoriaMemory = async (
     const nuevaCategoria = await prisma.categorias.create({
       data: {
         nombre: nombre,
+        slug: generarSlug(nombre),
         url_imagen: urlImagenPath ?? "",
         url_icono: urlIconoPath ?? "",
       },
@@ -151,6 +153,7 @@ export const actualizarCategoria = async (
       where: { id: id },
       data: {
         nombre: req.body.nombre,
+        slug: generarSlug(req.body.nombre),
         url_imagen:
           urlImagenPath !== null
             ? urlImagenPath

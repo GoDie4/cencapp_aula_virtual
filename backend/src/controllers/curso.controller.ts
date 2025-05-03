@@ -556,6 +556,7 @@ export const buscarPorNombre = async (req: Request, res: Response) => {
       },
       include: {
         detalles: true,
+        beneficios: true,
         Seccion: {
           include: {
             clases: true,

@@ -9,6 +9,7 @@ export interface Curso {
   horas: number;
   imagen: string;
   banner?: string;
+  beneficios?: Beneficio[]
   categoriaId: number;
   categoria?: Categoria;
   detalles?: CursoDetalles;
