@@ -71,11 +71,11 @@ const ViewCurso = async ({
         imagen={`${config.imagesUrl}${curso.banner ?? ""}`}
       />
 
-      <div className="py-20 px-5 lg:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="px-5 py-20 lg:px-20">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div className="space-y-8">
             <section className="space-y-4">
-              <h2 className="text-2xl font-semibold text-black-900 flex items-center gap-2">
+              <h2 className="flex items-center gap-2 text-2xl font-semibold text-black-900">
                 <FiInfo className="text-xl text-secondary-main" />
                 Presentación del curso
               </h2>
@@ -88,7 +88,7 @@ const ViewCurso = async ({
 
             {curso?.detalles?.dirigido && (
               <section className="space-y-4">
-                <h2 className="text-2xl font-semibold text-black-900 flex items-center gap-2">
+                <h2 className="flex items-center gap-2 text-2xl font-semibold text-black-900">
                   <FiSettings className="text-xl text-secondary-main" />
                   Dirigido a
                 </h2>
@@ -102,7 +102,7 @@ const ViewCurso = async ({
 
             {curso?.detalles?.objetivo && (
               <section className="space-y-4">
-                <h2 className="text-2xl font-semibold text-black-900 flex items-center gap-2">
+                <h2 className="flex items-center gap-2 text-2xl font-semibold text-black-900">
                   <FiTarget className="text-xl text-secondary-main" />
                   Objetivo
                 </h2>
@@ -116,7 +116,7 @@ const ViewCurso = async ({
 
             {curso?.detalles?.metodologia && (
               <section className="space-y-4">
-                <h2 className="text-2xl font-semibold text-black-900 flex items-center gap-2">
+                <h2 className="flex items-center gap-2 text-2xl font-semibold text-black-900">
                   <FiSettings className="text-xl text-secondary-main" />
                   Metodología
                 </h2>
@@ -130,7 +130,7 @@ const ViewCurso = async ({
 
             {curso?.detalles?.certificacion && (
               <section className="space-y-4">
-                <h2 className="text-2xl font-semibold text-black-900 flex items-center gap-2">
+                <h2 className="flex items-center gap-2 text-2xl font-semibold text-black-900">
                   <FiAward className="text-xl text-secondary-main" />
                   Certificación
                 </h2>
@@ -149,11 +149,11 @@ const ViewCurso = async ({
             <h2 className="text-2xl font-semibold">Beneficios</h2>
             {curso?.beneficios && (
               <section className="space-y-4">
-                <div className="grid grid-cols-1  gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   {curso.beneficios.map((beneficio, index) => (
                     <div
                       key={index}
-                      className="p-4 shadow-lg rounded-lg flex flex-col items-center"
+                      className="flex flex-col items-center p-4 rounded-lg shadow-lg"
                     >
                       <img
                         src={`${config.imagesUrl}${beneficio.icono ?? ""}`}
@@ -161,7 +161,7 @@ const ViewCurso = async ({
                         alt=""
                         className="h-[350px]"
                       />
-                      <p className="text-center mt-4">{beneficio.texto}</p>
+                      <p className="mt-4 text-center">{beneficio.texto}</p>
                     </div>
                   ))}
                   {/* Comentarios de beneficios omitidos */}
@@ -169,17 +169,17 @@ const ViewCurso = async ({
               </section>
             )}
 
-            <section className="space-y-4 shadow-md py-5 rounded-main">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-primary-main justify-center text-center flex items-center gap-2">
+            <section className="py-5 space-y-4 shadow-md rounded-main">
+              <h2 className="flex items-center justify-center gap-2 text-2xl font-semibold text-center md:text-3xl lg:text-4xl text-primary-main">
                 <FiDollarSign className="text-xl" />
                 Inversión
               </h2>
               {curso?.dolar ? (
-                <div className="text-lg md:text-xl lg:text-2xl text-center">
+                <div className="text-lg text-center md:text-xl lg:text-2xl">
                   S/ {curso.precio}.00 Soles ó {curso.dolar}.00 Dólares
                 </div>
               ) : (
-                <div className="text-lg md:text-xl lg:text-2xl text-center">
+                <div className="text-lg text-center md:text-xl lg:text-2xl">
                   S/ {curso.precio}.00 Soles
                 </div>
               )}
@@ -199,10 +199,10 @@ const ViewCurso = async ({
 
             <div className="mt-8">
               <a
-                href="https://wa.me//+51973044253"
+                href="https://wa.me//+51947172367"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 text-xl md:text-2xl font-medium bg-green-500 rounded-main hover:bg-green-600 text-white-main text-center justify-center py-3 px-4"
+                className="flex items-center justify-center gap-2 px-4 py-3 text-xl font-medium text-center bg-green-500 md:text-2xl rounded-main hover:bg-green-600 text-white-main"
               >
                 <BsWhatsapp />
                 Más información

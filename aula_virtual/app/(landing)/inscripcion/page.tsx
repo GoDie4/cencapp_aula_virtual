@@ -1,9 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { s2 } from "../../../components/shared/images";
+import { cuentas, s2 } from "../../../components/shared/images";
+
 import Banner from "../../../components/public/Banner";
-import lg1 from "../../../assets/varios/lg_bcp.jpg";
-import lg2 from "../../../assets/varios/lg_paypal.png";
-import qr from "../../../assets/varios/qr.png";
 import {
   FaMoneyCheckAlt,
   FaFileInvoiceDollar,
@@ -116,12 +114,12 @@ const Inscripcion = () => {
         </section>
       </section>
 
-      <section className="bg-white py-16 px-5 lg:px-[18rem] md:px-[12rem] sm:px-[6rem] xs:px-[3rem] xxs:px-5 rounded-lg shadow-md">
+      <section className="bg-white pb-16 px-5 lg:px-[18rem] md:px-[12rem] sm:px-[6rem] xs:px-[3rem] xxs:px-5 rounded-lg shadow-md">
         <h2 className="text-3xl lg:text-4xl text-center text-[#1231c9] font-bold mb-16">
           Formas de pago
         </h2>
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="flex flex-col items-center">
+        <div className="grid grid-cols-1 gap-8 ">
+          {/* <div className="flex flex-col items-center">
             <img
               src={lg1.src}
               alt="BCP Logo"
@@ -148,7 +146,8 @@ const Inscripcion = () => {
               className="max-w-[120px] h-[120px] object-contain mb-4"
             />
             <p className="font-semibold text-center">QR - YAPE</p>
-          </div>
+          </div> */}
+          <img src={cuentas.src} alt="" className="w-full"/>
         </div>
       </section>
     </>
