@@ -221,7 +221,7 @@ export const recuperarContrasena = async (req: any, res: any) => {
     },
   });
 
-  const resetLink = `http://localhost:3000/restablecer?token=${token}`;
+  const resetLink = `https://cencapperu.com/restablecer?token=${token}`;
 
   await sendEmail(
     user.email,
@@ -267,6 +267,7 @@ export const logout = (req: any, res: any) => {
     httpOnly: true,
     sameSite: "none",
     secure: true,
+    domain: ENV.COOKIE_DOMAIN,
   });
   return res.sendStatus(200);
 };

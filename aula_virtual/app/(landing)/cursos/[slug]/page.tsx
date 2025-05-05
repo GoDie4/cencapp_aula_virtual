@@ -4,6 +4,7 @@ import Banner from "../../../../components/public/Banner";
 import { getServerSideProps } from "@/server/getServerSideProps";
 import { ContentMain } from "../../../../components/public/estructura/ContentMain";
 import { SeoCursos } from "@/seo/SeoCursos";
+import { config } from "@/config/config";
 
 export async function generateMetadata({ params }: { params: any }) {
   const metadata = await SeoCursos({ params });
@@ -17,11 +18,12 @@ export default async function page({
 }) {
   const slug = (await params).slug;
   const dataCategorias = await getServerSideProps(`categoriasBuscar/${slug}`);
+  console.log(dataCategorias)
   return (
     <>
       <Banner
-        imagen={`http://localhost:4000${dataCategorias.url_imagen}`}
-        titulo={dataCategorias.nombre}
+        imagen={`${config.imagesUrl}${dataCategorias.categoria.url_imagen}`}
+        titulo={dataCategorias.categoria.nombre}
       />
       <div className="w-full">
         <ContentMain className="py-20">
@@ -30,7 +32,7 @@ export default async function page({
               {dataCategorias.categoria.nombre}
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <div className="w-full">
               {dataCategorias.categoria.cursos?.map((curso: any) => {
                 return (
@@ -38,7 +40,7 @@ export default async function page({
                     <CardCurso
                       id={String(curso.id)}
                       horas={String(curso.horas)}
-                      img={`http://localhost:4000${curso.imagen}`}
+                      img={`${config.imagesUrl}${curso.imagen}`}
                       precio={String(curso.precio)}
                       titulo={curso.nombre}
                     />

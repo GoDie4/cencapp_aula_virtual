@@ -11,6 +11,12 @@ yarn-error.log
 .env.test.local
 .env.production.local
 
+# misc
+.DS_Store
+*.pem
+*.zip
+*.rar
+
 # Logs
 logs/
 *.log
