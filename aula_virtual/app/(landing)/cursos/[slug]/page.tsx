@@ -18,12 +18,11 @@ export default async function page({
 }) {
   const slug = (await params).slug;
   const dataCategorias = await getServerSideProps(`categoriasBuscar/${slug}`);
-
-  console.log("CATEGORIAS: ", dataCategorias)
+  console.log(dataCategorias)
   return (
     <>
       <Banner
-        imagen={`${config.imagesUrl}${dataCategorias.url_imagen}`}
+        imagen={`${config.imagesUrl}${dataCategorias.categoria.url_imagen}`}
         titulo={dataCategorias.categoria.nombre}
       />
       <div className="w-full">
@@ -33,7 +32,7 @@ export default async function page({
               {dataCategorias.categoria.nombre}
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <div className="w-full">
               {dataCategorias.categoria.cursos?.map((curso: any) => {
                 return (

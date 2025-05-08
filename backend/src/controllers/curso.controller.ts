@@ -196,6 +196,63 @@ export const AsignarCursoManualmente = async (req: Request, res: Response) => {
   }
 };
 
+export const VerCursosAsignadosAlumno = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const cursos = await prisma.cursoUsuario.findMany({
+      where: {
+        userId: id,
+        tipo: "MATRICULADO",
+      },
+      include: {
+        curso: {
+          include: {
+            categoria: true
+          }
+        },
+        usuario: true,
+      },
+    });
+
+    res.status(200).json({ cursos });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Ocurrió un error en el servidor" });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export const eliminarCursoMatriculado = async (req: Request, res: Response) => {
+  const cursoUsuarioId = req.params.id
+  
+  if (!cursoUsuarioId) {
+    res.status(404).json({
+      message: 'Faltan datos'
+    })
+    return
+  }
+
+  try {
+    await prisma.cursoUsuario.deleteMany({
+      where: {
+        id: Number(cursoUsuarioId),
+      }
+    })
+    res.status(200).json({
+      message: 'El procedimiento se ha completado exitosamente'
+    })
+    return
+  } catch (error) {
+    res.status(500).json({
+      message: 'Ha ocurrido un error en el servidor'
+    })
+  } finally {
+    prisma.$disconnect
+  }
+}
+
 export const showAllCursos = async (
   req: Request,
   res: Response
@@ -735,18 +792,18 @@ export const obtenerCursoMateriales = async (req: any, res: Response) => {
     });
 
     const cursosFiltrados = cursos.map((c) => {
-        const secciones = c.curso.Seccion.map((s) => {
-          const clasesConMateriales = s.clases.filter((clase) => clase.materiales.length > 0);
-          return { ...s, clases: clasesConMateriales };
-        });
-        return {
-          ...c,
-          curso: {
-            ...c.curso,
-            Seccion: secciones,
-          },
-        };
+      const secciones = c.curso.Seccion.map((s) => {
+        const clasesConMateriales = s.clases.filter((clase) => clase.materiales.length > 0);
+        return { ...s, clases: clasesConMateriales };
       });
+      return {
+        ...c,
+        curso: {
+          ...c.curso,
+          Seccion: secciones,
+        },
+      };
+    });
 
     res.status(200).json({ cursos: cursosFiltrados });
   } catch (e) {

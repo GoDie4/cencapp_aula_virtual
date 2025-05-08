@@ -16,4 +16,5 @@ export const ENV = {
   EMAIL_SECURE: process.env.SECURE_MAIL || "",
   EMAIL_USER: process.env.USER_MAIL || "",
   EMAIL_PASS: process.env.PASS_MAIL || "",
+  COOKIE_DOMAIN: '.cencapperu.com',
 };

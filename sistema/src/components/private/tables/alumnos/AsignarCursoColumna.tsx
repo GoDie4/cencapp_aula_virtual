@@ -5,7 +5,7 @@ import { IoMdSettings } from 'react-icons/io'
 import React from 'react'
 import { parseDate } from '../../../../logic/parseDate'
 
-export default function CargoCursoColumna ({ pro, token, getListaProfesores, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { pro: CursosUsuarios, token: string, getListaProfesores: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
+export default function AsignarCursoColumna ({ pro, token, getListaProfesores, totalPosts, cantidadRegistros, paginaActual, setpaginaActual }: { pro: CursosUsuarios, token: string, getListaProfesores: () => Promise<void>, totalPosts: number, cantidadRegistros: number, paginaActual: number, setpaginaActual: (pagina: number) => void }): JSX.Element {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
@@ -17,7 +17,7 @@ export default function CargoCursoColumna ({ pro, token, getListaProfesores, tot
   const preguntar = (idDiscreto: number): void => {
     console.log(idDiscreto)
     DeleteItems({
-      ruta: 'eliminarCargoCurso',
+      ruta: 'cursos/eliminarManualmente',
       id: idDiscreto,
       token,
       getData: getListaProfesores,

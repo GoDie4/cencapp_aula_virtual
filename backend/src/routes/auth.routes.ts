@@ -38,6 +38,8 @@ import {
   getAllCoursesDelProfesor,
   getAlumnoMatriculado,
   AsignarCursoManualmente,
+  VerCursosAsignadosAlumno,
+  eliminarCursoMatriculado,
 } from "../controllers/curso.controller";
 import {
   verificarCompraCurso,
@@ -170,6 +172,9 @@ router.post("/borrarCategoria/:id", verifyAdmin, deleteCategoria);
 
 // Cursos
 router.post("/cursos/asignarManualmente/:id", AsignarCursoManualmente);
+router.get("/cursos/asignados/alumno/:id", VerCursosAsignadosAlumno);
+router.post("/cursos/eliminarManualmente/:id", eliminarCursoMatriculado);
+
 router.post("/cursos", verifyAdmin, uploadImageCurso, createCurso);
 router.get("/cursos", showAllCursos);
 router.get("/cursos/:id", obtenerCursoPorId);

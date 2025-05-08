@@ -16,6 +16,7 @@ app.use(
       "http://192.168.0.100:3000",
       "https://aula.cencapperu.com",
       "https://administrador.cencapperu.com",
+      "https://cencapperu.com"
     ],
     credentials: true,
   })
