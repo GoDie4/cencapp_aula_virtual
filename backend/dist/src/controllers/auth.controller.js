@@ -9,6 +9,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = __importDefault(require("crypto"));
 const jwt_1 = __importDefault(require("../utils/jwt"));
 const mail_controller_1 = require("./mail.controller");
+const config_1 = require("../config/config");
 const prisma = new client_1.PrismaClient();
 const crearAdmin = async (req, res) => {
     const { nombres, apellidos, celular, email, password } = req.body;
@@ -103,7 +104,7 @@ const register = async (req, res) => {
             sameSite: "none",
             secure: true,
             httpOnly: true,
-            domain: "localhost",
+            domain: config_1.ENV.COOKIE_DOMAIN,
             maxAge: 2 * 60 * 60 * 1000,
         });
         await (0, mail_controller_1.sendEmail)("anthony10.reyes10@gmail.com", "Registro", `NuevoRegistro.html`, {
@@ -145,7 +146,7 @@ const login = async (req, res) => {
             sameSite: "none",
             secure: true,
             httpOnly: true,
-            domain: "localhost",
+            domain: config_1.ENV.COOKIE_DOMAIN,
             maxAge: mantenerConexion ? 30 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
         });
         const primerNombre = usuarioExiste.nombres.split(" ");
@@ -183,7 +184,7 @@ const recuperarContrasena = async (req, res) => {
             userId: user.id,
         },
     });
-    const resetLink = `http://localhost:3000/restablecer?token=${token}`;
+    const resetLink = `https://cencapperu.com/restablecer?token=${token}`;
     await (0, mail_controller_1.sendEmail)(user.email, "Recuperar contraseña", `RecuperarContrasena.html`, {
         enlace: resetLink,
         nombre: user.nombres.split(" ")[0],
@@ -216,6 +217,7 @@ const logout = (req, res) => {
         httpOnly: true,
         sameSite: "none",
         secure: true,
+        domain: config_1.ENV.COOKIE_DOMAIN,
     });
     return res.sendStatus(200);
 };

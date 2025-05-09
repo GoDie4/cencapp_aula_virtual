@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerCursosPorMatriculado = exports.getAllCoursesDelProfesor = exports.obtenerCursoMateriales = exports.obtenerCursosPorAlumno = exports.registrarOActualizarPorcentajeCurso = exports.cursoPorSlug = exports.buscarPorNombre = exports.deleteCurso = exports.obtenerCursoPorId = exports.actualizarCurso = exports.showAllCursos = exports.AsignarCursoManualmente = exports.createCurso = exports.uploadImageCurso = void 0;
+exports.obtenerCursosPorMatriculado = exports.getAllCoursesDelProfesor = exports.obtenerCursoMateriales = exports.obtenerCursosPorAlumno = exports.registrarOActualizarPorcentajeCurso = exports.cursoPorSlug = exports.buscarPorNombre = exports.deleteCurso = exports.obtenerCursoPorId = exports.actualizarCurso = exports.showAllCursos = exports.eliminarCursoMatriculado = exports.VerCursosAsignadosAlumno = exports.AsignarCursoManualmente = exports.createCurso = exports.uploadImageCurso = void 0;
 exports.getAlumnoMatriculado = getAlumnoMatriculado;
 const client_1 = require("@prisma/client");
 const promises_1 = __importDefault(require("fs/promises"));
@@ -175,6 +175,63 @@ const AsignarCursoManualmente = async (req, res) => {
     }
 };
 exports.AsignarCursoManualmente = AsignarCursoManualmente;
+const VerCursosAsignadosAlumno = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const cursos = await prisma.cursoUsuario.findMany({
+            where: {
+                userId: id,
+                tipo: "MATRICULADO",
+            },
+            include: {
+                curso: {
+                    include: {
+                        categoria: true
+                    }
+                },
+                usuario: true,
+            },
+        });
+        res.status(200).json({ cursos });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ message: "Ocurrió un error en el servidor" });
+    }
+    finally {
+        await prisma.$disconnect();
+    }
+};
+exports.VerCursosAsignadosAlumno = VerCursosAsignadosAlumno;
+const eliminarCursoMatriculado = async (req, res) => {
+    const cursoUsuarioId = req.params.id;
+    if (!cursoUsuarioId) {
+        res.status(404).json({
+            message: 'Faltan datos'
+        });
+        return;
+    }
+    try {
+        await prisma.cursoUsuario.deleteMany({
+            where: {
+                id: Number(cursoUsuarioId),
+            }
+        });
+        res.status(200).json({
+            message: 'El procedimiento se ha completado exitosamente'
+        });
+        return;
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'Ha ocurrido un error en el servidor'
+        });
+    }
+    finally {
+        prisma.$disconnect;
+    }
+};
+exports.eliminarCursoMatriculado = eliminarCursoMatriculado;
 const showAllCursos = async (req, res) => {
     try {
         // Utiliza prisma.curso.findMany() para obtener todas las categorías de la base de datos

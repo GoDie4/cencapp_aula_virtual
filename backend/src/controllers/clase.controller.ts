@@ -261,14 +261,29 @@ export const obtenerClasePorSlug = async (
           include: {
             curso: {
               select: {
+                cursosUsuarios: {
+                  include: {
+                    usuario: {
+                      select: {
+                        nombres: true,
+                        apellidos: true,
+                      },
+                    },
+                  },
+                  where: {
+                    tipo: "CARGO",
+                  },
+                },
                 PorcentajeCurso: {
                   select: {
                     porcentaje: true,
                   },
                 },
+
                 nombre: true,
                 slug: true,
                 id: true,
+                imagen: true,
               },
             },
           },

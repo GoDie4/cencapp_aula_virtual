@@ -657,3 +657,5 @@
 2025-05-03T21:20:35.400Z [ERROR] GET /api/alumno/dataGeneral | Status: 401 | Time: 3.215 ms | IP: ::1 | User-Agent: "node"
 2025-05-03T21:24:56.886Z [ERROR] GET /api/cursoPorSlug/topografia-en-obras-civiles | Status: 403 | Time: 14.433 ms | IP: ::1 | User-Agent: "node"
 2025-05-03T21:24:56.924Z [ERROR] GET /api/cursoPorSlug/topografia-en-obras-civiles | Status: 403 | Time: 8.166 ms | IP: ::1 | User-Agent: "node"
+2025-05-08T12:12:39.432Z [ERROR] GET /api/clasePorSlug/introduccion-a-la-topografia | Status: 500 | Time: 48.543 ms | IP: ::1 | User-Agent: "node"
+2025-05-08T12:20:45.165Z [ERROR] GET /favicon.ico | Status: 404 | Time: 2.430 ms | IP: ::1 | User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"

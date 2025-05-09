@@ -275,7 +275,8 @@ export default async function page({
 
                         return (
                           <li key={item.id} className="flex justify-between">
-                            <p className="flex items-center gap-1">
+                            <Link href={`/aula/cursos/${dataCurso.slug}/${item?.slug}`} className="w-full flex justify-between group">
+                            <p className="flex items-center gap-1 group-hover:text-blue-600">
                               {claseVista && (
                                 <span className="flex-shrink-0 text-lg text-green-500">
                                   <IoCheckmark />
@@ -286,6 +287,8 @@ export default async function page({
                             <span className="text-sm text-gray-500">
                               {item.duracion}
                             </span>
+                            
+                            </Link>
                           </li>
                         );
                       })}

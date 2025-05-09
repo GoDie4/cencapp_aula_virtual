@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { ReproductorClase } from "./ReproductorClase";
 import { MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { useAuth } from "@/context/AuthContext";
+import { config } from "@/config/config";
 
 export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
     const porcentajeRaw = dataClase?.clase?.seccion?.curso?.PorcentajeCurso?.[0]?.porcentaje;
@@ -18,6 +19,8 @@ export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
           setPorcentaje(0); // o dejarlo como está si quieres que sea 0 por defecto
         }
       }, [dataClase]);
+console.log("dataclase: ", dataClase)
+
   const { user } = useAuth();
   return (
     <>
@@ -42,7 +45,7 @@ export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
           <div className="w-full lg:w-3/5 flex items center gap-3">
             <div className="w-fit">
               <img
-                src="/assets/images/cursos/1.webp"
+                src={`${config.imagesUrl}${dataClase.clase.seccion.curso.imagen}`}
                 alt=""
                 className="w-16 h-16 rounded-lg overflow-hidden"
               />
@@ -52,7 +55,7 @@ export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
                 {dataClase.clase.seccion.nombre}
               </h5>
               <p className="text-black-700 text-sm">
-                Por <span>Logos Perú</span>
+                Por <span>{dataClase.clase.seccion.curso.cursosUsuarios[0].usuario.nombres + " " + dataClase.clase.seccion.curso.cursosUsuarios[0].usuario.apellidos}</span>
               </p>
             </div>
           </div>

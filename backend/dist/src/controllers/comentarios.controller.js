@@ -1,0 +1,248 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.traerAllComentarios = exports.traerComentarioDeAlumno = exports.eliminarComentario = exports.registrarComentario = void 0;
+const client_1 = require("@prisma/client");
+const mail_controller_1 = require("./mail.controller");
+const prisma = new client_1.PrismaClient();
+const registrarComentario = async (req, res) => {
+    try {
+        const { claseId, userId, comentario } = req.body;
+        const profesor = await prisma.cursoUsuario.findFirst({
+            where: {
+                curso: {
+                    Seccion: {
+                        some: {
+                            clases: {
+                                some: {
+                                    id: claseId,
+                                },
+                            },
+                        },
+                    },
+                },
+                tipo: "CARGO",
+            },
+            include: {
+                usuario: true,
+            },
+        });
+        const curso = await prisma.curso.findFirst({
+            where: { id: profesor?.cursoId },
+        });
+        const user = await prisma.usuario.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+        const nuevoComentario = await prisma.comentarios.create({
+            data: {
+                comentario: comentario,
+                claseId: claseId,
+                userId: userId,
+            },
+        });
+        await (0, mail_controller_1.sendEmail)([
+            "anthony10.reyes10@gmail.com",
+            profesor?.usuario.email !== undefined ? profesor.usuario.email : "",
+        ], "Nuevo comentario", `NuevoComentario.html`, {
+            nombre_estudiante: user?.nombres + " " + user?.apellidos,
+            email: user?.email,
+            curso: curso?.nombre,
+            comentario: comentario,
+            fecha: new Date()
+        });
+        res.status(201).json(nuevoComentario);
+    }
+    catch (error) {
+        console.error("Error al registrar el comentario:", error);
+        res.status(500).json({ message: "Error interno del servidor" });
+    }
+};
+exports.registrarComentario = registrarComentario;
+const eliminarComentario = async (req, res) => {
+    const comentarioId = req.params.id;
+    const userId = req.user.id;
+    if (!userId) {
+        return res.status(401).json({ error: "No autenticado" });
+    }
+    try {
+        const comentario = await prisma.comentarios.findUnique({
+            where: { id: comentarioId },
+        });
+        if (!comentario) {
+            return res.status(404).json({ error: "Comentario no encontrado" });
+        }
+        if (comentario.userId !== userId) {
+            return res
+                .status(403)
+                .json({ error: "No tienes permiso para eliminar este comentario" });
+        }
+        await prisma.comentarios.delete({
+            where: { id: comentarioId },
+        });
+        res.status(200).json({ message: "Comentario eliminado correctamente" });
+    }
+    catch (error) {
+        console.error("Error al eliminar comentario:", error);
+        res.status(500).json({ error: "Error del servidor" });
+    }
+};
+exports.eliminarComentario = eliminarComentario;
+const traerComentarioDeAlumno = async (req, res) => {
+    const userId = req.user?.id;
+    try {
+        const comentarios = await prisma.comentarios.findMany({
+            where: {
+                userId: userId,
+            },
+            include: {
+                respuestas: true,
+                clase: {
+                    select: {
+                        nombre: true,
+                        slug: true,
+                        seccion: {
+                            select: {
+                                curso: {
+                                    select: {
+                                        nombre: true,
+                                        slug: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        res.json({ comentarios: comentarios });
+    }
+    catch (error) {
+        console.error("Error al obtener los comentarios del usuario:", error);
+        res.status(500).json({ error: "Error del servidor" });
+    }
+};
+exports.traerComentarioDeAlumno = traerComentarioDeAlumno;
+const traerAllComentarios = async (req, res) => {
+    const { user } = req;
+    try {
+        if (user.rolId === 1) {
+            const comentarios = await prisma.comentarios.findMany({
+                include: {
+                    clase: {
+                        omit: {
+                            seccionId: true,
+                            id: true,
+                            createdAt: true,
+                            duracion: true,
+                            posicion: true,
+                            slug: true,
+                            updatedAt: true,
+                            url_video: true,
+                        },
+                        include: {
+                            seccion: {
+                                omit: {
+                                    createdAt: true,
+                                    cursoId: true,
+                                    id: true,
+                                    posicion: true,
+                                    slug: true,
+                                    updatedAt: true,
+                                },
+                                include: {
+                                    curso: {
+                                        select: {
+                                            nombre: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    respuestas: true,
+                    usuario: {
+                        select: {
+                            nombres: true,
+                            id: true,
+                        },
+                    },
+                },
+            });
+            return res.json({ comentarios });
+        }
+        if (user.rolId === 3) {
+            const cursosAsignados = await prisma.cursoUsuario.findMany({
+                where: {
+                    userId: user.id,
+                    tipo: "CARGO",
+                },
+                select: {
+                    cursoId: true,
+                },
+            });
+            const cursoIds = cursosAsignados.map((cu) => cu.cursoId);
+            const comentarios = await prisma.comentarios.findMany({
+                where: {
+                    clase: {
+                        seccion: {
+                            cursoId: {
+                                in: cursoIds,
+                            },
+                        },
+                    },
+                },
+                include: {
+                    clase: {
+                        omit: {
+                            seccionId: true,
+                            id: true,
+                            createdAt: true,
+                            duracion: true,
+                            posicion: true,
+                            slug: true,
+                            updatedAt: true,
+                            url_video: true,
+                        },
+                        include: {
+                            seccion: {
+                                omit: {
+                                    createdAt: true,
+                                    cursoId: true,
+                                    id: true,
+                                    posicion: true,
+                                    slug: true,
+                                    updatedAt: true,
+                                },
+                                include: {
+                                    curso: {
+                                        select: {
+                                            nombre: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    respuestas: true,
+                    usuario: {
+                        select: {
+                            nombres: true,
+                            id: true,
+                        },
+                    },
+                },
+            });
+            return res.json({ comentarios });
+        }
+        return res
+            .status(403)
+            .json({ error: "No tienes permisos para acceder a esta información" });
+    }
+    catch (error) {
+        console.error("Error al obtener los comentarios", error);
+        res.status(500).json({ error: "Error del servidor" });
+    }
+};
+exports.traerAllComentarios = traerAllComentarios;
+//# sourceMappingURL=comentarios.controller.js.map

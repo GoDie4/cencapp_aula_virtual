@@ -1,3 +1,4 @@
+ 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
@@ -25,6 +26,7 @@ import {
 import { formatearFechaParaInputDate } from "../../../../materiales/@logic/parseDate";
 import { convertirBytesAMb } from "../../../../materiales/@logic/parseToMb";
 import { MaterialDataBase } from "@/interfaces/MaterialInterface";
+import Link from "next/link";
 export const TabsClases = ({ dataClase }: { dataClase: Clase }) => {
   const [clases, setClases] = useState<Clase[]>([]);
 
@@ -36,7 +38,7 @@ export const TabsClases = ({ dataClase }: { dataClase: Clase }) => {
 
       setClases(response.data.clases);
 
-      console.log(response.data.clases);
+      console.log("CLASES: ", response.data.clases);
     } catch (error) {
       console.log(error);
     }
@@ -165,18 +167,20 @@ export const TabsClases = ({ dataClase }: { dataClase: Clase }) => {
                     <ul className="list-disc  space-y-2 py-3 px-5 pl-8  text-base">
                       {seccion.clases.map((item: Clase, index) => (
                         <li key={index} className="flex justify-between">
-                          <span
-                            className={`${
-                              item.id === dataClase.id
-                                ? "text-primary-main"
-                                : ""
-                            }`}
-                          >
-                            {item.nombre}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {item.duracion}
-                          </span>
+                          <Link href={`/aula/cursos/${dataClase?.seccion.curso.slug}/${item?.slug}`} className="w-full flex justify-between">
+                            <span
+                              className={`${
+                                item.id === dataClase.id
+                                  ? "text-primary-main"
+                                  : ""
+                              }`}
+                            >
+                              {item.nombre}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {item.duracion}
+                            </span>
+                          </Link>
                         </li>
                       ))}
                     </ul>
