@@ -32,7 +32,7 @@ const FormLogin = () => {
     };
 
     try {
-      const response = await axios.post(`http://api.cencapperu.com/api/login`, data, {
+      const response = await axios.post(`https://api.cencapperu.com/api/login`, data, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

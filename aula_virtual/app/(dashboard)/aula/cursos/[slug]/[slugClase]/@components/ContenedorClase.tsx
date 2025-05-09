@@ -9,17 +9,21 @@ import { useAuth } from "@/context/AuthContext";
 import { config } from "@/config/config";
 
 export const ContenedorClase = ({ dataClase }: { dataClase: any }) => {
-    const porcentajeRaw = dataClase?.clase?.seccion?.curso?.PorcentajeCurso?.[0]?.porcentaje;
-    const [porcentaje, setPorcentaje] = useState<number>(Number(porcentajeRaw) || 0);
-    useEffect(() => {
-        if (dataClase?.clase?.seccion?.curso?.PorcentajeCurso?.length > 0) {
-          const porcentajeRaw = dataClase.clase.seccion.curso.PorcentajeCurso[0].porcentaje;
-          setPorcentaje(Number(porcentajeRaw) || 0);
-        } else {
-          setPorcentaje(0); // o dejarlo como está si quieres que sea 0 por defecto
-        }
-      }, [dataClase]);
-console.log("dataclase: ", dataClase)
+  const porcentajeRaw =
+    dataClase?.clase?.seccion?.curso?.PorcentajeCurso?.[0]?.porcentaje;
+  const [porcentaje, setPorcentaje] = useState<number>(
+    Number(porcentajeRaw) || 0
+  );
+  useEffect(() => {
+    if (dataClase?.clase?.seccion?.curso?.PorcentajeCurso?.length > 0) {
+      const porcentajeRaw =
+        dataClase.clase.seccion.curso.PorcentajeCurso[0].porcentaje;
+      setPorcentaje(Number(porcentajeRaw) || 0);
+    } else {
+      setPorcentaje(0); // o dejarlo como está si quieres que sea 0 por defecto
+    }
+  }, [dataClase]);
+  console.log("dataclase: ", dataClase);
 
   const { user } = useAuth();
   return (
@@ -54,9 +58,19 @@ console.log("dataclase: ", dataClase)
               <h5 className="font-semibold text-lg text-black-900">
                 {dataClase.clase.seccion.nombre}
               </h5>
-              <p className="text-black-700 text-sm">
-                Por <span>{dataClase.clase.seccion.curso.cursosUsuarios[0].usuario.nombres + " " + dataClase.clase.seccion.curso.cursosUsuarios[0].usuario.apellidos}</span>
-              </p>
+              {dataClase.clase.seccion.curso.cursosUsuarios?.length > 0 &&
+                dataClase.clase.seccion.curso.cursosUsuarios[0].usuario && (
+                  <p className="text-black-700 text-sm">
+                    Por{" "}
+                    <span>
+                      {dataClase.clase.seccion.curso.cursosUsuarios[0].usuario
+                        .nombres +
+                        " " +
+                        dataClase.clase.seccion.curso.cursosUsuarios[0].usuario
+                          .apellidos}
+                    </span>
+                  </p>
+                )}
             </div>
           </div>
           <div className="w-full lg:w-2/5  mt-5 md:mt-0 flex justify-end items-center gap-5">
@@ -86,7 +100,9 @@ console.log("dataclase: ", dataClase)
                 <Link
                   href={`/aula/cursos/${dataClase.clase.seccion.curso.slug}/${dataClase.siguienteClase?.slug}`}
                   className={`flex p-2 sm:p-3 border-2 text-primary-main  rounded-main border-primary-main text-2xl transition-all duration-200 hover:bg-primary-main hover:text-white-main ${
-                    !dataClase.siguienteClase || isNaN(porcentaje) || porcentaje < 90
+                    !dataClase.siguienteClase ||
+                    isNaN(porcentaje) ||
+                    porcentaje < 90
                       ? "pointer-events-none opacity-50"
                       : ""
                   }`}
